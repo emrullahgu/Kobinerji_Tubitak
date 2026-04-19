@@ -2470,3 +2470,560 @@ body {
     .animate-in { opacity: 1; transform: none; }
     .scroll-progress { display: none; }
 }
+
+/* ============================================================
+   NEW: CHARGE PROFILE SIMULATION
+   ============================================================ */
+.demo-select {
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    font-size: 0.8em;
+    font-family: 'Inter', sans-serif;
+    color: var(--text);
+    cursor: pointer;
+}
+.charge-sim-layout {
+    display: grid;
+    grid-template-columns: 1fr 200px;
+    gap: 20px;
+    margin-top: 16px;
+}
+.charge-canvas-wrap {
+    background: #0f172a;
+    border-radius: var(--radius-sm);
+    padding: 12px;
+    overflow: hidden;
+}
+.charge-canvas-wrap canvas,
+.aging-canvas-wrap canvas {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 6px;
+}
+.charge-legend {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    margin-top: 10px;
+    flex-wrap: wrap;
+}
+.cl-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.78em;
+    color: rgba(255,255,255,0.7);
+}
+.cl-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+}
+.charge-live-metrics {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.clm-item {
+    background: var(--primary);
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+    text-align: center;
+}
+.clm-label {
+    font-size: 0.7em;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 2px;
+}
+.clm-value {
+    font-size: 1.3em;
+    font-weight: 800;
+    color: #fff;
+    font-family: 'Courier New', monospace;
+}
+.clm-unit {
+    font-size: 0.65em;
+    color: rgba(255,255,255,0.4);
+}
+.clm-blue { color: #3b82f6; }
+.clm-amber { color: #f59e0b; }
+.clm-red { color: #ef4444; }
+.clm-green { color: #10b981; }
+.clm-purple { color: #8b5cf6; }
+
+/* ============================================================
+   NEW: AGING SIMULATION
+   ============================================================ */
+.aging-sim-layout {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 20px;
+    margin-top: 16px;
+}
+.aging-canvas-wrap {
+    background: #0f172a;
+    border-radius: var(--radius-sm);
+    padding: 12px;
+    overflow: hidden;
+}
+.aging-info-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.aging-cycle-display {
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    border-radius: var(--radius-sm);
+    padding: 16px;
+    text-align: center;
+}
+.aging-cycle-label {
+    font-size: 0.75em;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: rgba(255,255,255,0.5);
+}
+.aging-cycle-value {
+    font-size: 2.2em;
+    font-weight: 900;
+    color: #3b82f6;
+    font-family: 'Courier New', monospace;
+}
+.aging-chem-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.aging-chem-card {
+    border-radius: var(--radius-sm);
+    padding: 12px;
+    border-left: 4px solid;
+}
+.aging-nmc { background: rgba(59,130,246,0.06); border-color: #3b82f6; }
+.aging-lfp { background: rgba(16,185,129,0.06); border-color: #10b981; }
+.aging-nca { background: rgba(239,68,68,0.06); border-color: #ef4444; }
+.acc-header { font-weight: 700; font-size: 0.85em; margin-bottom: 4px; }
+.acc-soh { font-size: 1.4em; font-weight: 900; font-family: 'Courier New', monospace; }
+.acc-status { font-size: 0.75em; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
+.acc-status.acc-healthy { color: #10b981; }
+.acc-status.acc-warn { color: #f59e0b; }
+.acc-status.acc-critical { color: #ef4444; }
+.acc-detail { font-size: 0.7em; color: var(--text-muted); margin-top: 2px; }
+.aging-insight {
+    background: var(--bg);
+    border-radius: var(--radius-sm);
+    padding: 12px;
+    font-size: 0.82em;
+    line-height: 1.5;
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+}
+
+/* ============================================================
+   NEW: FEATURE IMPORTANCE CHART
+   ============================================================ */
+.fi-chart-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.fi-bar-row {
+    display: grid;
+    grid-template-columns: 200px 1fr 60px;
+    align-items: center;
+    gap: 12px;
+}
+.fi-label {
+    font-size: 0.82em;
+    font-weight: 600;
+    color: var(--text);
+    text-align: right;
+}
+.fi-bar-track {
+    height: 28px;
+    background: var(--bg);
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+}
+.fi-bar-fill {
+    height: 100%;
+    border-radius: 6px;
+    transition: width 0.6s cubic-bezier(0.4,0,0.2,1);
+    position: relative;
+}
+.fi-fill-1 { background: linear-gradient(90deg, #6366f1, #818cf8); }
+.fi-fill-2 { background: linear-gradient(90deg, #7c3aed, #a78bfa); }
+.fi-fill-3 { background: linear-gradient(90deg, #3b82f6, #60a5fa); }
+.fi-fill-4 { background: linear-gradient(90deg, #0ea5e9, #38bdf8); }
+.fi-fill-5 { background: linear-gradient(90deg, #14b8a6, #2dd4bf); }
+.fi-fill-6 { background: linear-gradient(90deg, #10b981, #34d399); }
+.fi-fill-7 { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+.fi-fill-8 { background: linear-gradient(90deg, #f97316, #fb923c); }
+.fi-fill-9 { background: linear-gradient(90deg, #ef4444, #f87171); }
+.fi-fill-10 { background: linear-gradient(90deg, #ec4899, #f472b6); }
+.fi-fill-11 { background: linear-gradient(90deg, #8b5cf6, #a78bfa); }
+.fi-fill-12 { background: linear-gradient(90deg, #64748b, #94a3b8); }
+.fi-score {
+    font-size: 0.85em;
+    font-weight: 800;
+    font-family: 'Courier New', monospace;
+    color: var(--text);
+    text-align: left;
+}
+
+/* ============================================================
+   NEW: RADAR CHART (Chemistry Compare)
+   ============================================================ */
+.chem-compare-layout {
+    display: grid;
+    grid-template-columns: 440px 1fr;
+    gap: 24px;
+    margin-top: 16px;
+}
+.chem-radar-wrap {
+    background: #0f172a;
+    border-radius: var(--radius-sm);
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.chem-radar-wrap canvas {
+    width: 100%;
+    max-width: 420px;
+    height: auto;
+}
+.chem-specs-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.chem-spec-card {
+    border-radius: var(--radius-sm);
+    padding: 16px;
+    border-left: 4px solid;
+}
+.chem-nmc { background: rgba(59,130,246,0.05); border-color: #3b82f6; }
+.chem-lfp { background: rgba(16,185,129,0.05); border-color: #10b981; }
+.chem-nca { background: rgba(239,68,68,0.05); border-color: #ef4444; }
+.chem-spec-card h4 { font-size: 0.95em; font-weight: 700; margin-bottom: 10px; }
+.chem-spec-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.csp-row { display: flex; justify-content: space-between; font-size: 0.8em; padding: 3px 0; border-bottom: 1px solid rgba(0,0,0,0.04); }
+.csp-label { color: var(--text-secondary); }
+.csp-val { font-weight: 700; color: var(--text); }
+
+/* ============================================================
+   NEW: TEMPERATURE HEATMAP
+   ============================================================ */
+.heatmap-layout {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 20px;
+    margin-top: 16px;
+}
+.heatmap-pack-visual {
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    border-radius: var(--radius-sm);
+    padding: 20px;
+}
+.hpv-title {
+    text-align: center;
+    font-size: 0.85em;
+    font-weight: 700;
+    color: rgba(255,255,255,0.6);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+}
+.heatmap-cells-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+.hm-cell {
+    background: rgba(255,255,255,0.05);
+    border-radius: var(--radius-sm);
+    padding: 12px 8px;
+    text-align: center;
+    border: 2px solid #10b981;
+    transition: all 0.3s ease;
+}
+.hm-cell-id {
+    font-size: 0.7em;
+    font-weight: 700;
+    color: rgba(255,255,255,0.5);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+.hm-cell-temp {
+    font-size: 1.2em;
+    font-weight: 900;
+    color: #fff;
+    font-family: 'Courier New', monospace;
+    margin: 4px 0;
+}
+.hm-cell-bar {
+    height: 4px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 2px;
+    overflow: hidden;
+}
+.hm-cell-bar-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.3s ease, background 0.3s ease;
+}
+.hm-gradient-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 16px;
+    font-size: 0.75em;
+    color: rgba(255,255,255,0.5);
+}
+.hm-gradient {
+    flex: 1;
+    height: 8px;
+    border-radius: 4px;
+    background: linear-gradient(90deg, #3b82f6, #10b981, #f59e0b, #ef4444);
+}
+.heatmap-stats-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.hm-stat {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    background: var(--bg);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+}
+.hm-stat-label { font-size: 0.8em; color: var(--text-secondary); }
+.hm-stat-value { font-size: 0.95em; font-weight: 800; font-family: 'Courier New', monospace; }
+.hm-stat-hot { color: #ef4444; }
+.hm-stat-cold { color: #3b82f6; }
+.hm-thermal-log {
+    flex: 1;
+    background: #0f172a;
+    border-radius: var(--radius-sm);
+    padding: 10px;
+    overflow-y: auto;
+    max-height: 180px;
+    font-size: 0.72em;
+    font-family: 'Courier New', monospace;
+    color: rgba(255,255,255,0.7);
+}
+.hm-log-entry { padding: 3px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+.hm-log-critical { color: #ef4444; font-weight: 700; }
+.hm-log-warn { color: #f59e0b; }
+
+/* ============================================================
+   NEW: CONFUSION MATRIX
+   ============================================================ */
+.cm-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-top: 16px;
+}
+.cm-matrix-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+.cm-axis-label {
+    font-size: 0.8em;
+    font-weight: 700;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+.cm-y-label {
+    writing-mode: vertical-lr;
+    transform: rotate(180deg);
+    position: absolute;
+    left: -30px;
+    top: 50%;
+}
+.cm-matrix-inner {
+    position: relative;
+    padding-left: 30px;
+}
+.cm-header-row, .cm-row {
+    display: grid;
+    grid-template-columns: 90px repeat(3, 1fr);
+    gap: 4px;
+}
+.cm-header-row { margin-bottom: 4px; }
+.cm-corner { }
+.cm-col-header, .cm-row-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.78em;
+    font-weight: 700;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.cm-row-header { justify-content: flex-end; padding-right: 12px; }
+.cm-cell {
+    width: 90px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-sm);
+    border: 2px solid var(--border);
+    transition: all 0.3s ease;
+    opacity: 0.3;
+}
+.cm-val {
+    font-size: 1.6em;
+    font-weight: 900;
+    font-family: 'Courier New', monospace;
+    color: var(--text);
+}
+.cm-metrics-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    justify-content: center;
+}
+.cm-metric { }
+.cm-metric-label {
+    font-size: 0.82em;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 4px;
+}
+.cm-metric-bar {
+    height: 24px;
+    background: var(--bg);
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+}
+.cm-metric-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #3b82f6, #2563eb);
+    border-radius: 6px;
+    transition: width 0.8s cubic-bezier(0.4,0,0.2,1);
+}
+.cm-fill-green { background: linear-gradient(90deg, #10b981, #059669); }
+.cm-fill-blue { background: linear-gradient(90deg, #3b82f6, #2563eb); }
+.cm-fill-purple { background: linear-gradient(90deg, #8b5cf6, #7c3aed); }
+.cm-fill-teal { background: linear-gradient(90deg, #14b8a6, #0d9488); }
+.cm-metric-val {
+    font-size: 0.85em;
+    font-weight: 800;
+    font-family: 'Courier New', monospace;
+    margin-top: 4px;
+    display: inline-block;
+}
+.cm-total-summary {
+    background: rgba(59,130,246,0.06);
+    border: 1px solid rgba(59,130,246,0.15);
+    border-radius: var(--radius-sm);
+    padding: 14px;
+    font-size: 0.85em;
+    line-height: 1.6;
+}
+
+/* ============================================================
+   NEW: DAQ SIMULATION
+   ============================================================ */
+.daq-layout {
+    display: grid;
+    grid-template-columns: 1fr 220px;
+    gap: 20px;
+    margin-top: 16px;
+}
+.daq-channels {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+.daq-channel {
+    background: #0f172a;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+}
+.daq-ch-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.daq-ch-name {
+    font-size: 0.75em;
+    font-weight: 700;
+    color: rgba(255,255,255,0.5);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.daq-ch-val {
+    font-size: 0.85em;
+    font-weight: 800;
+    font-family: 'Courier New', monospace;
+    color: #fff;
+}
+.daq-channel canvas {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+.daq-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.daq-stat-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    background: var(--bg);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+}
+.daq-stat-label { font-size: 0.78em; color: var(--text-secondary); }
+.daq-stat-value { font-size: 0.85em; font-weight: 700; font-family: 'Courier New', monospace; }
+.daq-recording {
+    animation: daqBlink 1s ease infinite;
+}
+@keyframes daqBlink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}
+
+/* ============================================================
+   RESPONSIVE — NEW SECTIONS
+   ============================================================ */
+@media (max-width: 900px) {
+    .charge-sim-layout { grid-template-columns: 1fr; }
+    .charge-live-metrics { flex-direction: row; flex-wrap: wrap; }
+    .clm-item { flex: 1; min-width: 80px; }
+    .aging-sim-layout { grid-template-columns: 1fr; }
+    .chem-compare-layout { grid-template-columns: 1fr; }
+    .heatmap-layout { grid-template-columns: 1fr; }
+    .cm-layout { grid-template-columns: 1fr; }
+    .daq-layout { grid-template-columns: 1fr; }
+    .daq-channels { grid-template-columns: 1fr; }
+    .fi-bar-row { grid-template-columns: 120px 1fr 50px; }
+    .heatmap-cells-grid { grid-template-columns: repeat(2, 1fr); }
+    .cm-cell { width: 70px; height: 65px; }
+    .cm-val { font-size: 1.2em; }
+}

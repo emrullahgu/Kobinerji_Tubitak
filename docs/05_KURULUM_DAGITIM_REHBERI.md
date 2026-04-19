@@ -61,7 +61,7 @@ colorama>=0.4.0
 ### 2.1. Projeyi İndirme
 
 ```bash
-git clone <repo-url> Kobinerji_Tubitak
+git clone https://github.com/emrullahgu/Kobinerji_Tubitak.git
 cd Kobinerji_Tubitak
 ```
 
@@ -82,7 +82,7 @@ source venv/bin/activate
 ### 2.3. Bağımlılıkları Yükleme
 
 ```bash
-pip install -r requirements.txt
+pip install -r python/requirements.txt
 ```
 
 **Kurulumu Doğrulama:**
@@ -121,9 +121,13 @@ Kobinerji_Tubitak/
 │   ├── 03_KULLANICI_EL_KITABI.md
 │   ├── 04_SISTEM_MIMARISI.md
 │   ├── 05_KURULUM_DAGITIM_REHBERI.md
-│   └── 06_TEST_RAPORU.md
+│   ├── 06_TEST_RAPORU.md
+│   ├── 07_IS_PAKETI_DETAYLANDIRMASI.md
+│   ├── 08_KALITE_KONTROL_PLANI.md
+│   └── 10_VGX_BMS_FIRMWARE_DATASHEET.md
 ├── config.yaml
-├── requirements.txt
+├── python/
+│   └── requirements.txt
 ├── index.html
 ├── styles.css
 ├── script.js
@@ -325,7 +329,7 @@ FROM python:3.10-slim
 
 WORKDIR /app
 
-COPY requirements.txt .
+COPY python/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
@@ -391,7 +395,7 @@ python -m examples.demo_end_to_end
 
 | Sorun | Çözüm |
 |-------|-------|
-| `ModuleNotFoundError` | `pip install -r requirements.txt` çalıştırın |
+| `ModuleNotFoundError` | `pip install -r python/requirements.txt` çalıştırın |
 | `Address already in use` | `netstat -ano \| findstr :5000` ile PID bulup kapatın |
 | CORS hatası | `flask-cors` yüklü mü kontrol edin |
 | `PermissionError` (log) | `logs/` dizinini oluşturun ve yazma izni verin |

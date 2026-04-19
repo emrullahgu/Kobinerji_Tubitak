@@ -75,7 +75,7 @@ cd C:\Users\emrul\OneDrive\Masaüstü\Kobinerji_Tubitak
 **Adım 2: Python Bağımlılıklarını Kurun**
 
 ```powershell
-pip install -r requirements.txt
+pip install -r python/requirements.txt
 ```
 
 **Adım 3: Kurulumu Doğrulayın**
@@ -537,13 +537,12 @@ pytest tests\test_suite.py --cov=python --cov-report=html
 
 | Sınıf | Test Sayısı | Kapsam |
 |-------|------------|--------|
-| `TestBatteryData` | 5 | Veri yükleme, temizleme, normalleştirme |
-| `TestFeatureExtraction` | 3 | Pencere oluşturma, özellik çıkarma |
-| `TestSoHModel` | 4 | Eğitim, tahmin, kaydetme/yükleme |
-| `TestBatteryMonitor` | 4 | İzleme, uyarı, pack metrikleri |
-| `TestCellBalancer` | 2 | Dengeleme hesaplama |
-| `TestBMSController` | 6 | Kontrolcü yaşam döngüsü |
-| `TestConstants` | 3 | Sabit geçerlilik |
+| `TestBatteryData` | 6 | Veri yükleme, temizleme, normalleştirme |
+| `TestFeatureExtraction` | 4 | Pencere oluşturma, özellik çıkarma |
+| `TestSoHModel` | 7 | Eğitim, tahmin, kaydetme/yükleme |
+| `TestBatteryMonitor` | 6 | İzleme, uyarı, pack metrikleri |
+| `TestCellBalancer` | 3 | Dengeleme hesaplama |
+| `TestBMSController` | 8 | Kontrolcü yaşam döngüsü |
 
 ---
 
@@ -621,7 +620,7 @@ sys.path.insert(0, r'C:\Users\emrul\OneDrive\Masaüstü\Kobinerji_Tubitak')
 ### 11.2. Bağımlılık Hatası
 
 ```powershell
-pip install --upgrade -r requirements.txt
+pip install --upgrade -r python/requirements.txt
 ```
 
 ### 11.3. API Bağlantı Reddedildi
@@ -673,7 +672,7 @@ Dosya boyutu 10 MB'ı aştığında otomatik dönüşüm yapılır (maksimum 5 y
 | API başlat | `python python\api\battery_api.py` |
 | Dashboard aç | `start index.html` |
 | Testleri çalıştır | `pytest tests\test_suite.py -v` |
-| Bağımlılık kur | `pip install -r requirements.txt` |
+| Bağımlılık kur | `pip install -r python/requirements.txt` |
 | Kapsam raporu | `pytest tests\test_suite.py --cov=python --cov-report=html` |
 
 ---

@@ -71,7 +71,7 @@ Bu doküman aşağıdaki bileşenlerin teknik detaylarını içerir:
 |--------|------------|--------|
 | SoH Tahmin Doğruluğu | ≥ %90 | İP-3 çıktısı |
 | R² Skoru | ≥ 0.85 | Model değerlendirme |
-| RMSE | < 0.05 | Model değerlendirme |
+| RMSE | < 5.0 (yüzde ölçeğinde) | Model değerlendirme |
 | Sınıflandırma Doğruluğu | ≥ %85 | İP-4 çıktısı |
 | Analiz Süresi | < 5 saniye | Gerçek zamanlı gereksinim |
 | Geri Kazanım Etkisi | +%10 iyileşme | Mekanik süreç |
@@ -167,10 +167,11 @@ Kobinerji_Tubitak/
 │   └── demo_end_to_end.py      # Uçtan uca demo (6 aşama)
 ├── docs/                        # Bu dokümantasyon dizini
 ├── config.yaml                  # YAML yapılandırma
-├── requirements.txt             # Python bağımlılıkları
+├── python/
+│   └── requirements.txt         # Python bağımlılıkları
 ├── index.html                   # Web dashboard
 ├── script.js                    # Frontend mantığı
-└── styles.css                   # Stillem
+└── styles.css                   # Stil dosyası
 ```
 
 ---
@@ -427,7 +428,7 @@ predict(X_test) → Test tahminleri
 | Metrik | Formül | Hedef |
 |--------|--------|-------|
 | R² | $R^2 = 1 - \frac{SS_{res}}{SS_{tot}}$ | ≥ 0.85 |
-| RMSE | $\sqrt{\frac{1}{n}\sum(y_i - \hat{y}_i)^2}$ | < 0.05 |
+| RMSE | $\sqrt{\frac{1}{n}\sum(y_i - \hat{y}_i)^2}$ | < 5.0 (SoH %0–100 ölçeğinde) |
 | MAE | $\frac{1}{n}\sum\|y_i - \hat{y}_i\|$ | — |
 | MAPE | $\frac{100}{n}\sum\left\|\frac{y_i - \hat{y}_i}{y_i}\right\|$ | — |
 | Medyan Hata | $\text{median}(\|y_i - \hat{y}_i\|)$ | — |
@@ -724,7 +725,7 @@ Tüm endpointler JSON formatında iletişim kurar. Content-Type: `application/js
 |-------|-------|
 | `TARGET_ACCURACY` | 0.90 |
 | `TARGET_R2` | 0.85 |
-| `TARGET_RMSE` | 0.05 |
+| `TARGET_RMSE` | 5.0 |
 | `METRIC_CLASSIFICATION_ACCURACY` | 0.85 |
 
 ### 10.4. Sınıflandırma Eşikleri
@@ -901,4 +902,4 @@ except Exception as e:
 ---
 
 **Doküman Sonu**  
-*TUBITAK 7260634 — KOBİNERJİ A.Ş.*
+*TÜBİTAK 7260634 — KOBİNERJİ A.Ş.*

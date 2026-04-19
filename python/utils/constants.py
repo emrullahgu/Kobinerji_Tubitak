@@ -127,7 +127,7 @@ NN_EARLY_STOPPING_PATIENCE = 10
 # Model accuracy targets
 TARGET_ACCURACY = 0.90  # 90% doğruluk hedefi
 TARGET_R2 = 0.85        # R² score hedefi (0-1 arası)
-TARGET_RMSE = 0.05      # Root Mean Square Error hedefi
+TARGET_RMSE = 5.0       # Root Mean Square Error hedefi (SoH %0-100 ölçeğinde)
 
 # ============================================
 # BMS PARAMETERS

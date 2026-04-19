@@ -203,7 +203,7 @@ BMSController sınıfının üst düzey kontrol ve karar işlevlerini test eder.
 | Metrik | Hedef | Beklenen |
 |--------|-------|----------|
 | R² Skoru | ≥ 0.85 | 0.90+ (RF ile) |
-| RMSE | < 5.0 | ~3-4 (sentetik veri) |
+| RMSE | < 5.0 (SoH %0–100 ölçeğinde) | ~3-4 (sentetik veri) |
 | MAE | < 3.0 | ~2-3 |
 | MAPE | < %5 | ~3-4% |
 | Doğruluk | ≥ %90 | %90+ |
@@ -231,8 +231,8 @@ BMSController sınıfının üst düzey kontrol ve karar işlevlerini test eder.
 
 | ID | Modül | Açıklama | Etki | Önerilen Düzeltme |
 |----|-------|----------|------|-------------------|
-| BUG-002 | `test_suite.py` | `save_cleaned_data` testi `output_path` parametresi kullanıyor; gerçek metot `filepath` bekliyor | Test başarısız olur | `output_path` → `filepath` olarak değiştirin |
-| BUG-003 | `test_suite.py` / `demo_end_to_end.py` | `FeatureExtractor` testleri `stride` parametresi kullanıyor; sınıf `window_stride` bekliyor | İlgili testler başarısız olur | `stride` → `window_stride` olarak değiştirin |
+| BUG-002 | `test_suite.py` | `save_cleaned_data` testi `output_path` parametresi kullanıyor; gerçek metot `filepath` bekliyor | Test başarısız olur | ✅ `output_path` → `filepath` olarak düzeltildi |
+| BUG-003 | `test_suite.py` / `demo_end_to_end.py` | `FeatureExtractor` testleri `stride` parametresi kullanıyor; sınıf `window_stride` bekliyor | İlgili testler başarısız olur | ✅ `stride` → `window_stride` olarak düzeltildi |
 
 ### 6.3. Düşük Seviye Hatalar
 
@@ -288,8 +288,8 @@ BMSController sınıfının üst düzey kontrol ve karar işlevlerini test eder.
 ### 8.2. Öncelikli Eylemler
 
 1. **BUG-001 düzeltme** — `constants.py` içine `LOG_LEVELS` ekle (Kritik)
-2. **BUG-002 düzeltme** — Test dosyasında `output_path` → `filepath` (Orta)
-3. **BUG-003 düzeltme** — Test/demo dosyalarında `stride` → `window_stride` (Orta)
+2. ~~**BUG-002 düzeltme** — Test dosyasında `output_path` → `filepath`~~ ✅ Düzeltildi
+3. ~~**BUG-003 düzeltme** — Test/demo dosyalarında `stride` → `window_stride`~~ ✅ Düzeltildi
 4. **pytest geçişi** — Daha iyi raporlama ve kapsam ölçümü
 5. **API test ekleme** — flask.testing.TestClient ile otomasyon
 6. **CI/CD entegrasyonu** — GitHub Actions ile otomatik test çalıştırma

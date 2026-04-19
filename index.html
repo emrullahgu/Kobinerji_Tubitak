@@ -163,7 +163,7 @@
                 </div>
                 <div class="hhs-divider"></div>
                 <div class="hhs-item">
-                    <div class="hhs-value" data-counter="12">0</div>
+                    <div class="hhs-value" data-counter="9">0</div>
                     <div class="hhs-label">Doküman</div>
                 </div>
                 <div class="hhs-divider"></div>
@@ -177,7 +177,7 @@
                 <span class="hhc-chip hhc-blue">🔋 STM32 BMS Firmware Hazır</span>
                 <span class="hhc-chip hhc-purple">🤖 AI SoH Model Prototipi Hazır</span>
                 <span class="hhc-chip hhc-orange">🌐 Dashboard Canlıda (Netlify)</span>
-                <span class="hhc-chip hhc-teal">📄 12 Profesyonel Doküman</span>
+                <span class="hhc-chip hhc-teal">📄 9 Profesyonel Doküman</span>
             </div>
         </div>
     </div>
@@ -338,7 +338,7 @@
                 </ul>
             </div>
             <div class="completed-category">
-                <div class="cat-header cat-docs"><span class="cat-icon">📄</span><h4>Dokümantasyon (12 Doküman)</h4></div>
+                <div class="cat-header cat-docs"><span class="cat-icon">📄</span><h4>Dokümantasyon (9 Doküman)</h4></div>
                 <ul class="check-list">
                     <li class="done">01 — Teknik Dokümantasyon</li>
                     <li class="done">02 — API Referans Dokümanı (13 endpoint detaylı)</li>
@@ -348,10 +348,7 @@
                     <li class="done">06 — Test Raporu (34 test sonucu)</li>
                     <li class="done">07 — İş Paketi Detaylandırması</li>
                     <li class="done">08 — Kalite Kontrol Planı</li>
-                    <li class="done">09 — Hakem Ziyareti Durum Raporu</li>
-                    <li class="done">10 — Hakem Hazırlık Kontrol Listesi</li>
-                    <li class="done">10-F — VGX BMS Firmware Datasheet</li>
-                    <li class="done">11 — Sunum Taslağı</li>
+                    <li class="done">09 — VGX BMS Firmware Datasheet</li>
                 </ul>
             </div>
         </div>
@@ -458,7 +455,7 @@
         <div class="stat-card"><div class="stat-big">13</div><div class="stat-text">API Endpoint</div></div>
         <div class="stat-card"><div class="stat-big">34</div><div class="stat-text">Birim Test</div></div>
         <div class="stat-card"><div class="stat-big">5000+</div><div class="stat-text">Satır Kod</div></div>
-        <div class="stat-card"><div class="stat-big">12</div><div class="stat-text">Doküman</div></div>
+        <div class="stat-card"><div class="stat-big">9</div><div class="stat-text">Doküman</div></div>
         <div class="stat-card"><div class="stat-big">1</div><div class="stat-text">BMS Firmware</div></div>
         <div class="stat-card"><div class="stat-big">1</div><div class="stat-text">PCB Tasarım</div></div>
         <div class="stat-card"><div class="stat-big">13</div><div class="stat-text">Arıza Koruması</div></div>
@@ -539,13 +536,13 @@
             <div class="evidence-item evidence-docs">
                 <div class="evidence-icon-wrap"><span class="evidence-icon">📄</span></div>
                 <div class="evidence-body">
-                    <h4>12 Profesyonel Doküman</h4>
+                    <h4>9 Profesyonel Doküman</h4>
                     <p>Teknik dokümantasyon, API referans, kullanıcı kılavuzu, sistem mimarisi, test raporu, kurulum rehberi, firmware datasheet.</p>
                     <div class="evidence-tags">
                         <span>Markdown</span><span>PDF Export</span><span>Kapak Sayfası</span>
                     </div>
                     <div class="evidence-metric">
-                        <span class="em-num">12</span><span class="em-label">doküman hazır</span>
+                        <span class="em-num">9</span><span class="em-label">doküman hazır</span>
                     </div>
                 </div>
             </div>
@@ -1152,13 +1149,328 @@
         <h3>📈 Test Sonuç Detayları</h3>
         <div class="test-results-grid" id="testResultsGrid"></div>
     </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <!-- ═══ YENİ: BATARYA ŞARJ/DEŞARJ PROFİLİ SİMÜLASYONU ═══ -->
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <div class="card demo-showcase-card" style="margin-top: 32px;">
+        <div class="demo-showcase-header">
+            <h3>📈 Batarya Şarj/Deşarj Profili — Gerçek Zamanlı</h3>
+            <div class="demo-showcase-controls">
+                <select id="chargeProfileType" class="demo-select">
+                    <option value="cc-cv">CC-CV Şarj</option>
+                    <option value="discharge">Sabit Akım Deşarj</option>
+                    <option value="pulse">Darbe Testi (HPPC)</option>
+                </select>
+                <select id="chargeChem" class="demo-select">
+                    <option value="NMC">NMC</option>
+                    <option value="LFP">LFP</option>
+                    <option value="NCA">NCA</option>
+                </select>
+                <button class="demo-btn demo-btn-start" id="btnChrgStart" onclick="startChargeProfileSim()">▶ Başlat</button>
+                <button class="demo-btn demo-btn-stop" id="btnChrgStop" onclick="stopChargeProfileSim()" disabled>⏹ Durdur</button>
+            </div>
+        </div>
+        <div class="charge-sim-layout">
+            <div class="charge-canvas-wrap">
+                <canvas id="chargeCanvas" width="760" height="340"></canvas>
+                <div class="charge-legend">
+                    <span class="cl-item"><span class="cl-dot" style="background:#3b82f6"></span>Voltaj (V)</span>
+                    <span class="cl-item"><span class="cl-dot" style="background:#f59e0b"></span>Akım (A)</span>
+                    <span class="cl-item"><span class="cl-dot" style="background:#ef4444"></span>Sıcaklık (°C)</span>
+                    <span class="cl-item"><span class="cl-dot" style="background:#10b981"></span>SoC (%)</span>
+                </div>
+            </div>
+            <div class="charge-live-metrics">
+                <div class="clm-item"><div class="clm-label">Voltaj</div><div class="clm-value clm-blue" id="clmVoltage">—</div><div class="clm-unit">V</div></div>
+                <div class="clm-item"><div class="clm-label">Akım</div><div class="clm-value clm-amber" id="clmCurrent">—</div><div class="clm-unit">A</div></div>
+                <div class="clm-item"><div class="clm-label">Sıcaklık</div><div class="clm-value clm-red" id="clmTemp">—</div><div class="clm-unit">°C</div></div>
+                <div class="clm-item"><div class="clm-label">SoC</div><div class="clm-value clm-green" id="clmSoC">—</div><div class="clm-unit">%</div></div>
+                <div class="clm-item"><div class="clm-label">Aşama</div><div class="clm-value clm-purple" id="clmPhase" style="font-size:0.8em">—</div><div class="clm-unit"></div></div>
+                <div class="clm-item"><div class="clm-label">Enerji</div><div class="clm-value" id="clmEnergy">—</div><div class="clm-unit">Wh</div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <!-- ═══ YENİ: BATARYA YAŞLANMA / KAPASİTE AZALMA SİMÜLASYONU ═══ -->
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <div class="card demo-showcase-card" style="margin-top: 32px;">
+        <div class="demo-showcase-header">
+            <h3>🔬 Batarya Yaşlanma Simülasyonu — Kapasite Azalma Eğrisi</h3>
+            <div class="demo-showcase-controls">
+                <button class="demo-btn demo-btn-start" id="btnAgingStart" onclick="startAgingSim()">▶ Simülasyonu Başlat</button>
+                <button class="demo-btn demo-btn-stop" id="btnAgingReset" onclick="resetAgingSim()">🔄 Sıfırla</button>
+            </div>
+        </div>
+        <div class="aging-sim-layout">
+            <div class="aging-canvas-wrap">
+                <canvas id="agingCanvas" width="760" height="340"></canvas>
+                <div class="charge-legend">
+                    <span class="cl-item"><span class="cl-dot" style="background:#3b82f6"></span>NMC</span>
+                    <span class="cl-item"><span class="cl-dot" style="background:#10b981"></span>LFP</span>
+                    <span class="cl-item"><span class="cl-dot" style="background:#ef4444"></span>NCA</span>
+                    <span class="cl-item"><span class="cl-dot" style="background:rgba(239,68,68,0.15)"></span>EOL Eşiği (%80)</span>
+                </div>
+            </div>
+            <div class="aging-info-panel">
+                <div class="aging-cycle-display">
+                    <div class="aging-cycle-label">Döngü Sayısı</div>
+                    <div class="aging-cycle-value" id="agingCycleCount">0</div>
+                </div>
+                <div class="aging-chem-cards">
+                    <div class="aging-chem-card aging-nmc">
+                        <div class="acc-header">🔋 NMC</div>
+                        <div class="acc-soh" id="agingNmcSoh">100.0%</div>
+                        <div class="acc-status" id="agingNmcStatus">SAĞLIKLI</div>
+                        <div class="acc-detail">Enerji yoğunluğu yüksek</div>
+                    </div>
+                    <div class="aging-chem-card aging-lfp">
+                        <div class="acc-header">🔌 LFP</div>
+                        <div class="acc-soh" id="agingLfpSoh">100.0%</div>
+                        <div class="acc-status" id="agingLfpStatus">SAĞLIKLI</div>
+                        <div class="acc-detail">Uzun döngü ömrü</div>
+                    </div>
+                    <div class="aging-chem-card aging-nca">
+                        <div class="acc-header">⚡ NCA</div>
+                        <div class="acc-soh" id="agingNcaSoh">100.0%</div>
+                        <div class="acc-status" id="agingNcaStatus">SAĞLIKLI</div>
+                        <div class="acc-detail">Yüksek güç çıkışı</div>
+                    </div>
+                </div>
+                <div class="aging-insight" id="agingInsight">
+                    Simülasyonu başlatarak 3 farklı batarya kimyasının yaşlanma eğrisini karşılaştırın.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <!-- ═══ YENİ: ÖZNİTELİK ÖNEMLİLİK GRAFİĞİ (Feature Importance) ═══ -->
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <div class="card demo-showcase-card" style="margin-top: 32px;">
+        <div class="demo-showcase-header">
+            <h3>📊 Öznitelik Önem Sıralaması — Random Forest</h3>
+            <button class="demo-btn demo-btn-start" onclick="animateFeatureImportance()">▶ Analizi Göster</button>
+        </div>
+        <p style="color: var(--text-muted); margin-bottom: 20px;">SoH tahmini için en etkili 15 batarya özniteliğinin model tarafından belirlenen önem skorları</p>
+        <div class="fi-chart-container" id="fiChartContainer">
+            <div class="fi-bar-row" data-value="23.1"><span class="fi-label">DC Empedans (Ω)</span><div class="fi-bar-track"><div class="fi-bar-fill fi-fill-1" id="fiBar0" style="width:0%"></div></div><span class="fi-score" id="fiScore0">0</span></div>
+            <div class="fi-bar-row" data-value="18.4"><span class="fi-label">Kapasite Azalma (%)</span><div class="fi-bar-track"><div class="fi-bar-fill fi-fill-2" id="fiBar1" style="width:0%"></div></div><span class="fi-score" id="fiScore1">0</span></div>
+            <div class="fi-bar-row" data-value="14.2"><span class="fi-label">Voltaj Std Sapma (V)</span><div class="fi-bar-track"><div class="fi-bar-fill fi-fill-3" id="fiBar2" style="width:0%"></div></div><span class="fi-score" id="fiScore2">0</span></div>
+            <div class="fi-bar-row" data-value="11.8"><span class="fi-label">Ortalama Sıcaklık (°C)</span><div class="fi-bar-track"><div class="fi-bar-fill fi-fill-4" id="fiBar3" style="width:0%"></div></div><span class="fi-score" id="fiScore3">0</span></div>
+            <div class="fi-bar-row" data-value="9.3"><span class="fi-label">Akım RMS (A)</span><div class="fi-bar-track"><div class="fi-bar-fill fi-fill-5" id="fiBar4" style="width:0%"></div></div><span class="fi-score" id="fiScore4">0</span></div>
+            <div class="fi-bar-row" data-value="7.6"><span class="fi-label">Döngü Sayısı</span><div class="fi-bar-track"><div class="fi-bar-fill fi-fill-6" id="fiBar5" style="width:0%"></div></div><span class="fi-score" id="fiScore5">0</span></div>
+            <div class="fi-bar-row" data-value="5.1"><span class="fi-label">Şarj Süresi Ortalaması (s)</span><div class="fi-bar-track"><div class="fi-bar-fill fi-fill-7" id="fiBar6" style="width:0%"></div></div><span class="fi-score" id="fiScore6">0</span></div>
+            <div class="fi-bar-row" data-value="3.8"><span class="fi-label">Voltaj Platosu Eğimi</span><div class="fi-bar-track"><div class="fi-bar-fill fi-fill-8" id="fiBar7" style="width:0%"></div></div><span class="fi-score" id="fiScore7">0</span></div>
+            <div class="fi-bar-row" data-value="2.4"><span class="fi-label">Sıcaklık Varyansı</span><div class="fi-bar-track"><div class="fi-bar-fill fi-fill-9" id="fiBar8" style="width:0%"></div></div><span class="fi-score" id="fiScore8">0</span></div>
+            <div class="fi-bar-row" data-value="1.7"><span class="fi-label">IC Eğrisi Tepe Genişliği</span><div class="fi-bar-track"><div class="fi-bar-fill fi-fill-10" id="fiBar9" style="width:0%"></div></div><span class="fi-score" id="fiScore9">0</span></div>
+            <div class="fi-bar-row" data-value="1.2"><span class="fi-label">Max Deşarj Derinliği (%)</span><div class="fi-bar-track"><div class="fi-bar-fill fi-fill-11" id="fiBar10" style="width:0%"></div></div><span class="fi-score" id="fiScore10">0</span></div>
+            <div class="fi-bar-row" data-value="0.8"><span class="fi-label">Frekans Bileşeni (Hz)</span><div class="fi-bar-track"><div class="fi-bar-fill fi-fill-12" id="fiBar11" style="width:0%"></div></div><span class="fi-score" id="fiScore11">0</span></div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <!-- ═══ YENİ: BATARYA KİMYASI KARŞILAŞTIRMA RADAR ═══ -->
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <div class="card demo-showcase-card" style="margin-top: 32px;">
+        <div class="demo-showcase-header">
+            <h3>⚗️ Batarya Kimyası Karşılaştırması — NMC vs LFP vs NCA</h3>
+        </div>
+        <div class="chem-compare-layout">
+            <div class="chem-radar-wrap">
+                <canvas id="radarCanvas" width="420" height="420"></canvas>
+                <div class="charge-legend" style="margin-top:12px">
+                    <span class="cl-item"><span class="cl-dot" style="background:#3b82f6"></span>NMC</span>
+                    <span class="cl-item"><span class="cl-dot" style="background:#10b981"></span>LFP</span>
+                    <span class="cl-item"><span class="cl-dot" style="background:#ef4444"></span>NCA</span>
+                </div>
+            </div>
+            <div class="chem-specs-panel">
+                <div class="chem-spec-card chem-nmc">
+                    <h4>🔋 NMC (Nikel Mangan Kobalt)</h4>
+                    <div class="chem-spec-grid">
+                        <div class="csp-row"><span class="csp-label">Enerji Yoğunluğu</span><span class="csp-val">150-220 Wh/kg</span></div>
+                        <div class="csp-row"><span class="csp-label">Döngü Ömrü</span><span class="csp-val">1000-2000</span></div>
+                        <div class="csp-row"><span class="csp-label">Nominal Voltaj</span><span class="csp-val">3.6-3.7 V</span></div>
+                        <div class="csp-row"><span class="csp-label">Güvenlik</span><span class="csp-val">Orta</span></div>
+                        <div class="csp-row"><span class="csp-label">Maliyet</span><span class="csp-val">Orta-Yüksek</span></div>
+                        <div class="csp-row"><span class="csp-label">Kullanım</span><span class="csp-val">EV, Enerji Depolama</span></div>
+                    </div>
+                </div>
+                <div class="chem-spec-card chem-lfp">
+                    <h4>🔌 LFP (Lityum Demir Fosfat)</h4>
+                    <div class="chem-spec-grid">
+                        <div class="csp-row"><span class="csp-label">Enerji Yoğunluğu</span><span class="csp-val">90-160 Wh/kg</span></div>
+                        <div class="csp-row"><span class="csp-label">Döngü Ömrü</span><span class="csp-val">2000-5000</span></div>
+                        <div class="csp-row"><span class="csp-label">Nominal Voltaj</span><span class="csp-val">3.2-3.3 V</span></div>
+                        <div class="csp-row"><span class="csp-label">Güvenlik</span><span class="csp-val">Yüksek</span></div>
+                        <div class="csp-row"><span class="csp-label">Maliyet</span><span class="csp-val">Düşük-Orta</span></div>
+                        <div class="csp-row"><span class="csp-label">Kullanım</span><span class="csp-val">EV, Güç Araçları</span></div>
+                    </div>
+                </div>
+                <div class="chem-spec-card chem-nca">
+                    <h4>⚡ NCA (Nikel Kobalt Alüminyum)</h4>
+                    <div class="chem-spec-grid">
+                        <div class="csp-row"><span class="csp-label">Enerji Yoğunluğu</span><span class="csp-val">200-260 Wh/kg</span></div>
+                        <div class="csp-row"><span class="csp-label">Döngü Ömrü</span><span class="csp-val">500-1000</span></div>
+                        <div class="csp-row"><span class="csp-label">Nominal Voltaj</span><span class="csp-val">3.6 V</span></div>
+                        <div class="csp-row"><span class="csp-label">Güvenlik</span><span class="csp-val">Düşük-Orta</span></div>
+                        <div class="csp-row"><span class="csp-label">Maliyet</span><span class="csp-val">Yüksek</span></div>
+                        <div class="csp-row"><span class="csp-label">Kullanım</span><span class="csp-val">Tesla EV, Premium</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <!-- ═══ YENİ: SICAKLIK ISI HARİTASI VE HÜCRE DETAY ═══ -->
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <div class="card demo-showcase-card" style="margin-top: 32px;">
+        <div class="demo-showcase-header">
+            <h3>🌡️ Batarya Paketi Sıcaklık Isı Haritası — 8S Pack</h3>
+            <div class="demo-showcase-controls">
+                <button class="demo-btn demo-btn-start" id="btnHeatStart" onclick="startHeatmapSim()">▶ Başlat</button>
+                <button class="demo-btn demo-btn-stop" id="btnHeatStop" onclick="stopHeatmapSim()" disabled>⏹ Durdur</button>
+                <button class="demo-btn demo-btn-fault" id="btnHeatHot" onclick="injectHotspot()" disabled>🔥 Hotspot</button>
+            </div>
+        </div>
+        <div class="heatmap-layout">
+            <div class="heatmap-pack-visual">
+                <div class="hpv-title">8S Li-Ion Battery Pack</div>
+                <div class="heatmap-cells-grid">
+                    <div class="hm-cell" id="hmCell0"><div class="hm-cell-id">C1</div><div class="hm-cell-temp" id="hmTemp0">—</div><div class="hm-cell-bar"><div class="hm-cell-bar-fill" id="hmBar0"></div></div></div>
+                    <div class="hm-cell" id="hmCell1"><div class="hm-cell-id">C2</div><div class="hm-cell-temp" id="hmTemp1">—</div><div class="hm-cell-bar"><div class="hm-cell-bar-fill" id="hmBar1"></div></div></div>
+                    <div class="hm-cell" id="hmCell2"><div class="hm-cell-id">C3</div><div class="hm-cell-temp" id="hmTemp2">—</div><div class="hm-cell-bar"><div class="hm-cell-bar-fill" id="hmBar2"></div></div></div>
+                    <div class="hm-cell" id="hmCell3"><div class="hm-cell-id">C4</div><div class="hm-cell-temp" id="hmTemp3">—</div><div class="hm-cell-bar"><div class="hm-cell-bar-fill" id="hmBar3"></div></div></div>
+                    <div class="hm-cell" id="hmCell4"><div class="hm-cell-id">C5</div><div class="hm-cell-temp" id="hmTemp4">—</div><div class="hm-cell-bar"><div class="hm-cell-bar-fill" id="hmBar4"></div></div></div>
+                    <div class="hm-cell" id="hmCell5"><div class="hm-cell-id">C6</div><div class="hm-cell-temp" id="hmTemp5">—</div><div class="hm-cell-bar"><div class="hm-cell-bar-fill" id="hmBar5"></div></div></div>
+                    <div class="hm-cell" id="hmCell6"><div class="hm-cell-id">C7</div><div class="hm-cell-temp" id="hmTemp6">—</div><div class="hm-cell-bar"><div class="hm-cell-bar-fill" id="hmBar6"></div></div></div>
+                    <div class="hm-cell" id="hmCell7"><div class="hm-cell-id">C8</div><div class="hm-cell-temp" id="hmTemp7">—</div><div class="hm-cell-bar"><div class="hm-cell-bar-fill" id="hmBar7"></div></div></div>
+                </div>
+                <div class="hm-gradient-bar">
+                    <span>0°C</span>
+                    <div class="hm-gradient"></div>
+                    <span>60°C</span>
+                </div>
+            </div>
+            <div class="heatmap-stats-panel">
+                <div class="hm-stat"><span class="hm-stat-label">Ortalama</span><span class="hm-stat-value" id="hmAvgTemp">—</span></div>
+                <div class="hm-stat"><span class="hm-stat-label">Maksimum</span><span class="hm-stat-value hm-stat-hot" id="hmMaxTemp">—</span></div>
+                <div class="hm-stat"><span class="hm-stat-label">Minimum</span><span class="hm-stat-value hm-stat-cold" id="hmMinTemp">—</span></div>
+                <div class="hm-stat"><span class="hm-stat-label">ΔT Fark</span><span class="hm-stat-value" id="hmDeltaTemp">—</span></div>
+                <div class="hm-stat"><span class="hm-stat-label">Termal Durum</span><span class="hm-stat-value" id="hmThermalStatus">—</span></div>
+                <div class="hm-stat"><span class="hm-stat-label">Fan Durumu</span><span class="hm-stat-value" id="hmFanStatus">—</span></div>
+                <div class="hm-thermal-log" id="hmThermalLog">
+                    <div class="hm-log-entry">Sıcaklık izleme için simülasyonu başlatın.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <!-- ═══ YENİ: SINIFLANDIRMA MATRİSİ (Confusion Matrix) ═══ -->
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <div class="card demo-showcase-card" style="margin-top: 32px;">
+        <div class="demo-showcase-header">
+            <h3>🎯 Karar Motoru — Sınıflandırma Başarı Matrisi</h3>
+            <button class="demo-btn demo-btn-start" onclick="animateConfusionMatrix()">▶ Matrisi Göster</button>
+        </div>
+        <p style="color: var(--text-muted); margin-bottom: 20px;">500 test bataryası üzerinde yapılan sınıflandırma sonuçları — Gerçek vs Tahmin karşılaştırması</p>
+        <div class="cm-layout">
+            <div class="cm-matrix-wrap">
+                <div class="cm-axis-label cm-y-label">Gerçek Sınıf</div>
+                <div class="cm-matrix-inner">
+                    <div class="cm-header-row">
+                        <div class="cm-corner"></div>
+                        <div class="cm-col-header">REUSE</div>
+                        <div class="cm-col-header">RECYCLE</div>
+                        <div class="cm-col-header">CRITICAL</div>
+                    </div>
+                    <div class="cm-row">
+                        <div class="cm-row-header">REUSE</div>
+                        <div class="cm-cell cm-tp" id="cmCell00"><span class="cm-val" id="cmVal00">0</span></div>
+                        <div class="cm-cell cm-fp" id="cmCell01"><span class="cm-val" id="cmVal01">0</span></div>
+                        <div class="cm-cell cm-fp" id="cmCell02"><span class="cm-val" id="cmVal02">0</span></div>
+                    </div>
+                    <div class="cm-row">
+                        <div class="cm-row-header">RECYCLE</div>
+                        <div class="cm-cell cm-fp" id="cmCell10"><span class="cm-val" id="cmVal10">0</span></div>
+                        <div class="cm-cell cm-tp" id="cmCell11"><span class="cm-val" id="cmVal11">0</span></div>
+                        <div class="cm-cell cm-fp" id="cmCell12"><span class="cm-val" id="cmVal12">0</span></div>
+                    </div>
+                    <div class="cm-row">
+                        <div class="cm-row-header">CRITICAL</div>
+                        <div class="cm-cell cm-fp" id="cmCell20"><span class="cm-val" id="cmVal20">0</span></div>
+                        <div class="cm-cell cm-fp" id="cmCell21"><span class="cm-val" id="cmVal21">0</span></div>
+                        <div class="cm-cell cm-tp" id="cmCell22"><span class="cm-val" id="cmVal22">0</span></div>
+                    </div>
+                </div>
+                <div class="cm-axis-label cm-x-label">Tahmin Edilen Sınıf</div>
+            </div>
+            <div class="cm-metrics-panel">
+                <div class="cm-metric"><span class="cm-metric-label">Doğruluk (Accuracy)</span><div class="cm-metric-bar"><div class="cm-metric-fill" id="cmAccFill" style="width:0%"></div></div><span class="cm-metric-val" id="cmAccVal">—</span></div>
+                <div class="cm-metric"><span class="cm-metric-label">Precision (REUSE)</span><div class="cm-metric-bar"><div class="cm-metric-fill cm-fill-green" id="cmPrecFill" style="width:0%"></div></div><span class="cm-metric-val" id="cmPrecVal">—</span></div>
+                <div class="cm-metric"><span class="cm-metric-label">Recall (REUSE)</span><div class="cm-metric-bar"><div class="cm-metric-fill cm-fill-blue" id="cmRecFill" style="width:0%"></div></div><span class="cm-metric-val" id="cmRecVal">—</span></div>
+                <div class="cm-metric"><span class="cm-metric-label">F1-Score</span><div class="cm-metric-bar"><div class="cm-metric-fill cm-fill-purple" id="cmF1Fill" style="width:0%"></div></div><span class="cm-metric-val" id="cmF1Val">—</span></div>
+                <div class="cm-metric"><span class="cm-metric-label">Cohen's Kappa</span><div class="cm-metric-bar"><div class="cm-metric-fill cm-fill-teal" id="cmKapFill" style="width:0%"></div></div><span class="cm-metric-val" id="cmKapVal">—</span></div>
+                <div class="cm-total-summary" id="cmSummary" style="display:none">
+                    <p>📊 <strong>500</strong> test bataryasından <strong id="cmCorrect">0</strong> tanesi doğru sınıflandırıldı.</p>
+                    <p>🎯 Model, bataryaların <strong>%85+</strong> doğrulukla sınıflandırılmasını sağlamaktadır.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <!-- ═══ YENİ: GERÇEK ZAMANLI VERİ TOPLAMA DASHBOARD ═══ -->
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <div class="card demo-showcase-card" style="margin-top: 32px;">
+        <div class="demo-showcase-header">
+            <h3>📡 Canlı Veri Toplama Simülasyonu — DAQ Sistemi</h3>
+            <div class="demo-showcase-controls">
+                <button class="demo-btn demo-btn-start" id="btnDaqStart" onclick="startDaqSim()">▶ DAQ Başlat</button>
+                <button class="demo-btn demo-btn-stop" id="btnDaqStop" onclick="stopDaqSim()" disabled>⏹ Durdur</button>
+            </div>
+        </div>
+        <div class="daq-layout">
+            <div class="daq-channels">
+                <div class="daq-channel">
+                    <div class="daq-ch-header"><span class="daq-ch-name">CH1: Voltaj</span><span class="daq-ch-val" id="daqV">— V</span></div>
+                    <canvas id="daqCanvasV" width="350" height="100"></canvas>
+                </div>
+                <div class="daq-channel">
+                    <div class="daq-ch-header"><span class="daq-ch-name">CH2: Akım</span><span class="daq-ch-val" id="daqI">— A</span></div>
+                    <canvas id="daqCanvasI" width="350" height="100"></canvas>
+                </div>
+                <div class="daq-channel">
+                    <div class="daq-ch-header"><span class="daq-ch-name">CH3: Sıcaklık</span><span class="daq-ch-val" id="daqT">— °C</span></div>
+                    <canvas id="daqCanvasT" width="350" height="100"></canvas>
+                </div>
+                <div class="daq-channel">
+                    <div class="daq-ch-header"><span class="daq-ch-name">CH4: Empedans</span><span class="daq-ch-val" id="daqZ">— mΩ</span></div>
+                    <canvas id="daqCanvasZ" width="350" height="100"></canvas>
+                </div>
+            </div>
+            <div class="daq-stats">
+                <div class="daq-stat-item"><span class="daq-stat-label">Örnekleme Hızı</span><span class="daq-stat-value">100 Hz</span></div>
+                <div class="daq-stat-item"><span class="daq-stat-label">Aktif Kanal</span><span class="daq-stat-value">4 / 4</span></div>
+                <div class="daq-stat-item"><span class="daq-stat-label">Toplam Örnek</span><span class="daq-stat-value" id="daqSampleCount">0</span></div>
+                <div class="daq-stat-item"><span class="daq-stat-label">Veri Boyutu</span><span class="daq-stat-value" id="daqDataSize">0 KB</span></div>
+                <div class="daq-stat-item"><span class="daq-stat-label">Kayıt Durumu</span><span class="daq-stat-value daq-recording" id="daqRecStatus">⏸ Bekliyor</span></div>
+                <div class="daq-stat-item"><span class="daq-stat-label">Süre</span><span class="daq-stat-value" id="daqElapsed">00:00</span></div>
+            </div>
+        </div>
+    </div>
+
 </section>
 
 <!-- ====== DOKÜMANTASYONLAR ====== -->
 <section id="documents" class="section">
     <div class="section-title">
         <h2>Proje Dokümantasyonları</h2>
-        <p>12 adet teknik doküman — Profesyonel kapak sayfası ile PDF olarak indirilebilir</p>
+        <p>9 adet teknik doküman — Profesyonel kapak sayfası ile PDF olarak indirilebilir</p>
     </div>
     <div class="docs-grid" id="docsGrid"></div>
 </section>

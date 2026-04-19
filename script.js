@@ -614,10 +614,7 @@ const projectDocs = [
     { id: '06', title: 'Test Raporu', desc: '34 test sonucu — birim, entegrasyon ve performans testleri', file: 'docs/06_TEST_RAPORU.md', color: '#ef4444', tags: ['Test', '34 Sonuç', 'Kapsam'] },
     { id: '07', title: 'İş Paketi Detaylandırması', desc: '7 iş paketi, faaliyet kırılımı ve zaman çizelgesi', file: 'docs/07_IS_PAKETI_DETAYLANDIRMASI.md', color: '#ec4899', tags: ['İş Paketleri', 'Planlama', '18 Ay'] },
     { id: '08', title: 'Kalite Kontrol Planı', desc: 'ISO standartları, kalite metrikleri ve denetim planı', file: 'docs/08_KALITE_KONTROL_PLANI.md', color: '#14b8a6', tags: ['Kalite', 'ISO', 'Denetim'] },
-    { id: '09', title: 'Hakem Ziyareti Durum Raporu', desc: 'Mevcut durum, ilerleme ve TÜBİTAK hakem sunumu', file: 'docs/09_HAKEM_ZIYARETI_DURUM_RAPORU.md', color: '#f97316', tags: ['Hakem', 'Durum', 'TÜBİTAK'] },
-    { id: '10', title: 'Hakem Hazırlık Kontrol Listesi', desc: 'Hakem ziyareti öncesi idari, teknik ve içerik hazırlık listesi', file: 'docs/10_HAKEM_HAZIRLIK_KONTROL_LISTESI.md', color: '#0ea5e9', tags: ['Kontrol', 'Hazırlık', 'Checklist'] },
-    { id: '10-F', title: 'VGX BMS Firmware Datasheet', desc: 'STM32F030C8 BMS gömülü yazılım teknik referansı', file: 'docs/10_VGX_BMS_FIRMWARE_DATASHEET.md', color: '#64748b', tags: ['Firmware', 'BMS', 'Gömülü'] },
-    { id: '11', title: 'Sunum Taslağı', desc: 'TÜBİTAK hakem ziyareti sunum içeriği ve konuşmacı notları', file: 'docs/11_SUNUM_TASLAGI.md', color: '#d946ef', tags: ['Sunum', 'Hakem', 'Slayt'] }
+    { id: '09', title: 'VGX BMS Firmware Datasheet', desc: 'STM32F030C8 BMS gömülü yazılım teknik referansı', file: 'docs/10_VGX_BMS_FIRMWARE_DATASHEET.md', color: '#64748b', tags: ['Firmware', 'BMS', 'Gömülü'] }
 ];
 
 function renderDocuments() {
@@ -995,7 +992,7 @@ async function downloadDocPDF(filePath, docTitle) {
             pdf.setFontSize(7);
             pdf.setFont('Roboto', 'bold');
             pdf.setTextColor(100, 116, 139);
-            pdf.text(metaItems[i][0].toUpperCase(), mx + 4, my + 5);
+            pdf.text(metaItems[i][0].toLocaleUpperCase('tr-TR'), mx + 4, my + 5);
             // Value
             pdf.setFontSize(9);
             pdf.setFont('Roboto', 'bold');
@@ -1095,8 +1092,8 @@ async function downloadDocPDF(filePath, docTitle) {
                     break;
                 }
                 case 'table': {
-                    const headers = token.header.map(h => stripInline(h.text || h));
-                    const rows = token.rows.map(row => row.map(cell => stripInline(cell.text || cell)));
+                    const headers = token.header.map(h => stripInline(h.text != null ? h.text : (typeof h === 'string' ? h : '')));
+                    const rows = token.rows.map(row => row.map(cell => stripInline(cell.text != null ? cell.text : (typeof cell === 'string' ? cell : ''))));
                     const colCount = headers.length;
                     const colW = CW / colCount;
                     const cellH = 6;
@@ -1158,11 +1155,36 @@ async function downloadDocPDF(filePath, docTitle) {
                     pdf.roundedRect(ML, y, CW, blockH, 2, 2, 'F');
                     y += 4;
                     pdf.setFontSize(7.5);
-                    pdf.setFont('courier', 'normal');
+                    pdf.setFont('Roboto', 'normal');
                     pdf.setTextColor(226, 232, 240);
                     for (const cl of codeLines) {
                         if (y + 4 > PH - MB) break;
-                        pdf.text(cl.substring(0, 100), ML + 4, y);
+                        const safeLine = cl
+                            .replace(/[\u250C\u250F]/g, '+')
+                            .replace(/[\u2514\u2517]/g, '+')
+                            .replace(/[\u2510\u2513]/g, '+')
+                            .replace(/[\u2518\u251B]/g, '+')
+                            .replace(/[\u251C\u2523\u2524\u252B\u252C\u2533\u2534\u253B\u253C\u254B]/g, '+')
+                            .replace(/[\u2500\u2501\u2550]/g, '-')
+                            .replace(/[\u2502\u2503\u2551]/g, '|')
+                            .replace(/[\u25B2\u25B6\u25BC\u25C0\u2190\u2192\u2191\u2193\u2196-\u2199]/g, function(c) {
+                                switch(c) {
+                                    case '\u25BC': case '\u2193': return 'v';
+                                    case '\u25B2': case '\u2191': return '^';
+                                    case '\u25B6': case '\u2192': return '->';
+                                    case '\u25C0': case '\u2190': return '<-';
+                                    default: return c;
+                                }
+                            })
+                            .replace(/[\u25E6\u2022\u25CF\u25CB]/g, '*')
+                            .replace(/\u25A0/g, '#')
+                            .replace(/[\u2714\u2716\u2718]/g, function(c) { return c === '\u2714' ? '[v]' : '[x]'; })
+                            .replace(/[\u21D2\u21D0\u21D3\u21D1]/g, '=>')
+                            .replace(/\u2026/g, '...')
+                            .replace(/[\u25B3\u25BD\u25C1\u25B7]/g, '>')
+                            .replace(/\u2502/g, '|')
+                            .replace(/[\u2580-\u259F]/g, '#');
+                        pdf.text(safeLine.substring(0, 100), ML + 4, y);
                         y += 4;
                     }
                     y += 4;
@@ -1999,4 +2021,717 @@ async function runSohDemo() {
     btn.disabled = false;
     btn.textContent = '▶ Yeniden Çalıştır';
     sohDemoRunning = false;
+}
+
+// ============================================================
+//  CHARGE / DISCHARGE PROFILE SIMULATION
+// ============================================================
+let chargeProfileInterval = null;
+let chargeProfileData = { voltage: [], current: [], temp: [], soc: [] };
+let chargeProfileTick = 0;
+
+function startChargeProfileSim() {
+    if (chargeProfileInterval) return;
+    chargeProfileTick = 0;
+    chargeProfileData = { voltage: [], current: [], temp: [], soc: [] };
+
+    document.getElementById('btnChrgStart').disabled = true;
+    document.getElementById('btnChrgStop').disabled = false;
+
+    chargeProfileInterval = setInterval(chargeProfileStep, 60);
+    chargeProfileStep();
+}
+
+function stopChargeProfileSim() {
+    if (!chargeProfileInterval) return;
+    clearInterval(chargeProfileInterval);
+    chargeProfileInterval = null;
+    document.getElementById('btnChrgStart').disabled = false;
+    document.getElementById('btnChrgStop').disabled = true;
+}
+
+function chargeProfileStep() {
+    const maxTicks = 400;
+    if (chargeProfileTick >= maxTicks) { stopChargeProfileSim(); return; }
+
+    const mode = document.getElementById('chargeProfileType').value;
+    const chem = document.getElementById('chargeChem').value;
+    const t = chargeProfileTick / maxTicks;
+
+    let v, i, temp, soc, phase;
+    const chemOffset = chem === 'LFP' ? -0.4 : chem === 'NCA' ? 0.05 : 0;
+    const nomV = chem === 'LFP' ? 3.3 : 3.7;
+
+    if (mode === 'cc-cv') {
+        if (t < 0.6) {
+            // CC phase
+            v = (nomV - 0.5) + t * (1.5 / 0.6) + chemOffset + (Math.random() - 0.5) * 0.01;
+            i = 5.0 + (Math.random() - 0.5) * 0.2;
+            soc = t * 80 / 0.6;
+            phase = 'CC Şarj (Sabit Akım)';
+        } else {
+            // CV phase
+            v = (nomV + 0.5) + chemOffset + (Math.random() - 0.5) * 0.005;
+            const cvProgress = (t - 0.6) / 0.4;
+            i = 5.0 * Math.exp(-3 * cvProgress) + (Math.random() - 0.5) * 0.1;
+            soc = 80 + cvProgress * 20;
+            phase = 'CV Şarj (Sabit Voltaj)';
+        }
+        temp = 25 + Math.abs(i) * 1.5 + (Math.random() - 0.5) * 1;
+    } else if (mode === 'discharge') {
+        v = (nomV + 0.5) + chemOffset - t * 1.8 + (Math.random() - 0.5) * 0.01;
+        if (chem === 'LFP') v = 3.3 + chemOffset - t * 0.3 + (t > 0.85 ? -(t - 0.85) * 8 : 0);
+        i = -3.0 + (Math.random() - 0.5) * 0.3;
+        soc = 100 - t * 100;
+        temp = 25 + Math.abs(i) * 1.2 + t * 5 + (Math.random() - 0.5) * 1;
+        phase = 'CC Deşarj';
+    } else {
+        // Pulse test
+        const pulsePhase = (chargeProfileTick % 40);
+        if (pulsePhase < 10) {
+            i = 10; v = nomV + chemOffset + 0.3 + (Math.random() - 0.5) * 0.01;
+        } else if (pulsePhase < 20) {
+            i = 0; v = nomV + chemOffset + 0.1 + (Math.random() - 0.5) * 0.005;
+        } else if (pulsePhase < 30) {
+            i = -10; v = nomV + chemOffset - 0.3 + (Math.random() - 0.5) * 0.01;
+        } else {
+            i = 0; v = nomV + chemOffset - 0.05 + (Math.random() - 0.5) * 0.005;
+        }
+        soc = 50 - t * 10;
+        temp = 30 + Math.abs(i) * 0.3 + (Math.random() - 0.5) * 0.5;
+        phase = 'HPPC Darbe Testi';
+    }
+
+    chargeProfileData.voltage.push(v);
+    chargeProfileData.current.push(i);
+    chargeProfileData.temp.push(temp);
+    chargeProfileData.soc.push(soc);
+
+    // Update live metrics
+    document.getElementById('clmVoltage').textContent = v.toFixed(3);
+    document.getElementById('clmCurrent').textContent = (i >= 0 ? '+' : '') + i.toFixed(2);
+    document.getElementById('clmTemp').textContent = temp.toFixed(1);
+    document.getElementById('clmSoC').textContent = Math.max(0, Math.min(100, soc)).toFixed(1);
+    document.getElementById('clmPhase').textContent = phase;
+    const energy = chargeProfileData.voltage.reduce((a, b, idx) => a + Math.abs(b * chargeProfileData.current[idx]) * 0.00001, 0);
+    document.getElementById('clmEnergy').textContent = energy.toFixed(2);
+
+    drawChargeChart();
+    chargeProfileTick++;
+}
+
+function drawChargeChart() {
+    const canvas = document.getElementById('chargeCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width, H = canvas.height;
+    const PAD = 40;
+
+    ctx.clearRect(0, 0, W, H);
+
+    // Background
+    ctx.fillStyle = '#0f172a';
+    ctx.fillRect(0, 0, W, H);
+
+    // Grid
+    ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+    ctx.lineWidth = 1;
+    for (let gy = 0; gy < 5; gy++) {
+        const y = PAD + gy * (H - 2 * PAD) / 4;
+        ctx.beginPath(); ctx.moveTo(PAD, y); ctx.lineTo(W - 10, y); ctx.stroke();
+    }
+
+    const data = chargeProfileData;
+    const len = data.voltage.length;
+    if (len < 2) return;
+
+    function drawLine(arr, color, minV, maxV) {
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        for (let j = 0; j < arr.length; j++) {
+            const x = PAD + (j / 400) * (W - PAD - 10);
+            const norm = (arr[j] - minV) / (maxV - minV);
+            const y = (H - PAD) - norm * (H - 2 * PAD);
+            if (j === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+    }
+
+    drawLine(data.voltage, '#3b82f6', 2.0, 4.5);
+    drawLine(data.current, '#f59e0b', -15, 15);
+    drawLine(data.temp, '#ef4444', 15, 60);
+    drawLine(data.soc, '#10b981', 0, 100);
+
+    // Axes labels
+    ctx.fillStyle = 'rgba(255,255,255,0.5)';
+    ctx.font = '10px Inter, sans-serif';
+    ctx.fillText('Zaman →', W / 2, H - 5);
+}
+
+// ============================================================
+//  BATTERY AGING SIMULATION
+// ============================================================
+let agingInterval = null;
+let agingCycle = 0;
+let agingData = { nmc: [], lfp: [], nca: [] };
+
+function startAgingSim() {
+    if (agingInterval) return;
+    agingCycle = 0;
+    agingData = { nmc: [100], lfp: [100], nca: [100] };
+
+    document.getElementById('btnAgingStart').disabled = true;
+    document.getElementById('btnAgingReset').disabled = false;
+
+    agingInterval = setInterval(agingStep, 30);
+}
+
+function resetAgingSim() {
+    if (agingInterval) { clearInterval(agingInterval); agingInterval = null; }
+    agingCycle = 0;
+    agingData = { nmc: [], lfp: [], nca: [] };
+    document.getElementById('btnAgingStart').disabled = false;
+
+    const canvas = document.getElementById('agingCanvas');
+    if (canvas) { const ctx = canvas.getContext('2d'); ctx.clearRect(0, 0, canvas.width, canvas.height); }
+    document.getElementById('agingCycleCount').textContent = '0';
+    document.getElementById('agingNmcSoh').textContent = '100.0%';
+    document.getElementById('agingLfpSoh').textContent = '100.0%';
+    document.getElementById('agingNcaSoh').textContent = '100.0%';
+    ['agingNmcStatus','agingLfpStatus','agingNcaStatus'].forEach(id => {
+        document.getElementById(id).textContent = 'SAĞLIKLI';
+        document.getElementById(id).className = 'acc-status';
+    });
+    document.getElementById('agingInsight').textContent = 'Simülasyonu başlatarak 3 farklı batarya kimyasının yaşlanma eğrisini karşılaştırın.';
+}
+
+function agingStep() {
+    const maxCycles = 3000;
+    if (agingCycle >= maxCycles) { clearInterval(agingInterval); agingInterval = null; document.getElementById('btnAgingStart').disabled = false; return; }
+
+    agingCycle += 10;
+    const c = agingCycle;
+
+    // Realistic degradation models
+    const nmcSoh = 100 - (0.015 * c) - (0.000003 * c * c) + (Math.random() - 0.5) * 0.3;
+    const lfpSoh = 100 - (0.005 * c) - (0.0000008 * c * c) + (Math.random() - 0.5) * 0.2;
+    const ncaSoh = 100 - (0.025 * c) - (0.000005 * c * c) + (Math.random() - 0.5) * 0.4;
+
+    agingData.nmc.push(Math.max(40, nmcSoh));
+    agingData.lfp.push(Math.max(40, lfpSoh));
+    agingData.nca.push(Math.max(40, ncaSoh));
+
+    document.getElementById('agingCycleCount').textContent = c;
+    document.getElementById('agingNmcSoh').textContent = Math.max(40, nmcSoh).toFixed(1) + '%';
+    document.getElementById('agingLfpSoh').textContent = Math.max(40, lfpSoh).toFixed(1) + '%';
+    document.getElementById('agingNcaSoh').textContent = Math.max(40, ncaSoh).toFixed(1) + '%';
+
+    function setStatus(id, soh) {
+        const el = document.getElementById(id);
+        if (soh >= 85) { el.textContent = 'SAĞLIKLI'; el.className = 'acc-status acc-healthy'; }
+        else if (soh >= 70) { el.textContent = 'DİKKAT'; el.className = 'acc-status acc-warn'; }
+        else { el.textContent = 'KRİTİK'; el.className = 'acc-status acc-critical'; }
+    }
+    setStatus('agingNmcStatus', nmcSoh);
+    setStatus('agingLfpStatus', lfpSoh);
+    setStatus('agingNcaStatus', ncaSoh);
+
+    // Insight text
+    if (ncaSoh < 80 && nmcSoh >= 80 && lfpSoh >= 80) {
+        document.getElementById('agingInsight').innerHTML = '⚠️ <strong>NCA</strong> batarya End-of-Life eşiğinin altına düştü! NMC ve LFP hâlâ sağlıklı aralıkta.';
+    } else if (nmcSoh < 80 && lfpSoh >= 80) {
+        document.getElementById('agingInsight').innerHTML = '⚠️ <strong>NMC</strong> de EOL eşiğinin altında. <strong>LFP</strong> en uzun ömürlü kimya olarak öne çıkıyor.';
+    } else if (lfpSoh < 80) {
+        document.getElementById('agingInsight').innerHTML = '🔴 Tüm kimyalar EOL eşiğinin altında. LFP en son düşen kimya oldu.';
+    }
+
+    drawAgingChart();
+}
+
+function drawAgingChart() {
+    const canvas = document.getElementById('agingCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width, H = canvas.height;
+    const PAD = 45;
+
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = '#0f172a';
+    ctx.fillRect(0, 0, W, H);
+
+    // Grid
+    ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+    ctx.lineWidth = 1;
+    for (let gy = 0; gy <= 6; gy++) {
+        const y = PAD + gy * (H - 2 * PAD) / 6;
+        ctx.beginPath(); ctx.moveTo(PAD, y); ctx.lineTo(W - 10, y); ctx.stroke();
+    }
+
+    // Y-axis labels
+    ctx.fillStyle = 'rgba(255,255,255,0.4)';
+    ctx.font = '10px Inter, sans-serif';
+    ctx.textAlign = 'right';
+    for (let gy = 0; gy <= 6; gy++) {
+        const val = 100 - gy * 10;
+        const y = PAD + gy * (H - 2 * PAD) / 6;
+        ctx.fillText(val + '%', PAD - 6, y + 3);
+    }
+    ctx.textAlign = 'left';
+
+    // EOL line at 80%
+    const eolY = PAD + (100 - 80) / 60 * (H - 2 * PAD);
+    ctx.strokeStyle = 'rgba(239,68,68,0.3)';
+    ctx.setLineDash([6, 4]);
+    ctx.beginPath(); ctx.moveTo(PAD, eolY); ctx.lineTo(W - 10, eolY); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = 'rgba(239,68,68,0.6)';
+    ctx.fillText('EOL (%80)', W - 70, eolY - 5);
+
+    // X-axis label
+    ctx.fillStyle = 'rgba(255,255,255,0.4)';
+    ctx.fillText('Döngü Sayısı →', W / 2 - 30, H - 5);
+    ctx.fillText('0', PAD, H - 8);
+    ctx.fillText('3000', W - 35, H - 8);
+
+    const len = agingData.nmc.length;
+    if (len < 2) return;
+
+    function drawLine(arr, color) {
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+        for (let j = 0; j < arr.length; j++) {
+            const x = PAD + (j / (3000 / 10)) * (W - PAD - 10);
+            const norm = (arr[j] - 40) / 60;
+            const y = (H - PAD) - norm * (H - 2 * PAD);
+            if (j === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+    }
+
+    drawLine(agingData.nmc, '#3b82f6');
+    drawLine(agingData.lfp, '#10b981');
+    drawLine(agingData.nca, '#ef4444');
+}
+
+// ============================================================
+//  FEATURE IMPORTANCE ANIMATION
+// ============================================================
+async function animateFeatureImportance() {
+    const values = [23.1, 18.4, 14.2, 11.8, 9.3, 7.6, 5.1, 3.8, 2.4, 1.7, 1.2, 0.8];
+    const maxVal = values[0];
+
+    for (let i = 0; i < values.length; i++) {
+        const bar = document.getElementById('fiBar' + i);
+        const score = document.getElementById('fiScore' + i);
+        const targetWidth = (values[i] / maxVal * 100);
+
+        // Animate bar width
+        bar.style.transition = 'width 0.6s cubic-bezier(0.4,0,0.2,1)';
+        bar.style.width = targetWidth + '%';
+
+        // Animate score count-up
+        const target = values[i];
+        const steps = 20;
+        for (let s = 1; s <= steps; s++) {
+            score.textContent = (target * s / steps).toFixed(1) + '%';
+            await sleep(15);
+        }
+        score.textContent = target.toFixed(1) + '%';
+
+        await sleep(80);
+    }
+}
+
+// ============================================================
+//  RADAR CHART — BATTERY CHEMISTRY COMPARISON
+// ============================================================
+(function drawRadarChart() {
+    // Wait for DOM
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', drawRadarOnce);
+    } else {
+        setTimeout(drawRadarOnce, 500);
+    }
+})();
+
+function drawRadarOnce() {
+    const canvas = document.getElementById('radarCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width, H = canvas.height;
+    const cx = W / 2, cy = H / 2;
+    const R = 160;
+
+    const labels = ['Enerji\nYoğunluğu', 'Döngü\nÖmrü', 'Güvenlik', 'Güç\nÇıkışı', 'Maliyet\n(Düşük=İyi)', 'Hızlı\nŞarj'];
+    const nmc = [0.80, 0.50, 0.60, 0.75, 0.50, 0.70];
+    const lfp = [0.45, 0.95, 0.95, 0.60, 0.85, 0.65];
+    const nca = [0.95, 0.35, 0.40, 0.90, 0.30, 0.80];
+    const n = labels.length;
+
+    ctx.clearRect(0, 0, W, H);
+
+    // Background grid rings
+    for (let ring = 1; ring <= 5; ring++) {
+        const r = R * ring / 5;
+        ctx.beginPath();
+        for (let i = 0; i <= n; i++) {
+            const angle = (Math.PI * 2 * i / n) - Math.PI / 2;
+            const x = cx + r * Math.cos(angle);
+            const y = cy + r * Math.sin(angle);
+            if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+        }
+        ctx.closePath();
+        ctx.strokeStyle = ring === 5 ? 'rgba(255,255,255,0.15)' : 'rgba(255,255,255,0.06)';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+    }
+
+    // Spokes + labels
+    ctx.fillStyle = 'rgba(255,255,255,0.7)';
+    ctx.font = '11px Inter, sans-serif';
+    ctx.textAlign = 'center';
+    for (let i = 0; i < n; i++) {
+        const angle = (Math.PI * 2 * i / n) - Math.PI / 2;
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.lineTo(cx + R * Math.cos(angle), cy + R * Math.sin(angle));
+        ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+        ctx.stroke();
+
+        // Label
+        const lx = cx + (R + 30) * Math.cos(angle);
+        const ly = cy + (R + 30) * Math.sin(angle);
+        const lines = labels[i].split('\n');
+        lines.forEach((line, li) => {
+            ctx.fillText(line, lx, ly + li * 13 - (lines.length - 1) * 6);
+        });
+    }
+
+    function drawPolygon(data, color, alpha) {
+        ctx.beginPath();
+        for (let i = 0; i <= n; i++) {
+            const idx = i % n;
+            const angle = (Math.PI * 2 * idx / n) - Math.PI / 2;
+            const r = R * data[idx];
+            const x = cx + r * Math.cos(angle);
+            const y = cy + r * Math.sin(angle);
+            if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+        }
+        ctx.closePath();
+        ctx.fillStyle = color.replace('1)', alpha + ')');
+        ctx.fill();
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // Dots
+        for (let i = 0; i < n; i++) {
+            const angle = (Math.PI * 2 * i / n) - Math.PI / 2;
+            const r = R * data[i];
+            ctx.beginPath();
+            ctx.arc(cx + r * Math.cos(angle), cy + r * Math.sin(angle), 4, 0, Math.PI * 2);
+            ctx.fillStyle = color;
+            ctx.fill();
+        }
+    }
+
+    drawPolygon(nmc, 'rgba(59,130,246,1)', 0.12);
+    drawPolygon(lfp, 'rgba(16,185,129,1)', 0.12);
+    drawPolygon(nca, 'rgba(239,68,68,1)', 0.12);
+}
+
+// ============================================================
+//  TEMPERATURE HEATMAP SIMULATION
+// ============================================================
+let heatmapInterval = null;
+let hmTemps = [25, 25, 25, 25, 25, 25, 25, 25];
+let hmHotspotCell = -1;
+
+function startHeatmapSim() {
+    if (heatmapInterval) return;
+    hmTemps = [25, 25, 25, 25, 25, 25, 25, 25];
+    hmHotspotCell = -1;
+
+    document.getElementById('btnHeatStart').disabled = true;
+    document.getElementById('btnHeatStop').disabled = false;
+    document.getElementById('btnHeatHot').disabled = false;
+    document.getElementById('hmThermalLog').innerHTML = '';
+    hmAddLog('Sıcaklık izleme başlatıldı', 'info');
+
+    heatmapInterval = setInterval(heatmapTick, 400);
+}
+
+function stopHeatmapSim() {
+    if (!heatmapInterval) return;
+    clearInterval(heatmapInterval);
+    heatmapInterval = null;
+    document.getElementById('btnHeatStart').disabled = false;
+    document.getElementById('btnHeatStop').disabled = true;
+    document.getElementById('btnHeatHot').disabled = true;
+    hmAddLog('Sıcaklık izleme durduruldu', 'info');
+}
+
+function injectHotspot() {
+    hmHotspotCell = Math.floor(Math.random() * 8);
+    hmTemps[hmHotspotCell] = 52 + Math.random() * 8;
+    hmAddLog('🔥 Cell ' + (hmHotspotCell + 1) + ' HOTSPOT! T=' + hmTemps[hmHotspotCell].toFixed(1) + '°C', 'critical');
+    hmAddLog('⚡ Fan hızı %100\'e çıkartıldı', 'warn');
+
+    setTimeout(() => {
+        if (hmHotspotCell >= 0) {
+            hmTemps[hmHotspotCell] = 30 + Math.random() * 5;
+            hmAddLog('✅ Hotspot soğutuldu — Cell ' + (hmHotspotCell + 1) + ' normal', 'info');
+            hmHotspotCell = -1;
+        }
+    }, 6000);
+}
+
+function heatmapTick() {
+    for (let i = 0; i < 8; i++) {
+        if (i === hmHotspotCell) {
+            hmTemps[i] += (Math.random() - 0.4) * 2;
+            hmTemps[i] = Math.max(45, Math.min(65, hmTemps[i]));
+        } else {
+            hmTemps[i] += (Math.random() - 0.5) * 1.5;
+            hmTemps[i] = Math.max(18, Math.min(42, hmTemps[i]));
+        }
+    }
+
+    for (let i = 0; i < 8; i++) {
+        const temp = hmTemps[i];
+        const pct = Math.min(100, Math.max(0, (temp / 60) * 100));
+        const hue = Math.max(0, 200 - (temp / 60) * 200);
+
+        document.getElementById('hmTemp' + i).textContent = temp.toFixed(1) + '°C';
+        document.getElementById('hmBar' + i).style.width = pct + '%';
+        document.getElementById('hmBar' + i).style.background = `hsl(${hue}, 80%, 50%)`;
+
+        const cell = document.getElementById('hmCell' + i);
+        cell.style.borderColor = temp > 45 ? '#ef4444' : temp > 35 ? '#f59e0b' : '#10b981';
+        cell.style.background = `linear-gradient(135deg, rgba(${Math.min(255, temp * 4)}, ${Math.max(0, 200 - temp * 3)}, ${Math.max(0, 100 - temp * 2)}, 0.1), transparent)`;
+    }
+
+    const avg = hmTemps.reduce((a, b) => a + b) / 8;
+    const max = Math.max(...hmTemps);
+    const min = Math.min(...hmTemps);
+    document.getElementById('hmAvgTemp').textContent = avg.toFixed(1) + '°C';
+    document.getElementById('hmMaxTemp').textContent = max.toFixed(1) + '°C';
+    document.getElementById('hmMinTemp').textContent = min.toFixed(1) + '°C';
+    document.getElementById('hmDeltaTemp').textContent = (max - min).toFixed(1) + '°C';
+
+    const thermalStatus = document.getElementById('hmThermalStatus');
+    if (max > 50) { thermalStatus.textContent = '🔴 KRİTİK'; thermalStatus.style.color = '#ef4444'; }
+    else if (max > 38) { thermalStatus.textContent = '🟡 DİKKAT'; thermalStatus.style.color = '#f59e0b'; }
+    else { thermalStatus.textContent = '🟢 NORMAL'; thermalStatus.style.color = '#10b981'; }
+
+    const fanStatus = document.getElementById('hmFanStatus');
+    if (max > 45) { fanStatus.textContent = '🌀 %100 (Tam Hız)'; fanStatus.style.color = '#ef4444'; }
+    else if (max > 35) { fanStatus.textContent = '🌀 %60 (Orta)'; fanStatus.style.color = '#f59e0b'; }
+    else { fanStatus.textContent = '⏸ Kapalı'; fanStatus.style.color = '#64748b'; }
+}
+
+function hmAddLog(msg, level) {
+    const log = document.getElementById('hmThermalLog');
+    const ts = new Date().toLocaleTimeString('tr-TR');
+    const entry = document.createElement('div');
+    entry.className = 'hm-log-entry' + (level === 'critical' ? ' hm-log-critical' : level === 'warn' ? ' hm-log-warn' : '');
+    entry.textContent = `[${ts}] ${msg}`;
+    log.prepend(entry);
+    while (log.children.length > 15) log.lastChild.remove();
+}
+
+// ============================================================
+//  CONFUSION MATRIX ANIMATION
+// ============================================================
+async function animateConfusionMatrix() {
+    // Reset
+    for (let r = 0; r < 3; r++) for (let c = 0; c < 3; c++) {
+        document.getElementById('cmVal' + r + c).textContent = '0';
+        document.getElementById('cmCell' + r + c).style.opacity = '0.3';
+    }
+
+    // Realistic confusion matrix for battery classification
+    const matrix = [
+        [187, 8, 2],    // REUSE
+        [12, 156, 7],   // RECYCLE
+        [1, 6, 121]     // CRITICAL
+    ];
+
+    // Animate cells one by one
+    for (let r = 0; r < 3; r++) {
+        for (let c = 0; c < 3; c++) {
+            const target = matrix[r][c];
+            const el = document.getElementById('cmVal' + r + c);
+            const cell = document.getElementById('cmCell' + r + c);
+            cell.style.opacity = '1';
+            cell.style.transition = 'all 0.3s ease';
+
+            // Count up
+            const steps = 15;
+            for (let s = 1; s <= steps; s++) {
+                el.textContent = Math.round(target * s / steps);
+                await sleep(20);
+            }
+            el.textContent = target;
+
+            // Color intensity based on value
+            if (r === c) {
+                const intensity = Math.min(1, target / 200);
+                cell.style.background = `rgba(16,185,129,${0.15 + intensity * 0.35})`;
+            } else {
+                const intensity = Math.min(1, target / 50);
+                cell.style.background = `rgba(239,68,68,${0.05 + intensity * 0.25})`;
+            }
+
+            await sleep(60);
+        }
+    }
+
+    // Calculate metrics
+    const total = 500;
+    const correct = 187 + 156 + 121;
+    const accuracy = correct / total;
+    const precisionReuse = 187 / (187 + 12 + 1);
+    const recallReuse = 187 / (187 + 8 + 2);
+    const f1 = 2 * precisionReuse * recallReuse / (precisionReuse + recallReuse);
+    const kappa = 0.82 + Math.random() * 0.05;
+
+    // Animate metrics
+    const metrics = [
+        { fill: 'cmAccFill', val: 'cmAccVal', target: accuracy },
+        { fill: 'cmPrecFill', val: 'cmPrecVal', target: precisionReuse },
+        { fill: 'cmRecFill', val: 'cmRecVal', target: recallReuse },
+        { fill: 'cmF1Fill', val: 'cmF1Val', target: f1 },
+        { fill: 'cmKapFill', val: 'cmKapVal', target: kappa }
+    ];
+
+    for (const m of metrics) {
+        const fillEl = document.getElementById(m.fill);
+        const valEl = document.getElementById(m.val);
+        fillEl.style.transition = 'width 0.8s cubic-bezier(0.4,0,0.2,1)';
+        fillEl.style.width = (m.target * 100) + '%';
+        valEl.textContent = '%' + (m.target * 100).toFixed(1);
+        await sleep(200);
+    }
+
+    document.getElementById('cmCorrect').textContent = correct;
+    document.getElementById('cmSummary').style.display = 'block';
+}
+
+// ============================================================
+//  DAQ (DATA ACQUISITION) SIMULATION
+// ============================================================
+let daqInterval = null;
+let daqBuffers = { V: [], I: [], T: [], Z: [] };
+let daqSamples = 0;
+let daqStartTime = null;
+const DAQ_MAX_POINTS = 200;
+
+function startDaqSim() {
+    if (daqInterval) return;
+    daqBuffers = { V: [], I: [], T: [], Z: [] };
+    daqSamples = 0;
+    daqStartTime = Date.now();
+
+    document.getElementById('btnDaqStart').disabled = true;
+    document.getElementById('btnDaqStop').disabled = false;
+    document.getElementById('daqRecStatus').textContent = '🔴 Kayıt Yapılıyor';
+    document.getElementById('daqRecStatus').style.color = '#ef4444';
+
+    daqInterval = setInterval(daqTick, 50);
+}
+
+function stopDaqSim() {
+    if (!daqInterval) return;
+    clearInterval(daqInterval);
+    daqInterval = null;
+
+    document.getElementById('btnDaqStart').disabled = false;
+    document.getElementById('btnDaqStop').disabled = true;
+    document.getElementById('daqRecStatus').textContent = '⏸ Durduruldu';
+    document.getElementById('daqRecStatus').style.color = '#64748b';
+}
+
+function daqTick() {
+    daqSamples++;
+    const t = daqSamples * 0.01;
+
+    // Realistic sensor data with noise
+    const v = 3.7 + 0.3 * Math.sin(t * 0.5) + (Math.random() - 0.5) * 0.02;
+    const i = 2.5 * Math.sin(t * 0.3) + 1.5 * Math.sin(t * 1.2) + (Math.random() - 0.5) * 0.3;
+    const temp = 28 + 5 * Math.sin(t * 0.1) + Math.abs(i) * 0.8 + (Math.random() - 0.5) * 0.5;
+    const z = 45 + 10 * Math.sin(t * 0.2) + (Math.random() - 0.5) * 2;
+
+    daqBuffers.V.push(v); if (daqBuffers.V.length > DAQ_MAX_POINTS) daqBuffers.V.shift();
+    daqBuffers.I.push(i); if (daqBuffers.I.length > DAQ_MAX_POINTS) daqBuffers.I.shift();
+    daqBuffers.T.push(temp); if (daqBuffers.T.length > DAQ_MAX_POINTS) daqBuffers.T.shift();
+    daqBuffers.Z.push(z); if (daqBuffers.Z.length > DAQ_MAX_POINTS) daqBuffers.Z.shift();
+
+    document.getElementById('daqV').textContent = v.toFixed(3) + ' V';
+    document.getElementById('daqI').textContent = (i >= 0 ? '+' : '') + i.toFixed(2) + ' A';
+    document.getElementById('daqT').textContent = temp.toFixed(1) + ' °C';
+    document.getElementById('daqZ').textContent = z.toFixed(1) + ' mΩ';
+    document.getElementById('daqSampleCount').textContent = daqSamples.toLocaleString();
+    document.getElementById('daqDataSize').textContent = (daqSamples * 32 / 1024).toFixed(1) + ' KB';
+
+    const elapsed = Math.floor((Date.now() - daqStartTime) / 1000);
+    const mins = String(Math.floor(elapsed / 60)).padStart(2, '0');
+    const secs = String(elapsed % 60).padStart(2, '0');
+    document.getElementById('daqElapsed').textContent = mins + ':' + secs;
+
+    drawDaqChannel('daqCanvasV', daqBuffers.V, '#3b82f6', 2.5, 4.5);
+    drawDaqChannel('daqCanvasI', daqBuffers.I, '#f59e0b', -6, 6);
+    drawDaqChannel('daqCanvasT', daqBuffers.T, '#ef4444', 15, 50);
+    drawDaqChannel('daqCanvasZ', daqBuffers.Z, '#8b5cf6', 20, 80);
+}
+
+function drawDaqChannel(canvasId, data, color, minV, maxV) {
+    const canvas = document.getElementById(canvasId);
+    if (!canvas || data.length < 2) return;
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width, H = canvas.height;
+
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = '#0f172a';
+    ctx.fillRect(0, 0, W, H);
+
+    // Grid
+    ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+    ctx.lineWidth = 1;
+    for (let g = 1; g < 4; g++) {
+        const y = g * H / 4;
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+    }
+
+    // Gradient fill
+    const grad = ctx.createLinearGradient(0, 0, 0, H);
+    grad.addColorStop(0, color.replace(')', ',0.2)').replace('rgb', 'rgba'));
+    grad.addColorStop(1, 'transparent');
+
+    ctx.beginPath();
+    ctx.moveTo(0, H);
+    for (let j = 0; j < data.length; j++) {
+        const x = (j / DAQ_MAX_POINTS) * W;
+        const norm = (data[j] - minV) / (maxV - minV);
+        const y = H - norm * H;
+        ctx.lineTo(x, y);
+    }
+    ctx.lineTo((data.length - 1) / DAQ_MAX_POINTS * W, H);
+    ctx.closePath();
+    ctx.fillStyle = grad;
+    ctx.fill();
+
+    // Line
+    ctx.beginPath();
+    for (let j = 0; j < data.length; j++) {
+        const x = (j / DAQ_MAX_POINTS) * W;
+        const norm = (data[j] - minV) / (maxV - minV);
+        const y = H - norm * H;
+        if (j === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    }
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
 }
