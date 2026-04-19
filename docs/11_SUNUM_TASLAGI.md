@@ -1,7 +1,7 @@
 # HAKEM ZİYARETİ SUNUM TASLAĞI
 
 ## TÜBİTAK 1507 — Proje No: 7260634
-### "Yapay Zekâ Tabanlı Batarya Sağlık Değerlendirme ve Geri Dönüşüm Karar Destek Sistemi"
+### "Elektrikli Araç Bataryaları İçin Yapay Zekâ Destekli Yeşil Dönüşüm ve Analiz Sistemi"
 ### KOBİNERJİ MÜHENDİSLİK VE ENERJİ VERİMLİLİĞİ DANIŞMANLIK A.Ş.
 
 ---
@@ -13,12 +13,12 @@
 ## SLAYT 1 — KAPAK
 
 **Başlık:**  
-Yapay Zekâ Tabanlı Batarya Sağlık Değerlendirme ve Geri Dönüşüm Karar Destek Sistemi
+Elektrikli Araç Bataryaları İçin Yapay Zekâ Destekli Yeşil Dönüşüm ve Analiz Sistemi
 
 **Alt Bilgi:**
 - Proje No: 7260634
 - Destek Programı: TÜBİTAK 1507 — KOBİ Ar-Ge Başlangıç Destek Programı
-- Firma: KOBİNERJİ A.Ş.
+- Firma: KOBİNERJİ MÜHENDİSLİK VE ENERJİ VERİMLİLİĞİ DANIŞMANLIK A.Ş.
 - Tarih: [Ziyaret Tarihi]
 - Sunan: Proje Ekibi
 
@@ -109,7 +109,7 @@ Yapay Zekâ Tabanlı Batarya Sağlık Değerlendirme ve Geri Dönüşüm Karar D
 
 ---
 
-## SLAYT 7 — CANLAMA DEMO PLANI
+## SLAYT 7 — CANLI DEMO PLANI
 
 **Başlık:** "Canlı Gösterim"
 
@@ -179,21 +179,21 @@ python -m python.reporting.data_analysis_tools
 2026                                    2027
 MAR  HAZ  EYL  ARA  MAR  HAZ  EYL
  ├────┤                                  İP1: Veri Altyapısı (%65)
-      ├────┤                             İP2: EIS ve Hızlı Test
+      ├────┤                             İP2: Veri Ön İşleme
            ├────┤                        İP3: AI Model Geliştirme
-                ├────┤                   İP4: Sınıflandırma Sistemi
-                     ├────┤              İP5: Geri Dönüşüm Optimizasyonu
+                ├────┤                   İP4: Karar Destek Sistemi
+                     ├────┤              İP5: Mekanik Geri Kazanım
                           ├────┤         İP6: Entegre Platform
-                               ├────┤   İP7: Validasyon ve Raporlama
+                               ├────┤   İP7: Nihai Optimizasyon
 ```
 
 **Kilometre Taşları:**
 1. ✅ Proje Başlangıç Toplantısı (01.04.2026)
 2. ⏳ Veri Toplama Altyapısı Tamamlama (01.06.2026)
-3. ○ EIS Test Protokolü Onayı (01.09.2026)
-4. ○ İlk AI Model Prototipi (01.12.2026)
-5. ○ Sınıflandırma Sistemi Beta (01.03.2027)
-6. ○ Entegre Sistem Testi (01.06.2027)
+3. ○ İşlenmiş Nihai Veri Seti (01.09.2026)
+4. ○ SoH Tahmin Modeli (01.01.2027)
+5. ○ Karar Destek Sistemi Beta (01.03.2027)
+6. ○ Sistem Entegrasyonu (01.07.2027)
 7. ○ Final Rapor ve Kapanış (01.09.2027)
 
 ---
@@ -233,14 +233,14 @@ MAR  HAZ  EYL  ARA  MAR  HAZ  EYL
 
 | Kalem | Planlanan | Harcanan | Oran |
 |-------|-----------|----------|------|
-| Personel | 1.982.730 TL | 300.000 TL | %15 |
-| Makine-Teçhizat | 1.260.000 TL | 850.000 TL | %67 |
-| Malzeme-Sarf | 155.000 TL | 50.000 TL | %32 |
-| Seyahat | 100.000 TL | 20.000 TL | %20 |
+| Personel | 1.982.730 TL | 693.400 TL | %35 |
+| Makine-Teçhizat | 1.260.000 TL | 460.000 TL | %36,5 |
+| Malzeme-Sarf | 155.000 TL | 51.600 TL | %33 |
+| Seyahat | 100.000 TL | 15.000 TL | %15 |
 | **TOPLAM** | **3.497.730 TL** | **1.220.000 TL** | **%34.9** |
 
 **Konuşmacı Notu:**
-> "Makine-teçhizat harcaması yüksek görünüyor çünkü İP1'de tüm ana ekipmanlar tedarik edildi. Bu planlı bir harcamadır."
+> "Bütçe kullanım oranımız %34,9 olup İP1'deki ekipman alımları dönem başında gerçekleştirilmiştir. Bu planlı bir harcamadır."
 
 ---
 
@@ -282,7 +282,7 @@ MAR  HAZ  EYL  ARA  MAR  HAZ  EYL
 
 **Sonraki 3 Ay:**
 - İP1 tamamlama (Haziran 2026)
-- İP2 başlangıç: EIS test protokolü geliştirme
+- İP2 başlangıç: Veri ön işleme ve özellik çıkarımı
 - İlk model prototip çalışmaları
 
 **Kapanış Mesajı:**

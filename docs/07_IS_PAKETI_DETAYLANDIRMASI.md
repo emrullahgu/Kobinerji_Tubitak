@@ -1,6 +1,6 @@
 # TÜBİTAK 7260634 — İş Paketi Detaylandırması
 
-**Proje:** Elektrikli Araç Bataryaları İçin Yapay Zeka Destekli Yeşil Dönüşüm ve Analiz Sistemi  
+**Proje:** Elektrikli Araç Bataryaları İçin Yapay Zekâ Destekli Yeşil Dönüşüm ve Analiz Sistemi  
 **Firma:** KOBİNERJİ MÜHENDİSLİK VE ENERJİ VERİMLİLİĞİ DANIŞMANLIK A.Ş.  
 **Süre:** 18 Ay (01.03.2026 – 01.09.2027)  
 **Toplam Bütçe:** 3.497.730 TL  

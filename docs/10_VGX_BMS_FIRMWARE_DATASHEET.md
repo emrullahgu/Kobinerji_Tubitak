@@ -1,7 +1,7 @@
 # TÜBİTAK 7260634 — VGX BMS Firmware Datasheet
 
-**Proje Adı:** Yapay Zeka Destekli Lityum İyon Batarya Analizi ve Geri Dönüşüm Sistemi  
-**Kuruluş:** KOBİNERJİ A.Ş. — Kobinerji Mühendislik ve Enerji Verimliliği Danışmanlık A.Ş.  
+**Proje Adı:** Elektrikli Araç Bataryaları İçin Yapay Zekâ Destekli Yeşil Dönüşüm ve Analiz Sistemi  
+**Kuruluş:** KOBİNERJİ MÜHENDİSLİK VE ENERJİ VERİMLİLİĞİ DANIŞMANLIK A.Ş.  
 **Proje Kodu:** TÜBİTAK 1507 — 7260634  
 **Doküman Sürümü:** 1.0.0  
 **Tarih:** 19 Nisan 2026  

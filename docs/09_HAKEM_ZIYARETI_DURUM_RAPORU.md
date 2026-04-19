@@ -4,7 +4,7 @@
 
 ---
 
-**Proje Adı:** Elektrikli Araç Bataryaları İçin Yapay Zeka Destekli Yeşil Dönüşüm ve Analiz Sistemi  
+**Proje Adı:** Elektrikli Araç Bataryaları İçin Yapay Zekâ Destekli Yeşil Dönüşüm ve Analiz Sistemi  
 **Proje No:** 7260634  
 **Yürütücü Kuruluş:** KOBİNERJİ MÜHENDİSLİK VE ENERJİ VERİMLİLİĞİ DANIŞMANLIK A.Ş.  
 **Proje Yürütücüsü:** Cem Bülbül  
@@ -21,7 +21,7 @@
 |-------|-------|
 | Proje No | 7260634 |
 | Program | TÜBİTAK 1507 — KOBİ Ar-Ge Başlangıç Destek Programı |
-| Proje Adı | Elektrikli Araç Bataryaları İçin Yapay Zeka Destekli Yeşil Dönüşüm ve Analiz Sistemi |
+| Proje Adı | Elektrikli Araç Bataryaları İçin Yapay Zekâ Destekli Yeşil Dönüşüm ve Analiz Sistemi |
 | Yürütücü | KOBİNERJİ MÜHENDİSLİK VE ENERJİ VERİMLİLİĞİ DANIŞMANLIK A.Ş. |
 | Başlangıç Tarihi | 01.03.2026 |
 | Bitiş Tarihi | 01.09.2027 |

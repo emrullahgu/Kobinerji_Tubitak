@@ -575,7 +575,9 @@ const projectDocs = [
     { id: '07', title: 'İş Paketi Detaylandırması', desc: '7 iş paketi, faaliyet kırılımı ve zaman çizelgesi', file: 'docs/07_IS_PAKETI_DETAYLANDIRMASI.md', color: '#ec4899', tags: ['İş Paketleri', 'Planlama', '18 Ay'] },
     { id: '08', title: 'Kalite Kontrol Planı', desc: 'ISO standartları, kalite metrikleri ve denetim planı', file: 'docs/08_KALITE_KONTROL_PLANI.md', color: '#14b8a6', tags: ['Kalite', 'ISO', 'Denetim'] },
     { id: '09', title: 'Hakem Ziyareti Durum Raporu', desc: 'Mevcut durum, ilerleme ve TÜBİTAK hakem sunumu', file: 'docs/09_HAKEM_ZIYARETI_DURUM_RAPORU.md', color: '#f97316', tags: ['Hakem', 'Durum', 'TÜBİTAK'] },
-    { id: '10', title: 'VGX BMS Firmware Datasheet', desc: 'STM32F030C8 BMS gömülü yazılım teknik referansı', file: 'docs/10_VGX_BMS_FIRMWARE_DATASHEET.md', color: '#64748b', tags: ['Firmware', 'BMS', 'Gömülü'] }
+    { id: '10', title: 'Hakem Hazırlık Kontrol Listesi', desc: 'Hakem ziyareti öncesi idari, teknik ve içerik hazırlık listesi', file: 'docs/10_HAKEM_HAZIRLIK_KONTROL_LISTESI.md', color: '#0ea5e9', tags: ['Kontrol', 'Hazırlık', 'Checklist'] },
+    { id: '10-F', title: 'VGX BMS Firmware Datasheet', desc: 'STM32F030C8 BMS gömülü yazılım teknik referansı', file: 'docs/10_VGX_BMS_FIRMWARE_DATASHEET.md', color: '#64748b', tags: ['Firmware', 'BMS', 'Gömülü'] },
+    { id: '11', title: 'Sunum Taslağı', desc: 'TÜBİTAK hakem ziyareti sunum içeriği ve konuşmacı notları', file: 'docs/11_SUNUM_TASLAGI.md', color: '#d946ef', tags: ['Sunum', 'Hakem', 'Slayt'] }
 ];
 
 function renderDocuments() {
@@ -592,180 +594,566 @@ function renderDocuments() {
             </div>
             <div class="doc-card-tags">
                 ${doc.tags.map(t => `<span class="doc-tag">${t}</span>`).join('')}
+                ${getDocEditBadge(doc.file)}
             </div>
             <div class="doc-card-footer">
-                <span class="doc-card-meta"></span>
-                <button class="doc-download-btn" onclick="downloadDocPDF('${doc.file}', '${doc.id} — ${doc.title.replace(/'/g, "\\'")}')">
-                    <span class="btn-text">⬇ PDF İndir</span>
-                    <span class="spinner"></span>
-                </button>
+                <span class="doc-card-meta">📄 Markdown → PDF</span>
+                <div class="doc-card-actions">
+                    <button class="doc-edit-btn" onclick="openDocEditor('${doc.file}', '${doc.id} — ${doc.title.replace(/'/g, "\\'")}')">
+                        ✏️ Düzenle
+                    </button>
+                    <button class="doc-download-btn" onclick="downloadDocPDF('${doc.file}', '${doc.id} — ${doc.title.replace(/'/g, "\\'")}')">
+                        <span class="btn-text">📥 PDF İndir</span>
+                        <span class="spinner"></span>
+                    </button>
+                </div>
             </div>
         </div>
     `).join('');
 }
 
+/* ═══════════ DOCUMENT EDITOR ═══════════ */
+function getDocEditBadge(filePath) {
+    const key = 'doc_edit_' + filePath.replace(/[^a-zA-Z0-9]/g, '_');
+    if (localStorage.getItem(key)) {
+        return '<span class="doc-tag doc-tag-edited">✏️ Düzenlendi</span>';
+    }
+    return '';
+}
+
+function getDocContent(filePath) {
+    const key = 'doc_edit_' + filePath.replace(/[^a-zA-Z0-9]/g, '_');
+    return localStorage.getItem(key);
+}
+
+function saveDocContent(filePath, content) {
+    const key = 'doc_edit_' + filePath.replace(/[^a-zA-Z0-9]/g, '_');
+    localStorage.setItem(key, content);
+    localStorage.setItem(key + '_date', new Date().toISOString());
+}
+
+function resetDocContent(filePath) {
+    const key = 'doc_edit_' + filePath.replace(/[^a-zA-Z0-9]/g, '_');
+    localStorage.removeItem(key);
+    localStorage.removeItem(key + '_date');
+}
+
+async function openDocEditor(filePath, docTitle) {
+    // Fetch original or load saved
+    let content;
+    const saved = getDocContent(filePath);
+    if (saved) {
+        content = saved;
+    } else {
+        const resp = await fetch(filePath);
+        if (!resp.ok) { showToast('❌ Dosya yüklenemedi', 'error'); return; }
+        content = await resp.text();
+    }
+
+    // Create modal
+    let modal = document.getElementById('docEditorModal');
+    if (modal) modal.remove();
+
+    modal = document.createElement('div');
+    modal.id = 'docEditorModal';
+    modal.className = 'doc-editor-modal';
+    modal.innerHTML = `
+        <div class="doc-editor-container">
+            <div class="doc-editor-toolbar">
+                <div class="doc-editor-title">
+                    <span class="doc-editor-icon">📝</span>
+                    <h3>${docTitle}</h3>
+                    ${saved ? '<span class="doc-editor-saved-badge">💾 Kaydedilmiş düzenleme</span>' : ''}
+                </div>
+                <div class="doc-editor-actions">
+                    <button class="doc-editor-btn doc-editor-btn-reset" onclick="resetDocAndClose('${filePath}')" title="Orijinal haline döndür">
+                        🔄 Sıfırla
+                    </button>
+                    <button class="doc-editor-btn doc-editor-btn-save" onclick="saveDocAndClose('${filePath}')">
+                        💾 Kaydet
+                    </button>
+                    <button class="doc-editor-btn doc-editor-btn-close" onclick="closeDocEditor()">
+                        ✕
+                    </button>
+                </div>
+            </div>
+            <div class="doc-editor-body">
+                <div class="doc-editor-pane doc-editor-left">
+                    <div class="doc-editor-pane-header">Markdown Kaynak</div>
+                    <textarea id="docEditorTextarea" spellcheck="true">${escapeHtml(content)}</textarea>
+                </div>
+                <div class="doc-editor-pane doc-editor-right">
+                    <div class="doc-editor-pane-header">Önizleme</div>
+                    <div id="docEditorPreview" class="doc-editor-preview"></div>
+                </div>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(modal);
+    requestAnimationFrame(() => modal.classList.add('open'));
+
+    // Live preview
+    const textarea = document.getElementById('docEditorTextarea');
+    const preview = document.getElementById('docEditorPreview');
+    function updatePreview() {
+        preview.innerHTML = marked.parse(textarea.value);
+    }
+    updatePreview();
+    textarea.addEventListener('input', updatePreview);
+
+    // Escape to close
+    modal._keyHandler = (e) => { if (e.key === 'Escape') closeDocEditor(); };
+    document.addEventListener('keydown', modal._keyHandler);
+}
+
+function escapeHtml(str) {
+    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function saveDocAndClose(filePath) {
+    const textarea = document.getElementById('docEditorTextarea');
+    if (!textarea) return;
+    saveDocContent(filePath, textarea.value);
+    closeDocEditor();
+    renderDocuments();
+    showToast('✅ Doküman kaydedildi — PDF bu değişiklikleri kullanacak', 'success');
+}
+
+function resetDocAndClose(filePath) {
+    resetDocContent(filePath);
+    closeDocEditor();
+    renderDocuments();
+    showToast('🔄 Doküman orijinal haline döndürüldü', 'info');
+}
+
+function closeDocEditor() {
+    const modal = document.getElementById('docEditorModal');
+    if (!modal) return;
+    if (modal._keyHandler) document.removeEventListener('keydown', modal._keyHandler);
+    modal.classList.remove('open');
+    setTimeout(() => modal.remove(), 300);
+}
+
+/* ═══════════ PDF GENERATION (jsPDF native text) ═══════════ */
 async function downloadDocPDF(filePath, docTitle) {
     const btn = event.currentTarget;
     btn.classList.add('loading');
     btn.disabled = true;
+
     try {
-        const resp = await fetch(filePath);
-        if (!resp.ok) throw new Error('Dosya yüklenemedi: ' + resp.status);
-        const md = await resp.text();
-        const htmlContent = marked.parse(md);
-
-        let container = document.getElementById('pdfRenderContainer');
-        if (!container) {
-            container = document.createElement('div');
-            container.id = 'pdfRenderContainer';
-            document.body.appendChild(container);
+        /* 1. Get content (saved edits or original) */
+        let md = getDocContent(filePath);
+        if (!md) {
+            const resp = await fetch(filePath);
+            if (!resp.ok) throw new Error('Dosya yüklenemedi: ' + resp.status);
+            md = await resp.text();
         }
 
-        // Build structured HTML document for section-by-section rendering
-        container.innerHTML = `
-            <div class="pdf-doc-header">
-                <img src="firmalogo.png" class="pdf-doc-logo" crossorigin="anonymous">
-                <div class="pdf-doc-header-text">
-                    <div class="pdf-doc-company">KOBİNERJİ MÜHENDİSLİK VE ENERJİ VERİMLİLİĞİ DANIŞMANLIK A.Ş.</div>
-                    <div class="pdf-doc-project">TÜBİTAK 1507 — Proje No: 7260634</div>
-                    <div class="pdf-doc-subtitle">Elektrikli Araç Bataryaları İçin Yapay Zekâ Destekli Yeşil Dönüşüm ve Analiz Sistemi</div>
-                </div>
-            </div>
-            <div class="pdf-doc-title-bar">
-                <h1 class="pdf-doc-main-title">${docTitle}</h1>
-                <div class="pdf-doc-meta-row">
-                    <span>Tarih: 19 Nisan 2026</span>
-                    <span>Sürüm: 1.0.0</span>
-                    <span>Gizlilik: Proje İçi</span>
-                </div>
-            </div>
-            <div class="pdf-doc-content">${htmlContent}</div>
-            <div class="pdf-doc-footer">
-                <div>© 2026 KOBİNERJİ A.Ş. — Tüm hakları saklıdır.</div>
-                <div>${docTitle}</div>
-            </div>
-        `;
+        const now = new Date();
+        const dateStr = now.toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' });
+        const dateISO = now.toISOString().split('T')[0];
 
-        // Wait for logo to load
-        const logoImg = container.querySelector('.pdf-doc-logo');
-        if (logoImg && !logoImg.complete) {
-            await new Promise(resolve => { logoImg.onload = resolve; logoImg.onerror = resolve; setTimeout(resolve, 2000); });
-        }
-        await new Promise(r => setTimeout(r, 300));
+        /* 2. Parse markdown into structured tokens */
+        const tokens = marked.lexer(md);
 
-        // Collect render blocks: split content by H1/H2 for clean page breaks
-        const renderBlocks = [];
-        const headerEl = container.querySelector('.pdf-doc-header');
-        const titleEl = container.querySelector('.pdf-doc-title-bar');
-        if (headerEl) renderBlocks.push(headerEl);
-        if (titleEl) renderBlocks.push(titleEl);
-
-        const contentEl = container.querySelector('.pdf-doc-content');
-        if (contentEl) {
-            // Split content children into groups at each H1/H2 boundary
-            let currentGroup = document.createElement('div');
-            currentGroup.className = 'pdf-doc-content';
-            let hasContent = false;
-
-            for (const child of [...contentEl.children]) {
-                const tag = child.tagName;
-                if ((tag === 'H1' || tag === 'H2') && hasContent) {
-                    container.appendChild(currentGroup);
-                    renderBlocks.push(currentGroup);
-                    currentGroup = document.createElement('div');
-                    currentGroup.className = 'pdf-doc-content';
-                    hasContent = false;
-                }
-                currentGroup.appendChild(child.cloneNode(true));
-                hasContent = true;
-            }
-            if (hasContent) {
-                container.appendChild(currentGroup);
-                renderBlocks.push(currentGroup);
-            }
-        }
-
-        const footerEl = container.querySelector('.pdf-doc-footer');
-        if (footerEl) renderBlocks.push(footerEl);
-
-        await new Promise(r => setTimeout(r, 200));
-
-        // Section-by-section PDF rendering (same proven approach as AGY101-02)
+        /* 3. Setup jsPDF */
         const { jsPDF } = window.jspdf;
         const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-        const pageW = 210, pageH = 297, margin = 7;
-        const contentW = pageW - margin * 2;
-        const usableH = pageH - margin * 2;
+        const PW = 210, PH = 297;
+        const ML = 18, MR = 18, MT = 22, MB = 20;
+        const CW = PW - ML - MR;
+        let y = MT;
+        let pageNum = 0;
 
-        const h2cOpts = {
-            scale: 2, useCORS: true, allowTaint: true,
-            backgroundColor: '#ffffff', logging: false,
-            windowWidth: 794, imageTimeout: 15000
-        };
+        /* ── Helper: add page with header/footer ── */
+        function newPage() {
+            if (pageNum > 0) pdf.addPage();
+            pageNum++;
+            y = MT;
+        }
 
-        let currentY = margin;
+        function checkSpace(needed) {
+            if (y + needed > PH - MB) {
+                newPage();
+                return true;
+            }
+            return false;
+        }
 
-        for (let i = 0; i < renderBlocks.length; i++) {
-            const el = renderBlocks[i];
-            if (!el || !el.offsetHeight || el.offsetHeight < 2) continue;
+        function addHeaderFooter() {
+            const total = pdf.internal.getNumberOfPages();
+            for (let p = 2; p <= total; p++) {
+                pdf.setPage(p);
+                // Header line
+                pdf.setDrawColor(99, 102, 241);
+                pdf.setLineWidth(0.4);
+                pdf.line(ML, MT - 6, PW - MR, MT - 6);
+                pdf.setFontSize(7);
+                pdf.setTextColor(100, 116, 139);
+                pdf.text('KOBINERJI A.S. | TUBITAK 7260634', ML, MT - 9);
+                const short = docTitle.length > 48 ? docTitle.substring(0, 45) + '...' : docTitle;
+                pdf.setFontSize(6.5);
+                pdf.setTextColor(99, 102, 241);
+                pdf.text(short, PW - MR, MT - 9, { align: 'right' });
+                // Footer
+                const fy = PH - MB + 6;
+                pdf.setDrawColor(203, 213, 225);
+                pdf.setLineWidth(0.3);
+                pdf.line(ML, fy, PW - MR, fy);
+                pdf.setFontSize(6.5);
+                pdf.setTextColor(148, 163, 184);
+                pdf.text('(c) 2026 KOBINERJI A.S.', ML, fy + 4);
+                pdf.setFontSize(6);
+                pdf.setTextColor(220, 38, 38);
+                pdf.text('GIZLI', PW / 2, fy + 4, { align: 'center' });
+                pdf.setFontSize(7);
+                pdf.setTextColor(100, 116, 139);
+                pdf.text('Sayfa ' + (p - 1) + ' / ' + (total - 1), PW - MR, fy + 4, { align: 'right' });
+            }
+        }
 
-            const canvas = await html2canvas(el, h2cOpts);
-            const imgW = contentW;
-            const imgH = (canvas.height * contentW) / canvas.width;
-            const remaining = usableH - (currentY - margin);
+        /* ── Helper: wrap and print text ── */
+        function printText(text, fontSize, bold, color, indent) {
+            indent = indent || 0;
+            pdf.setFontSize(fontSize);
+            pdf.setFont('helvetica', bold ? 'bold' : 'normal');
+            pdf.setTextColor(color[0], color[1], color[2]);
+            const maxW = CW - indent;
+            const lines = pdf.splitTextToSize(text, maxW);
+            const lineH = fontSize * 0.45;
+            for (let i = 0; i < lines.length; i++) {
+                checkSpace(lineH);
+                pdf.text(lines[i], ML + indent, y);
+                y += lineH;
+            }
+        }
 
-            if (imgH <= remaining) {
-                // Fits on current page
-                pdf.addImage(canvas.toDataURL('image/png'), 'PNG', margin, currentY, imgW, imgH);
-                currentY += imgH + 0.5;
-            } else if (imgH <= usableH) {
-                // Doesn't fit current page, but fits a fresh page
-                pdf.addPage();
-                currentY = margin;
-                pdf.addImage(canvas.toDataURL('image/png'), 'PNG', margin, currentY, imgW, imgH);
-                currentY += imgH + 0.5;
-            } else {
-                // Taller than one page → slice
-                if (currentY > margin + 2) { pdf.addPage(); currentY = margin; }
+        function stripInline(text) {
+            // Remove markdown inline formatting for plain text rendering
+            return text
+                .replace(/\*\*(.+?)\*\*/g, '$1')
+                .replace(/\*(.+?)\*/g, '$1')
+                .replace(/__(.+?)__/g, '$1')
+                .replace(/_(.+?)_/g, '$1')
+                .replace(/`(.+?)`/g, '$1')
+                .replace(/\[(.+?)\]\(.+?\)/g, '$1')
+                .replace(/~~(.+?)~~/g, '$1');
+        }
 
-                const pxPerMm = canvas.width / contentW;
-                const pxPerPage = Math.floor(usableH * pxPerMm);
-                let srcY = 0, sliceIdx = 0;
+        /* ══════ 4. COVER PAGE ══════ */
+        newPage();
+        // Top gradient bar
+        pdf.setFillColor(15, 23, 42);
+        pdf.rect(0, 0, PW, 42, 'F');
+        pdf.setFillColor(30, 58, 95);
+        pdf.rect(0, 35, PW, 7, 'F');
 
-                while (srcY < canvas.height) {
-                    if (sliceIdx > 0) { pdf.addPage(); currentY = margin; }
+        // Company name on dark bar
+        pdf.setFontSize(11);
+        pdf.setFont('helvetica', 'bold');
+        pdf.setTextColor(255, 255, 255);
+        pdf.text('KOBINERJI MUHENDISLIK VE ENERJI VERIMLILIGI DANISMANLIK A.S.', ML, 18);
+        pdf.setFontSize(8);
+        pdf.setTextColor(180, 200, 220);
+        pdf.text('Ceran Plaza, Kemalpasa OSB, Gazi Blv. No:177/19, 35730 Kemalpasa/Izmir', ML, 25);
 
-                    const sliceH = Math.min(pxPerPage, canvas.height - srcY);
-                    const slice = document.createElement('canvas');
-                    slice.width = canvas.width;
-                    slice.height = Math.ceil(sliceH);
-                    const ctx = slice.getContext('2d');
-                    ctx.fillStyle = '#ffffff';
-                    ctx.fillRect(0, 0, slice.width, slice.height);
-                    ctx.drawImage(canvas, 0, srcY, canvas.width, sliceH, 0, 0, canvas.width, sliceH);
+        // TÜBİTAK badge
+        pdf.setFillColor(99, 102, 241);
+        pdf.roundedRect(PW / 2 - 45, 58, 90, 12, 6, 6, 'F');
+        pdf.setFontSize(9);
+        pdf.setFont('helvetica', 'bold');
+        pdf.setTextColor(255, 255, 255);
+        pdf.text('TUBITAK 1507 - KOBi Ar-Ge Destek Programi', PW / 2, 66, { align: 'center' });
 
-                    const sliceImgH = sliceH / pxPerMm;
-                    pdf.addImage(slice.toDataURL('image/png'), 'PNG', margin, margin, contentW, sliceImgH);
-                    currentY = margin + sliceImgH + 0.5;
-                    srcY += pxPerPage;
-                    sliceIdx++;
+        // Project number
+        pdf.setFontSize(36);
+        pdf.setFont('helvetica', 'bold');
+        pdf.setTextColor(15, 23, 42);
+        pdf.text('Proje No: 7260634', PW / 2, 95, { align: 'center' });
+
+        // Project name
+        pdf.setFontSize(13);
+        pdf.setFont('helvetica', 'normal');
+        pdf.setTextColor(51, 65, 85);
+        const projNameLines = pdf.splitTextToSize(
+            'Elektrikli Arac Bataryalari Icin Yapay Zeka Destekli Yesil Donusum ve Analiz Sistemi', 140);
+        let pny = 110;
+        projNameLines.forEach(l => { pdf.text(l, PW / 2, pny, { align: 'center' }); pny += 7; });
+
+        // Divider
+        pdf.setDrawColor(99, 102, 241);
+        pdf.setLineWidth(1);
+        pdf.line(PW / 2 - 30, pny + 5, PW / 2 + 30, pny + 5);
+
+        // Document title
+        pdf.setFontSize(18);
+        pdf.setFont('helvetica', 'bold');
+        pdf.setTextColor(15, 76, 117);
+        const titleLines = pdf.splitTextToSize(docTitle, 150);
+        let ty = pny + 20;
+        titleLines.forEach(l => { pdf.text(l, PW / 2, ty, { align: 'center' }); ty += 9; });
+
+        // Meta grid
+        const metaItems = [
+            ['Dokuman Tarihi', dateStr],
+            ['Surum', '1.0.0'],
+            ['Proje Suresi', '01.03.2026 - 01.09.2027'],
+            ['Gizlilik', 'Proje Ici - Gizli'],
+            ['Proje Yurutucusu', 'Cem Bulbul'],
+            ['Hazirlayan', 'KOBINERJI A.S. Proje Ekibi']
+        ];
+        let my = ty + 15;
+        const mColW = 80;
+        for (let i = 0; i < metaItems.length; i++) {
+            const col = i % 2;
+            const mx = ML + col * (mColW + 10);
+            if (i % 2 === 0 && i > 0) my += 16;
+            // Box
+            pdf.setFillColor(248, 250, 252);
+            pdf.setDrawColor(226, 232, 240);
+            pdf.roundedRect(mx, my, mColW, 14, 2, 2, 'FD');
+            // Label
+            pdf.setFontSize(7);
+            pdf.setFont('helvetica', 'bold');
+            pdf.setTextColor(100, 116, 139);
+            pdf.text(metaItems[i][0].toUpperCase(), mx + 4, my + 5);
+            // Value
+            pdf.setFontSize(9);
+            pdf.setFont('helvetica', 'bold');
+            pdf.setTextColor(15, 23, 42);
+            pdf.text(metaItems[i][1], mx + 4, my + 11);
+        }
+
+        // Bottom band
+        const bby = PH - 30;
+        pdf.setFillColor(248, 250, 252);
+        pdf.rect(0, bby, PW, 30, 'F');
+        pdf.setDrawColor(226, 232, 240);
+        pdf.line(0, bby, PW, bby);
+        pdf.setFontSize(9);
+        pdf.setFont('helvetica', 'bold');
+        pdf.setTextColor(220, 38, 38);
+        pdf.text('GIZLI - Bu dokuman KOBINERJI A.S. tarafindan TUBITAK\'a sunulmak uzere hazirlanmistir.', PW / 2, bby + 12, { align: 'center' });
+        pdf.setFontSize(8);
+        pdf.setTextColor(148, 163, 184);
+        pdf.text('(c) 2026 KOBINERJI A.S. - Tum haklari saklidir.', PW / 2, bby + 20, { align: 'center' });
+
+        /* ══════ 5. CONTENT PAGES ══════ */
+        newPage();
+
+        // Title at top of content
+        pdf.setFontSize(16);
+        pdf.setFont('helvetica', 'bold');
+        pdf.setTextColor(15, 23, 42);
+        const mainTitleLines = pdf.splitTextToSize(docTitle, CW);
+        mainTitleLines.forEach(l => { pdf.text(l, ML, y); y += 7; });
+        y += 2;
+        pdf.setDrawColor(99, 102, 241);
+        pdf.setLineWidth(0.8);
+        pdf.line(ML, y, PW - MR, y);
+        y += 3;
+        pdf.setFontSize(8);
+        pdf.setFont('helvetica', 'normal');
+        pdf.setTextColor(100, 116, 139);
+        pdf.text('Tarih: ' + dateStr + '  |  Surum: 1.0.0  |  Gizlilik: Proje Ici', ML, y);
+        y += 8;
+
+        /* ── Process tokens ── */
+        for (const token of tokens) {
+            switch (token.type) {
+                case 'heading': {
+                    const text = stripInline(token.text);
+                    const depth = token.depth;
+                    const sizes = { 1: 15, 2: 12.5, 3: 11, 4: 10, 5: 9.5, 6: 9 };
+                    const fs = sizes[depth] || 10;
+                    const gap = depth <= 2 ? 6 : 4;
+                    checkSpace(gap + fs * 0.5 + 4);
+                    y += gap;
+                    pdf.setFontSize(fs);
+                    pdf.setFont('helvetica', 'bold');
+                    if (depth === 1) pdf.setTextColor(15, 23, 42);
+                    else if (depth === 2) pdf.setTextColor(30, 41, 59);
+                    else pdf.setTextColor(51, 65, 85);
+                    const hLines = pdf.splitTextToSize(text, CW);
+                    hLines.forEach(l => { checkSpace(fs * 0.45); pdf.text(l, ML, y); y += fs * 0.45; });
+                    if (depth <= 2) {
+                        y += 1;
+                        pdf.setDrawColor(depth === 1 ? 99 : 226, depth === 1 ? 102 : 232, depth === 1 ? 241 : 240);
+                        pdf.setLineWidth(depth === 1 ? 0.6 : 0.3);
+                        pdf.line(ML, y, PW - MR, y);
+                    }
+                    y += 3;
+                    break;
+                }
+                case 'paragraph': {
+                    const text = stripInline(token.text);
+                    checkSpace(8);
+                    printText(text, 9.5, false, [30, 41, 59], 0);
+                    y += 3;
+                    break;
+                }
+                case 'list': {
+                    checkSpace(8);
+                    for (let i = 0; i < token.items.length; i++) {
+                        const item = token.items[i];
+                        const text = stripInline(item.text);
+                        const bullet = token.ordered ? (i + 1) + '.' : '\u2022';
+                        checkSpace(5);
+                        pdf.setFontSize(9.5);
+                        pdf.setFont('helvetica', 'normal');
+                        pdf.setTextColor(30, 41, 59);
+                        pdf.text(bullet, ML + 3, y);
+                        const listLines = pdf.splitTextToSize(text, CW - 10);
+                        listLines.forEach((l, li) => {
+                            checkSpace(4.5);
+                            pdf.text(l, ML + 10, y);
+                            y += 4.5;
+                        });
+                        y += 1;
+                    }
+                    y += 2;
+                    break;
+                }
+                case 'table': {
+                    const headers = token.header.map(h => stripInline(h.text || h));
+                    const rows = token.rows.map(row => row.map(cell => stripInline(cell.text || cell)));
+                    const colCount = headers.length;
+                    const colW = CW / colCount;
+                    const cellH = 6;
+                    const cellPad = 2;
+                    const tableH = (1 + rows.length) * cellH;
+
+                    checkSpace(Math.min(tableH, 40));
+
+                    // Header row
+                    pdf.setFillColor(241, 245, 249);
+                    pdf.rect(ML, y, CW, cellH, 'F');
+                    pdf.setFontSize(7.5);
+                    pdf.setFont('helvetica', 'bold');
+                    pdf.setTextColor(51, 65, 85);
+                    headers.forEach((h, ci) => {
+                        const txt = pdf.splitTextToSize(h, colW - cellPad * 2);
+                        pdf.text(txt[0] || '', ML + ci * colW + cellPad, y + 4);
+                    });
+                    // Header border
+                    pdf.setDrawColor(203, 213, 225);
+                    pdf.setLineWidth(0.2);
+                    pdf.rect(ML, y, CW, cellH);
+                    headers.forEach((_, ci) => {
+                        if (ci > 0) pdf.line(ML + ci * colW, y, ML + ci * colW, y + cellH);
+                    });
+                    y += cellH;
+
+                    // Data rows
+                    pdf.setFont('helvetica', 'normal');
+                    pdf.setFontSize(7.5);
+                    rows.forEach((row, ri) => {
+                        checkSpace(cellH);
+                        if (ri % 2 === 0) {
+                            pdf.setFillColor(248, 250, 252);
+                            pdf.rect(ML, y, CW, cellH, 'F');
+                        }
+                        pdf.setTextColor(30, 41, 59);
+                        row.forEach((cell, ci) => {
+                            const txt = pdf.splitTextToSize(cell, colW - cellPad * 2);
+                            pdf.text(txt[0] || '', ML + ci * colW + cellPad, y + 4);
+                        });
+                        pdf.setDrawColor(226, 232, 240);
+                        pdf.rect(ML, y, CW, cellH);
+                        row.forEach((_, ci) => {
+                            if (ci > 0) pdf.line(ML + ci * colW, y, ML + ci * colW, y + cellH);
+                        });
+                        y += cellH;
+                    });
+                    y += 4;
+                    break;
+                }
+                case 'code': {
+                    const codeText = token.text;
+                    checkSpace(12);
+                    pdf.setFillColor(30, 41, 59);
+                    const codeLines = codeText.split('\n');
+                    const codeH = codeLines.length * 4 + 6;
+                    const blockH = Math.min(codeH, PH - MB - y);
+                    pdf.roundedRect(ML, y, CW, blockH, 2, 2, 'F');
+                    y += 4;
+                    pdf.setFontSize(7.5);
+                    pdf.setFont('courier', 'normal');
+                    pdf.setTextColor(226, 232, 240);
+                    for (const cl of codeLines) {
+                        if (y + 4 > PH - MB) break; // Don't overflow
+                        pdf.text(cl.substring(0, 100), ML + 4, y);
+                        y += 4;
+                    }
+                    y += 4;
+                    break;
+                }
+                case 'blockquote': {
+                    const text = stripInline(token.text || (token.tokens ? token.tokens.map(t => t.text || '').join(' ') : ''));
+                    checkSpace(10);
+                    pdf.setDrawColor(99, 102, 241);
+                    pdf.setLineWidth(1);
+                    const qLines = pdf.splitTextToSize(text, CW - 12);
+                    const qH = qLines.length * 4.5 + 2;
+                    pdf.line(ML + 2, y, ML + 2, y + qH);
+                    pdf.setFontSize(9);
+                    pdf.setFont('helvetica', 'italic');
+                    pdf.setTextColor(100, 116, 139);
+                    qLines.forEach(l => { checkSpace(4.5); pdf.text(l, ML + 8, y); y += 4.5; });
+                    y += 4;
+                    break;
+                }
+                case 'hr': {
+                    checkSpace(6);
+                    y += 3;
+                    pdf.setDrawColor(226, 232, 240);
+                    pdf.setLineWidth(0.3);
+                    pdf.line(ML, y, PW - MR, y);
+                    y += 3;
+                    break;
+                }
+                case 'space': {
+                    y += 2;
+                    break;
+                }
+                default: {
+                    if (token.text) {
+                        const text = stripInline(token.text);
+                        if (text.trim()) {
+                            checkSpace(6);
+                            printText(text, 9.5, false, [30, 41, 59], 0);
+                            y += 2;
+                        }
+                    }
+                    break;
                 }
             }
         }
 
-        // Add page numbers on every page
-        const numPages = pdf.internal.getNumberOfPages();
-        for (let p = 1; p <= numPages; p++) {
-            pdf.setPage(p);
-            pdf.setFontSize(8);
-            pdf.setTextColor(160);
-            pdf.text(docTitle, margin, pageH - 4);
-            pdf.text('Sayfa ' + p + ' / ' + numPages, pageW - margin - 25, pageH - 4);
-        }
+        /* ── End mark ── */
+        checkSpace(20);
+        y += 8;
+        pdf.setDrawColor(99, 102, 241);
+        pdf.setLineWidth(0.3);
+        const endLen = 40;
+        pdf.line(PW / 2 - endLen, y, PW / 2 + endLen, y);
+        y += 5;
+        pdf.setFontSize(8);
+        pdf.setFont('helvetica', 'bold');
+        pdf.setTextColor(100, 116, 139);
+        pdf.text('-- Dokuman Sonu --', PW / 2, y, { align: 'center' });
+        y += 5;
+        pdf.setFontSize(7);
+        pdf.setFont('helvetica', 'normal');
+        pdf.setTextColor(148, 163, 184);
+        pdf.text(docTitle + '  |  KOBINERJI A.S.  |  (c) 2026', PW / 2, y, { align: 'center' });
 
+        /* ══════ 6. HEADERS & FOOTERS ══════ */
+        addHeaderFooter();
+
+        /* ══════ 7. SAVE ══════ */
         const safeTitle = docTitle.replace(/[^a-zA-Z0-9_\-ğüşıöçĞÜŞİÖÇ ]/g, '').replace(/\s+/g, '_');
-        pdf.save(`${safeTitle}.pdf`);
-        container.innerHTML = '';
+        pdf.save(`${safeTitle}_${dateISO}.pdf`);
         showToast(`✅ ${docTitle} PDF başarıyla indirildi`, 'success');
     } catch (err) {
         console.error('PDF oluşturma hatası:', err);

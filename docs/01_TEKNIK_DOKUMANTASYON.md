@@ -1,7 +1,7 @@
 # TÜBİTAK 7260634 — Teknik Dokümantasyon
 
-**Proje Adı:** Yapay Zeka Destekli Lityum İyon Batarya Analizi ve Geri Dönüşüm Sistemi  
-**Kuruluş:** KOBİNERJİ A.Ş. — Koç Üniversitesi Robotik Laboratuvarı  
+**Proje Adı:** Elektrikli Araç Bataryaları İçin Yapay Zekâ Destekli Yeşil Dönüşüm ve Analiz Sistemi  
+**Kuruluş:** KOBİNERJİ MÜHENDİSLİK VE ENERJİ VERİMLİLİĞİ DANIŞMANLIK A.Ş.  
 **Proje Kodu:** TÜBİTAK 1507 — 7260634  
 **Doküman Sürümü:** 1.0.0  
 **Tarih:** 19 Nisan 2026  
@@ -85,10 +85,10 @@ Bu doküman aşağıdaki bileşenlerin teknik detaylarını içerir:
 ```
 ┌──────────────────────────────────────────────────────┐
 │            KATMAN 1: WEB FRONTEND                    │
-│  ┌─────────┐ ┌──────────┐ ┌───────────┐            │
-│  │Dashboard │ │ Zaman    │ │  Bütçe    │            │
-│  │ Özet    │ │ Çizelgesi│ │  Takibi   │            │
-│  └─────────┘ └──────────┘ └───────────┘            │
+│  ┌─────────┐ ┌──────────┐ ┌───────────┐              │
+│  │Dashboard│ │ Zaman    │ │  Bütçe    │              │
+│  │ Özet    │ │ Çizelgesi│ │  Takibi   │              │
+│  └─────────┘ └──────────┘ └───────────┘              │
 │  HTML5 + CSS3 + Vanilla JavaScript                   │
 │  Responsive Grid, LocalStorage, Klavye Kısayolları   │
 └──────────────────────┬───────────────────────────────┘
@@ -103,22 +103,22 @@ Bu doküman aşağıdaki bileşenlerin teknik detaylarını içerir:
 ┌──────────────────────▼───────────────────────────────┐
 │            KATMAN 3: PYTHON BACKEND                  │
 │                                                      │
-│  ┌───────────────┐  ┌────────────────┐              │
-│  │ Veri İşleme   │  │ Özellik        │              │
-│  │  battery_data │──│  Çıkarımı      │              │
-│  │  .py          │  │  feature_ext.  │              │
-│  └───────────────┘  └───────┬────────┘              │
+│  ┌───────────────┐  ┌────────────────┐               │
+│  │ Veri İşleme   │  │ Özellik        │               │
+│  │  battery_data │──│  Çıkarımı      │               │
+│  │  .py          │  │  feature_ext.  │               │ 
+│  └───────────────┘  └───────┬────────┘               │ 
 │                             │                        │
-│  ┌───────────────┐  ┌──────▼─────────┐              │
-│  │ BMS Kontrol   │  │ SoH Tahmin     │              │
-│  │  bms_control  │◄─│  Modeli        │              │
-│  │  ler.py       │  │  soh_model.py  │              │
-│  └───────────────┘  └────────────────┘              │
+│  ┌───────────────┐  ┌──────▼─────────┐               │
+│  │ BMS Kontrol   │  │ SoH Tahmin     │               │
+│  │  bms_control  │◄─│  Modeli        │               │
+│  │  ler.py       │  │  soh_model.py  │               │
+│  └───────────────┘  └────────────────┘               │
 │                                                      │
-│  ┌───────────────┐  ┌────────────────┐              │
-│  │ BMS İzleme    │  │ Sabitler +     │              │
-│  │  battery_mgr. │  │  Logger        │              │
-│  └───────────────┘  └────────────────┘              │
+│  ┌───────────────┐  ┌────────────────┐               │
+│  │ BMS İzleme    │  │ Sabitler +     │               │
+│  │  battery_mgr. │  │  Logger        │               │
+│  └───────────────┘  └────────────────┘               │
 └──────────────────────────────────────────────────────┘
 ```
 

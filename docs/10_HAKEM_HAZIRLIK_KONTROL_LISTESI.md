@@ -1,6 +1,6 @@
 # HAKEM ZİYARETİ HAZIRLIK KONTROL LİSTESİ
 
-## 7260634 No'lu TÜBİTAK Projesi — KOBİNERJİ A.Ş.
+## 7260634 No'lu TÜBİTAK Projesi — KOBİNERJİ MÜHENDİSLİK VE ENERJİ VERİMLİLİĞİ DANIŞMANLIK A.Ş.
 
 ---
 
@@ -79,7 +79,7 @@
 
 | # | Muhtemel Soru | Hazırlık Notu |
 |---|--------------|---------------|
-| 1 | "Şu ana kadar somut olarak ne yaptınız?" | İP1 faaliyetleri: altyapı kuruldı, testler başladı, yazılım geliştirildi, ilk veriler toplandı |
+| 1 | "Şu ana kadar somut olarak ne yaptınız?" | İP1 faaliyetleri: altyapı kuruldu, testler başladı, yazılım geliştirildi, ilk veriler toplandı |
 | 2 | "Veri nerede? Gösterebilir misiniz?" | Ham veri örnekleri + sentetik veri ile demo |
 | 3 | "Model doğruluğu hedefe ulaşacak mı?" | Yazılım hazır, 4 algoritma uygulandı; gerçek verilerle eğitim İP3'te |
 | 4 | "Ekipte kim ne yapıyor?" | 5 kişilik ekip, kişi bazlı iş paketi atamaları |

@@ -1,6 +1,6 @@
 # TÜBİTAK 7260634 — Kalite Kontrol Planı
 
-**Proje:** Elektrikli Araç Bataryaları İçin Yapay Zeka Destekli Yeşil Dönüşüm ve Analiz Sistemi  
+**Proje:** Elektrikli Araç Bataryaları İçin Yapay Zekâ Destekli Yeşil Dönüşüm ve Analiz Sistemi  
 **Firma:** KOBİNERJİ MÜHENDİSLİK VE ENERJİ VERİMLİLİĞİ DANIŞMANLIK A.Ş.  
 **Sürüm:** 1.0.0  
 **Tarih:** 19 Nisan 2026  

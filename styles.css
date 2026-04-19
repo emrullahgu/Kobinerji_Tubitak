@@ -816,7 +816,7 @@ body {
 /* ============ DOCUMENTS GRID ============ */
 .docs-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
     gap: 24px;
 }
 .doc-card {
@@ -824,44 +824,76 @@ body {
     border-radius: 16px;
     border: 1px solid var(--border);
     overflow: hidden;
-    transition: transform 0.2s, box-shadow 0.2s;
+    transition: transform 0.3s cubic-bezier(.25,.8,.25,1), box-shadow 0.3s cubic-bezier(.25,.8,.25,1);
+    position: relative;
+}
+.doc-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary), #6366f1);
+    opacity: 0;
+    transition: opacity 0.3s;
 }
 .doc-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 32px rgba(0,0,0,0.12);
+    transform: translateY(-6px);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.14);
+}
+.doc-card:hover::before {
+    opacity: 1;
 }
 .doc-card-header {
-    padding: 20px 24px 16px;
+    padding: 24px 24px 16px;
     display: flex;
     align-items: flex-start;
     gap: 16px;
 }
 .doc-card-number {
     flex-shrink: 0;
-    width: 48px;
-    height: 48px;
-    border-radius: 12px;
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: 800;
-    font-size: 1.1em;
+    font-size: 1em;
     color: #fff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    position: relative;
+}
+.doc-card-number::after {
+    content: '📄';
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    font-size: 12px;
+    background: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 .doc-card-info h4 {
-    font-size: 1em;
+    font-size: 1.02em;
     font-weight: 700;
     color: var(--text-primary);
-    margin-bottom: 4px;
+    margin-bottom: 6px;
     line-height: 1.4;
 }
 .doc-card-info p {
     font-size: 0.82em;
     color: var(--text-secondary);
-    line-height: 1.4;
+    line-height: 1.5;
 }
 .doc-card-tags {
-    padding: 0 24px 12px;
+    padding: 0 24px 14px;
     display: flex;
     flex-wrap: wrap;
     gap: 6px;
@@ -869,43 +901,60 @@ body {
 .doc-tag {
     font-size: 0.7em;
     font-weight: 600;
-    padding: 3px 8px;
+    padding: 4px 10px;
     border-radius: 6px;
-    background: rgba(99,102,241,0.1);
-    color: var(--primary);
+    background: rgba(99,102,241,0.08);
+    color: #6366f1;
+    border: 1px solid rgba(99,102,241,0.15);
+    transition: all 0.2s;
+}
+.doc-card:hover .doc-tag {
+    background: rgba(99,102,241,0.12);
+    border-color: rgba(99,102,241,0.25);
 }
 .doc-card-footer {
-    padding: 12px 24px 16px;
+    padding: 14px 24px 18px;
     border-top: 1px solid var(--border);
     display: flex;
     align-items: center;
     justify-content: space-between;
+    background: rgba(248, 250, 252, 0.5);
 }
 .doc-card-meta {
-    font-size: 0.78em;
+    font-size: 0.75em;
     color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 4px;
 }
 .doc-download-btn {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    padding: 8px 18px;
+    gap: 8px;
+    padding: 10px 22px;
     border-radius: 10px;
     border: none;
     font-size: 0.82em;
     font-weight: 700;
     cursor: pointer;
     color: #fff;
-    background: linear-gradient(135deg, #3b82f6, #2563eb);
-    transition: opacity 0.2s, transform 0.15s;
+    background: linear-gradient(135deg, #6366f1, #4f46e5);
+    transition: all 0.2s cubic-bezier(.25,.8,.25,1);
+    box-shadow: 0 2px 8px rgba(99,102,241,0.3);
+    font-family: 'Inter', sans-serif;
 }
 .doc-download-btn:hover {
-    opacity: 0.9;
-    transform: scale(1.03);
+    background: linear-gradient(135deg, #4f46e5, #4338ca);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(99,102,241,0.4);
+}
+.doc-download-btn:active {
+    transform: translateY(0);
 }
 .doc-download-btn:disabled {
-    opacity: 0.5;
+    opacity: 0.6;
     cursor: wait;
+    transform: none;
 }
 .doc-download-btn .spinner {
     display: none;
@@ -920,105 +969,204 @@ body {
 .doc-download-btn.loading .btn-text { display: none; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* PDF render container (hidden) */
-#pdfRenderContainer {
-    position: fixed;
-    left: -9999px;
-    top: 0;
-    width: 794px;
-    background: #fff;
-    color: #1e293b;
-    font-family: 'Inter', sans-serif;
-    padding: 0;
-    line-height: 1.7;
-    font-size: 13px;
+/* ── Doc card actions row ── */
+.doc-card-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
 }
-/* PDF Document Header */
-.pdf-doc-header {
+.doc-edit-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 10px 16px;
+    border-radius: 10px;
+    border: 1.5px solid var(--border);
+    font-size: 0.82em;
+    font-weight: 600;
+    cursor: pointer;
+    color: var(--text-primary);
+    background: var(--card-bg);
+    transition: all 0.2s;
+    font-family: 'Inter', sans-serif;
+}
+.doc-edit-btn:hover {
+    border-color: #6366f1;
+    color: #6366f1;
+    background: rgba(99,102,241,0.05);
+}
+.doc-tag-edited {
+    background: rgba(16,185,129,0.1) !important;
+    color: #059669 !important;
+    border-color: rgba(16,185,129,0.2) !important;
+}
+
+/* ═══════════ DOCUMENT EDITOR MODAL ═══════════ */
+.doc-editor-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(4px);
     display: flex;
     align-items: center;
-    gap: 16px;
-    padding: 32px 48px 20px;
-    border-bottom: 3px solid #6366f1;
-    background: linear-gradient(135deg, #f8fafc 0%, #eef2ff 100%);
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
 }
-.pdf-doc-logo {
-    width: 56px;
-    height: 56px;
-    border-radius: 10px;
-    object-fit: contain;
+.doc-editor-modal.open {
+    opacity: 1;
+    pointer-events: all;
+}
+.doc-editor-container {
+    width: 94vw;
+    height: 90vh;
+    max-width: 1400px;
     background: #fff;
-    padding: 4px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-.pdf-doc-header-text { flex: 1; }
-.pdf-doc-company {
-    font-size: 11px;
-    font-weight: 700;
-    color: #0f172a;
-    letter-spacing: 0.5px;
-    margin-bottom: 2px;
-}
-.pdf-doc-project {
-    font-size: 10px;
-    color: #6366f1;
-    font-weight: 600;
-}
-.pdf-doc-subtitle {
-    font-size: 9px;
-    color: #64748b;
-    margin-top: 2px;
-}
-/* PDF Title Bar */
-.pdf-doc-title-bar {
-    padding: 24px 48px 20px;
-    border-bottom: 1px solid #e2e8f0;
-}
-.pdf-doc-main-title {
-    font-size: 20px;
-    font-weight: 800;
-    color: #0f172a;
-    margin: 0 0 10px;
-    letter-spacing: -0.02em;
-}
-.pdf-doc-meta-row {
+    border-radius: 16px;
     display: flex;
-    gap: 24px;
-    font-size: 10px;
-    color: #64748b;
-    font-weight: 500;
+    flex-direction: column;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.3);
+    overflow: hidden;
+    transform: scale(0.95);
+    transition: transform 0.3s;
 }
-/* PDF Document Content */
-.pdf-doc-content {
-    padding: 28px 48px 40px;
+.doc-editor-modal.open .doc-editor-container {
+    transform: scale(1);
 }
-.pdf-doc-content h1 { font-size: 20px; color: #0f172a; margin: 28px 0 14px; border-bottom: 2px solid #6366f1; padding-bottom: 8px; font-weight: 800; }
-.pdf-doc-content h2 { font-size: 16px; color: #1e293b; margin: 22px 0 10px; border-bottom: 1px solid #e2e8f0; padding-bottom: 6px; font-weight: 700; }
-.pdf-doc-content h3 { font-size: 14px; color: #334155; margin: 16px 0 8px; font-weight: 700; }
-.pdf-doc-content h4 { font-size: 12.5px; color: #475569; margin: 12px 0 6px; font-weight: 600; }
-.pdf-doc-content p { margin: 7px 0; line-height: 1.7; }
-.pdf-doc-content table { border-collapse: collapse; width: 100%; margin: 12px 0; font-size: 11.5px; }
-.pdf-doc-content th, .pdf-doc-content td { border: 1px solid #cbd5e1; padding: 7px 10px; text-align: left; }
-.pdf-doc-content th { background: #f1f5f9; font-weight: 700; color: #334155; }
-.pdf-doc-content tr:nth-child(even) td { background: #f8fafc; }
-.pdf-doc-content code { background: #f1f5f9; padding: 1px 5px; border-radius: 4px; font-size: 0.9em; color: #6366f1; }
-.pdf-doc-content pre { background: #1e293b; color: #e2e8f0; padding: 14px 16px; border-radius: 8px; overflow-x: auto; font-size: 11px; line-height: 1.5; margin: 12px 0; }
-.pdf-doc-content pre code { background: none; color: inherit; padding: 0; }
-.pdf-doc-content ul, .pdf-doc-content ol { padding-left: 22px; margin: 7px 0; }
-.pdf-doc-content li { margin: 3px 0; }
-.pdf-doc-content blockquote { border-left: 3px solid #6366f1; padding-left: 14px; color: #64748b; margin: 12px 0; font-style: italic; }
-.pdf-doc-content hr { border: none; border-top: 1px solid #e2e8f0; margin: 18px 0; }
-.pdf-doc-content strong { color: #0f172a; }
-.pdf-doc-content img { max-width: 100%; height: auto; border-radius: 6px; }
-/* PDF Document Footer */
-.pdf-doc-footer {
-    padding: 16px 48px;
-    border-top: 2px solid #e2e8f0;
+.doc-editor-toolbar {
     display: flex;
     justify-content: space-between;
-    font-size: 9px;
-    color: #94a3b8;
+    align-items: center;
+    padding: 16px 24px;
+    background: linear-gradient(135deg, #0f172a, #1e3a5f);
+    color: #fff;
+    flex-shrink: 0;
+}
+.doc-editor-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.doc-editor-icon { font-size: 1.4em; }
+.doc-editor-title h3 {
+    font-size: 1em;
+    font-weight: 700;
+    margin: 0;
+}
+.doc-editor-saved-badge {
+    font-size: 0.75em;
+    background: rgba(16,185,129,0.2);
+    color: #34d399;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-weight: 600;
+}
+.doc-editor-actions {
+    display: flex;
+    gap: 8px;
+}
+.doc-editor-btn {
+    padding: 8px 18px;
+    border-radius: 8px;
+    border: none;
+    font-size: 0.82em;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Inter', sans-serif;
+}
+.doc-editor-btn-save {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #fff;
+}
+.doc-editor-btn-save:hover { opacity: 0.9; }
+.doc-editor-btn-reset {
+    background: rgba(255,255,255,0.1);
+    color: #fbbf24;
+    border: 1px solid rgba(255,255,255,0.15);
+}
+.doc-editor-btn-reset:hover { background: rgba(255,255,255,0.2); }
+.doc-editor-btn-close {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.15);
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    font-size: 1.1em;
+}
+.doc-editor-btn-close:hover { background: rgba(239,68,68,0.4); }
+
+.doc-editor-body {
+    flex: 1;
+    display: flex;
+    min-height: 0;
+}
+.doc-editor-pane {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+.doc-editor-left { border-right: 1px solid #e2e8f0; }
+.doc-editor-pane-header {
+    padding: 8px 16px;
+    font-size: 0.75em;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #64748b;
     background: #f8fafc;
+    border-bottom: 1px solid #e2e8f0;
+    flex-shrink: 0;
+}
+#docEditorTextarea {
+    flex: 1;
+    border: none;
+    padding: 20px;
+    font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+    font-size: 13px;
+    line-height: 1.7;
+    resize: none;
+    outline: none;
+    color: #1e293b;
+    background: #fefefe;
+    tab-size: 4;
+}
+.doc-editor-preview {
+    flex: 1;
+    padding: 24px;
+    overflow-y: auto;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    line-height: 1.7;
+    color: #1e293b;
+}
+.doc-editor-preview h1 { font-size: 1.6em; font-weight: 800; color: #0f172a; margin: 20px 0 10px; border-bottom: 2px solid #6366f1; padding-bottom: 6px; }
+.doc-editor-preview h2 { font-size: 1.3em; font-weight: 700; color: #1e293b; margin: 18px 0 8px; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px; }
+.doc-editor-preview h3 { font-size: 1.1em; font-weight: 700; color: #334155; margin: 14px 0 6px; }
+.doc-editor-preview p { margin: 6px 0; }
+.doc-editor-preview table { border-collapse: collapse; width: 100%; margin: 10px 0; font-size: 0.9em; }
+.doc-editor-preview th, .doc-editor-preview td { border: 1px solid #cbd5e1; padding: 6px 10px; text-align: left; }
+.doc-editor-preview th { background: #f1f5f9; font-weight: 700; }
+.doc-editor-preview code { background: #f1f5f9; padding: 1px 5px; border-radius: 4px; font-size: 0.88em; color: #6366f1; }
+.doc-editor-preview pre { background: #1e293b; color: #e2e8f0; padding: 12px; border-radius: 8px; overflow-x: auto; }
+.doc-editor-preview pre code { background: none; color: inherit; }
+.doc-editor-preview blockquote { border-left: 3px solid #6366f1; padding-left: 12px; color: #64748b; font-style: italic; margin: 10px 0; }
+.doc-editor-preview ul, .doc-editor-preview ol { padding-left: 20px; }
+.doc-editor-preview strong { color: #0f172a; }
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+    .doc-editor-body { flex-direction: column; }
+    .doc-editor-left { border-right: none; border-bottom: 1px solid #e2e8f0; }
+    .doc-editor-pane { min-height: 40%; }
+    .doc-card-actions { flex-direction: column; gap: 6px; }
 }
 
 /* ============ FOOTER ============ */

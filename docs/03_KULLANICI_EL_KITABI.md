@@ -1,6 +1,6 @@
 # TÜBİTAK 7260634 — Kullanıcı El Kitabı
 
-**Proje:** Yapay Zeka Destekli Lityum İyon Batarya Analizi  
+**Proje:** Elektrikli Araç Bataryaları İçin Yapay Zekâ Destekli Yeşil Dönüşüm ve Analiz Sistemi  
 **Sürüm:** 1.0.0  
 **Tarih:** 19 Nisan 2026  
 **Hedef Kitle:** Proje ekibi, araştırmacılar, Son kullanıcılar  
