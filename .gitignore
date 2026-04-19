@@ -35,16 +35,16 @@ Thumbs.db
 *.tmp
 *.temp
 
-# OPU Build artifacts
-OPU/Objects/
-OPU/Listings/
-OPU/DebugConfig/
-OPU/RTE/
-OPU/*.BAT
-OPU/JLinkLog.txt
-OPU/JLinkSettings.ini
-OPU/*.uvguix.*
-OPU/*.uvoptx
+# VGX Build artifacts
+VGX/Objects/
+VGX/Listings/
+VGX/DebugConfig/
+VGX/RTE/
+VGX/*.BAT
+VGX/JLinkLog.txt
+VGX/JLinkSettings.ini
+VGX/*.uvguix.*
+VGX/*.uvoptx
 
 # Python
 __pycache__/

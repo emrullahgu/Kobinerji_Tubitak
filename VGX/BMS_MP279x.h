@@ -1,10 +1,10 @@
-/************************************************************************************
+ï»¿/************************************************************************************
 *         File: BMS_MP279x.h																												*
 *					Description: Contains pin mapping and BMS parameters										  *
 *					CPU: STM32F03xx Medium density devices																		*
-*					Project:	OPU, Battery Management Unit																		*
+*					Project:VGX, Battery Management Unit																		*
 *					Version:	1.0																															*
-*					Author:		Red Origin Technologies																				  *
+*					Author:		Emrullah GÃœNAY â€” KOBÄ°NERJÄ° A.Åž.																				  *
 *					Date:			06/05/2024																											*
 *************************************************************************************/
 #ifndef BMS_H_
@@ -102,11 +102,11 @@
 #define DSC_THRES_Dgl			8					//Default: 1				Units: 200 us
 #define CSC_THRES					36000			//Default: 9375			Units: mA
 #define CSC_THRES_Dgl			8					//Default: 8				Units: 200 us
-#define BAT_DOT_THRES			5500			//Default: 5800			Units: 0.01 ºC
-#define BAT_DUT_THRES			-1800			//Default: -1800		Units: 0.01 ºC
-#define BAT_COT_THRES			4300			//Default: 4300			Units: 0.01 ºC
-#define BAT_CUT_THRES			200				//Default: 200			Units: 0.01 ºC
-#define PCB_OT_THRES			8500			//Default: 8500			Units: 0.01 ºC
+#define BAT_DOT_THRES			5500			//Default: 5800			Units: 0.01 ï¿½C
+#define BAT_DUT_THRES			-1800			//Default: -1800		Units: 0.01 ï¿½C
+#define BAT_COT_THRES			4300			//Default: 4300			Units: 0.01 ï¿½C
+#define BAT_CUT_THRES			200				//Default: 200			Units: 0.01 ï¿½C
+#define PCB_OT_THRES			8500			//Default: 8500			Units: 0.01 ï¿½C
 #define Min_Bal_V					30000			//Default: 40000		Units: 0.1mV
 #define Bal_Config				0x0B			//Default: 0x0B
 
@@ -164,11 +164,11 @@
 #define DSC_THRES_Dgl			1					//Default: 1				Units: 200 us
 #define CSC_THRES					9375			//Default: 9375			Units: mA
 #define CSC_THRES_Dgl			8					//Default: 8				Units: 200 us
-#define BAT_DOT_THRES			5800			//Default: 5800			Units: 0.01 ºC
-#define BAT_DUT_THRES			-1800			//Default: -1800		Units: 0.01 ºC
-#define BAT_COT_THRES			4300			//Default: 4300			Units: 0.01 ºC
-#define BAT_CUT_THRES			200				//Default: 200			Units: 0.01 ºC
-#define PCB_OT_THRES			8500			//Default: 8500			Units: 0.01 ºC
+#define BAT_DOT_THRES			5800			//Default: 5800			Units: 0.01 ï¿½C
+#define BAT_DUT_THRES			-1800			//Default: -1800		Units: 0.01 ï¿½C
+#define BAT_COT_THRES			4300			//Default: 4300			Units: 0.01 ï¿½C
+#define BAT_CUT_THRES			200				//Default: 200			Units: 0.01 ï¿½C
+#define PCB_OT_THRES			8500			//Default: 8500			Units: 0.01 ï¿½C
 #define Min_Bal_V					40000			//Default: 40000		Units: 0.1mV
 #define Bal_Config				0x0B			//Default: 0x0B
 

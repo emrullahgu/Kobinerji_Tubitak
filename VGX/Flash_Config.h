@@ -1,10 +1,10 @@
-/************************************************************************************
+﻿/************************************************************************************
 *         File: Flash_Config.h																											*
 *					Description: Contains the Flash configuration														  *
 *					CPU: STM32F03xx Medium density devices																		*
-*					Project:	OPU, Battery Management Unit																		*
+*					Project:VGX, Battery Management Unit																		*
 *					Version:	1.0																															*
-*					Author:		Red Origin Technologies																				  *
+*					Author:		Emrullah GÜNAY — KOBİNERJİ A.Ş.																				  *
 *					Date:			06/05/2024																											*
 *************************************************************************************/
 

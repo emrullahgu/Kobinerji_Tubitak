@@ -1,11 +1,11 @@
-/************************************************************************************
+﻿/************************************************************************************
 *         File: MPF4279x_I2C.c																												*
 *					Description: Contains the functions for the I2Cmaster interface with the	*
 *						MPF4279x IC																															*
 *					CPU: STM32F03xx Medium density devices																		*
-*					Project:	OPU, Battery Management Unit																		*
+*					Project:VGX, Battery Management Unit																		*
 *					Version:	1.0																															*
-*					Author:		Red Origin Technologies																				  *
+*					Author:		Emrullah GÜNAY — KOBİNERJİ A.Ş.																				  *
 *					Date:			06/05/2024																											*
 *************************************************************************************/
 

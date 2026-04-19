@@ -1,2 +1,0 @@
-# FuelGaugeEVB_Firmware
-

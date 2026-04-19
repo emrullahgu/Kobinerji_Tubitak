@@ -1,10 +1,10 @@
-/************************************************************************************
+ï»¿/************************************************************************************
 *         File: Init.c																															*
 *					Description: Contains a basicly functions for peripherals initialization  *
 *					CPU: STM32F03xx Medium density devices																		*
-*					Project:	OPU, Battery Management Unit																		*
+*					Project:VGX, Battery Management Unit																		*
 *					Version:	1.0																															*
-*					Author:		Red Origin Technologies																				  *
+*					Author:		Emrullah GÃœNAY â€” KOBÄ°NERJÄ° A.Åž.																				  *
 *					Date:			06/05/2024																											*
 *************************************************************************************/
 
@@ -306,12 +306,12 @@ void InitRTC(void)
 	RTC->WPR=0x53U;
 	
 	RTC->ISR |= RTC_ISR_INIT;
-	while(!(RTC->ISR&RTC_ISR_INITF)); //Poll RTC_ISR_INITF, wait until its value goes to ‘1’
+	while(!(RTC->ISR&RTC_ISR_INITF)); //Poll RTC_ISR_INITF, wait until its value goes to ï¿½1ï¿½
 
 	RTC->PRER=0x007C00C7;
 	
 	RTC->CR &=~ RTC_CR_ALRAE;		//Reset RTC_CR_ALRAE to Disable Alarm A.
-	while(!(RTC->ISR&RTC_ISR_ALRAWF)); //Poll RTC_ISR_ALRAWF, wait until its value goes to ‘1’
+	while(!(RTC->ISR&RTC_ISR_ALRAWF)); //Poll RTC_ISR_ALRAWF, wait until its value goes to ï¿½1ï¿½
 	
 	RTC->CR |= RTC_CR_ALRAIE;
 	
@@ -353,16 +353,16 @@ uint32_t SysTick_Delay_Init(void) {
 }
 
 
-//ADC External NTC IÇIN
+//ADC External NTC Iï¿½IN
 	void ADC_Configuration(void) 
 {
     // RCC (Reset and Clock Control) register'ini etkinlestir
-    RCC->AHBENR |= RCC_AHBENR_GPIOAEN;  // GPIOA için
-    RCC->APB2ENR |= RCC_APB2ENR_ADC1EN; // ADC için
+    RCC->AHBENR |= RCC_AHBENR_GPIOAEN;  // GPIOA iï¿½in
+    RCC->APB2ENR |= RCC_APB2ENR_ADC1EN; // ADC iï¿½in
     // GPIOA_MODER register'ini ayarla (PA6'i analog moduna ayarla)
     GPIOA->MODER |= GPIO_MODER_MODER6 | GPIO_MODER_MODER2;
-    // ADC1 için AHB frekansini kullan
-    //RCC->CFGR2 |= RCC_CFGR2_ADCPRE12_DIV1; // ADC1 için AHB frekansini böl 1
+    // ADC1 iï¿½in AHB frekansini kullan
+    //RCC->CFGR2 |= RCC_CFGR2_ADCPRE12_DIV1; // ADC1 iï¿½in AHB frekansini bï¿½l 1
     // ADC'nin kalibrasyonunu yap
     ADC1->CR |= ADC_CR_ADCAL;
     while (ADC1->CR & ADC_CR_ADCAL);  // Kalibrasyon bitene kadar bekle
@@ -373,22 +373,22 @@ uint32_t SysTick_Delay_Init(void) {
 // ADC okuma fonksiyonu
 uint16_t adc_pa7(void) 
 {
-    ADC1->CHSELR = 0; // Tüm kanallari kapat
-    ADC1->CHSELR |= ADC_CHSELR_CHSEL7; // Kanal 6'i seç (PA1)
+    ADC1->CHSELR = 0; // Tï¿½m kanallari kapat
+    ADC1->CHSELR |= ADC_CHSELR_CHSEL7; // Kanal 6'i seï¿½ (PA1)
     // ADC baslat
     ADC1->CR |= ADC_CR_ADSTART;
-    // ADC'nin dönüsünü bekleyin
+    // ADC'nin dï¿½nï¿½sï¿½nï¿½ bekleyin
     while (!(ADC1->ISR & ADC_ISR_EOC));
     return ADC1->DR; // ADC verisini oku
 }
 
 uint16_t adc_pa5(void) 
 {
-    ADC1->CHSELR = 0; // Tüm kanallari kapat
-    ADC1->CHSELR |= ADC_CHSELR_CHSEL5; // Kanal 2'i seç (PA1)
+    ADC1->CHSELR = 0; // Tï¿½m kanallari kapat
+    ADC1->CHSELR |= ADC_CHSELR_CHSEL5; // Kanal 2'i seï¿½ (PA1)
     // ADC baslat
     ADC1->CR |= ADC_CR_ADSTART;
-    // ADC'nin dönüsünü bekleyin
+    // ADC'nin dï¿½nï¿½sï¿½nï¿½ bekleyin
     while (!(ADC1->ISR & ADC_ISR_EOC));
     return ADC1->DR; // ADC verisini oku
 }
