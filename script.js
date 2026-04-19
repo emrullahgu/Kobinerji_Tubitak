@@ -138,11 +138,11 @@ const project = {
     ],
 
     team: [
-        { name: 'Cem Bülbül', initials: 'CB', role: 'Kurucu - Proje Yürütücüsü', edu: 'Lisans', tasks: ['Proje koordinasyonu', 'Genel yönetim', 'Paydaş yönetimi'] },
-        { name: 'Alperen Helva', initials: 'AH', role: 'Elektrik-Elektronik Mühendisi', edu: 'Yüksek Lisans', tasks: ['Veri işleme', 'SoH model geliştirme', 'Model optimizasyonu'] },
-        { name: 'Emrullah Günay', initials: 'EG', role: 'Elektrik-Elektronik Mühendisi', edu: 'Lisans', tasks: ['Veri analizi', 'Sistem geliştirme', 'Sistem testleri'] },
-        { name: 'Görkem Tanır', initials: 'GT', role: 'Elektrik-Elektronik Mühendisi', edu: 'Lisans', tasks: ['Test altyapısı kurulum', 'Veri toplama', 'Batarya testleri'] },
-        { name: 'İbrahim Çağdaş', initials: 'İÇ', role: 'Makina Mühendisi', edu: 'Lisans', tasks: ['Mekanik sistem kurulum', 'Geri kazanım sistemi', 'Test desteği'] }
+        { name: 'Cem Bülbül', initials: 'CB', photo: 'vesikalar/cembulbul.jpeg', role: 'Kurucu - Proje Yürütücüsü', edu: 'Lisans', tasks: ['Proje koordinasyonu', 'Genel yönetim', 'Paydaş yönetimi'] },
+        { name: 'Alperen Helva', initials: 'AH', photo: 'vesikalar/alperenhelva.jpeg', role: 'Elektrik-Elektronik Mühendisi', edu: 'Yüksek Lisans', tasks: ['Veri işleme', 'SoH model geliştirme', 'Model optimizasyonu'] },
+        { name: 'Emrullah Günay', initials: 'EG', photo: 'vesikalar/emrullahgunay.jpg', role: 'Elektrik-Elektronik Mühendisi', edu: 'Lisans', tasks: ['Veri analizi', 'Sistem geliştirme', 'Sistem testleri'] },
+        { name: 'Görkem Tanır', initials: 'GT', photo: 'vesikalar/gorkemtanir.jpeg', role: 'Elektrik-Elektronik Mühendisi', edu: 'Lisans', tasks: ['Test altyapısı kurulum', 'Veri toplama', 'Batarya testleri'] },
+        { name: 'İbrahim Çağdaş', initials: 'İÇ', photo: 'vesikalar/ibrahimcagdas.jpg', role: 'Makina Mühendisi', edu: 'Lisans', tasks: ['Mekanik sistem kurulum', 'Geri kazanım sistemi', 'Test desteği'] }
     ]
 };
 
@@ -353,7 +353,7 @@ function renderTeam() {
     if (!grid) return;
     grid.innerHTML = project.team.map(m => `
         <div class="tm-card">
-            <div class="tm-avatar">${m.initials}</div>
+            <div class="tm-avatar">${m.photo ? `<img src="${m.photo}" alt="${m.name}">` : m.initials}</div>
             <div class="tm-name">${m.name}</div>
             <div class="tm-role">${m.role}</div>
             <div class="tm-edu">${m.edu}</div>
