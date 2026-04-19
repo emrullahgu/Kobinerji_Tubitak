@@ -1259,7 +1259,7 @@ async function exportPDF() {
             }
 
             // Force page breaks before specific sections
-            if (block.type === 'header' && (block.parentId === 'secA1' || block.parentId === 'secA2' || block.parentId === 'secB1')) {
+            if (block.type === 'header' && (block.parentId === 'secA1' || block.parentId === 'secA2' || block.parentId === 'secB1' || block.parentId === 'secB2')) {
                 pdf.addPage();
                 currentY = margin;
                 needsNewPage = false;
