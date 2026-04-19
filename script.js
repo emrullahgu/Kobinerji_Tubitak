@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderWorkPackages();
     renderMilestones();
     renderTeam();
+    renderDocuments();
     updateDynamicDates();
     animateProgressBars();
     initScrollAnimations();
@@ -539,6 +540,7 @@ function cancelEdits() {
     renderWorkPackages();
     renderMilestones();
     renderTeam();
+    renderDocuments();
     animateProgressBars();
     makeEditable();
 
@@ -562,10 +564,127 @@ function exportPDF() {
     window.print();
 }
 
+// ============ DOCUMENTS SECTION ============
+const projectDocs = [
+    { id: '01', title: 'Teknik Dokümantasyon', desc: 'Sistemin tüm teknik bileşenlerinin detaylı açıklaması', file: 'docs/01_TEKNIK_DOKUMANTASYON.md', color: '#6366f1', tags: ['Teknik', 'Sistem', 'Modüller'] },
+    { id: '02', title: 'API Referans Dokümanı', desc: '13 endpoint detaylı REST API referans kılavuzu', file: 'docs/02_API_REFERANS_KILAVUZU.md', color: '#8b5cf6', tags: ['API', '13 Endpoint', 'REST'] },
+    { id: '03', title: 'Kullanıcı El Kitabı', desc: 'Kurulum, kullanım ve sorun giderme rehberi', file: 'docs/03_KULLANICI_EL_KITABI.md', color: '#06b6d4', tags: ['Kullanıcı', 'Rehber', 'SSS'] },
+    { id: '04', title: 'Sistem Mimarisi Dokümanı', desc: 'Katman mimarisi, modül tasarımları ve veri modelleri', file: 'docs/04_SISTEM_MIMARISI.md', color: '#10b981', tags: ['Mimari', 'Tasarım', 'Katmanlar'] },
+    { id: '05', title: 'Kurulum ve Dağıtım Rehberi', desc: 'Python backend, frontend ve Netlify dağıtım adımları', file: 'docs/05_KURULUM_DAGITIM_REHBERI.md', color: '#f59e0b', tags: ['Kurulum', 'Dağıtım', 'Netlify'] },
+    { id: '06', title: 'Test Raporu', desc: '34 test sonucu — birim, entegrasyon ve performans testleri', file: 'docs/06_TEST_RAPORU.md', color: '#ef4444', tags: ['Test', '34 Sonuç', 'Kapsam'] },
+    { id: '07', title: 'İş Paketi Detaylandırması', desc: '7 iş paketi, faaliyet kırılımı ve zaman çizelgesi', file: 'docs/07_IS_PAKETI_DETAYLANDIRMASI.md', color: '#ec4899', tags: ['İş Paketleri', 'Planlama', '18 Ay'] },
+    { id: '08', title: 'Kalite Kontrol Planı', desc: 'ISO standartları, kalite metrikleri ve denetim planı', file: 'docs/08_KALITE_KONTROL_PLANI.md', color: '#14b8a6', tags: ['Kalite', 'ISO', 'Denetim'] },
+    { id: '09', title: 'Hakem Ziyareti Durum Raporu', desc: 'Mevcut durum, ilerleme ve TÜBİTAK hakem sunumu', file: 'docs/09_HAKEM_ZIYARETI_DURUM_RAPORU.md', color: '#f97316', tags: ['Hakem', 'Durum', 'TÜBİTAK'] },
+    { id: '10', title: 'VGX BMS Firmware Datasheet', desc: 'STM32F030C8 BMS gömülü yazılım teknik referansı', file: 'docs/10_VGX_BMS_FIRMWARE_DATASHEET.md', color: '#64748b', tags: ['Firmware', 'BMS', 'Gömülü'] }
+];
+
+function renderDocuments() {
+    const grid = document.getElementById('docsGrid');
+    if (!grid) return;
+    grid.innerHTML = projectDocs.map(doc => `
+        <div class="doc-card">
+            <div class="doc-card-header">
+                <div class="doc-card-number" style="background: ${doc.color};">${doc.id}</div>
+                <div class="doc-card-info">
+                    <h4>${doc.title}</h4>
+                    <p>${doc.desc}</p>
+                </div>
+            </div>
+            <div class="doc-card-tags">
+                ${doc.tags.map(t => `<span class="doc-tag">${t}</span>`).join('')}
+            </div>
+            <div class="doc-card-footer">
+                <span class="doc-card-meta">📄 Markdown → PDF</span>
+                <button class="doc-download-btn" onclick="downloadDocPDF('${doc.file}', '${doc.id} — ${doc.title.replace(/'/g, "\\'")}')">
+                    <span class="btn-text">⬇ PDF İndir</span>
+                    <span class="spinner"></span>
+                </button>
+            </div>
+        </div>
+    `).join('');
+}
+
+async function downloadDocPDF(filePath, docTitle) {
+    const btn = event.currentTarget;
+    btn.classList.add('loading');
+    btn.disabled = true;
+    try {
+        const resp = await fetch(filePath);
+        if (!resp.ok) throw new Error('Dosya yüklenemedi: ' + resp.status);
+        const md = await resp.text();
+        const htmlContent = marked.parse(md);
+
+        let container = document.getElementById('pdfRenderContainer');
+        if (!container) {
+            container = document.createElement('div');
+            container.id = 'pdfRenderContainer';
+            document.body.appendChild(container);
+        }
+        container.innerHTML = `
+            <div style="text-align:center; margin-bottom:32px; padding-bottom:20px; border-bottom:3px solid #6366f1;">
+                <div style="font-size:11px; color:#6366f1; font-weight:700; letter-spacing:2px; margin-bottom:6px;">KOBİNERJİ MÜHENDİSLİK A.Ş.</div>
+                <div style="font-size:10px; color:#94a3b8;">TÜBİTAK 1507 — Proje No: 7260634</div>
+            </div>
+            ${htmlContent}
+            <div style="margin-top:40px; padding-top:16px; border-top:1px solid #e2e8f0; text-align:center; font-size:10px; color:#94a3b8;">
+                © 2026 KOBİNERJİ A.Ş. — Tüm hakları saklıdır. — ${docTitle}
+            </div>
+        `;
+
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF('p', 'mm', 'a4');
+        const pageW = 210;
+        const pageH = 297;
+        const margin = 0;
+
+        // Split content into chunks for multi-page rendering
+        const totalHeight = container.scrollHeight;
+        const renderWidth = container.offsetWidth;
+        const scale = 2;
+        const pxPerPage = Math.floor((pageH / pageW) * renderWidth * 0.95);
+
+        let yOffset = 0;
+        let pageNum = 0;
+
+        while (yOffset < totalHeight) {
+            const chunkH = Math.min(pxPerPage, totalHeight - yOffset);
+            const canvas = await html2canvas(container, {
+                scale: scale,
+                useCORS: true,
+                y: yOffset,
+                height: chunkH,
+                width: renderWidth,
+                windowWidth: renderWidth,
+                windowHeight: chunkH
+            });
+
+            const imgData = canvas.toDataURL('image/jpeg', 0.92);
+            const imgW = pageW - margin * 2;
+            const imgH = (chunkH / renderWidth) * imgW;
+
+            if (pageNum > 0) pdf.addPage();
+            pdf.addImage(imgData, 'JPEG', margin, margin, imgW, imgH);
+            pageNum++;
+            yOffset += chunkH;
+        }
+
+        const safeTitle = docTitle.replace(/[^a-zA-Z0-9_\-ğüşıöçĞÜŞİÖÇ ]/g, '').replace(/\s+/g, '_');
+        pdf.save(`${safeTitle}.pdf`);
+        container.innerHTML = '';
+        showToast(`✅ ${docTitle} PDF başarıyla indirildi`, 'success');
+    } catch (err) {
+        console.error('PDF oluşturma hatası:', err);
+        showToast(`❌ PDF oluşturulamadı: ${err.message}`, 'error');
+    } finally {
+        btn.classList.remove('loading');
+        btn.disabled = false;
+    }
+}
+
 // ============ KEYBOARD SHORTCUTS ============
 document.addEventListener('keydown', (e) => {
-    if (e.altKey && e.key >= '1' && e.key <= '8') {
-        const secs = ['overview','progress','roadmap','workpackages','milestones','budget','team','technical'];
+    if (e.altKey && e.key >= '1' && e.key <= '9') {
+        const secs = ['overview','progress','roadmap','workpackages','milestones','budget','team','technical','documents'];
         const idx = parseInt(e.key) - 1;
         if (secs[idx]) document.querySelector(`[data-section="${secs[idx]}"]`).click();
     }

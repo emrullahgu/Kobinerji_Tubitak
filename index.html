@@ -63,6 +63,7 @@
         <button class="nav-btn" data-section="budget"><span class="nav-icon">💰</span> Bütçe</button>
         <button class="nav-btn" data-section="team"><span class="nav-icon">👥</span> Ekip</button>
         <button class="nav-btn" data-section="technical"><span class="nav-icon">💻</span> Teknik Altyapı</button>
+        <button class="nav-btn" data-section="documents"><span class="nav-icon">📄</span> Dokümantasyonlar</button>
         <a href="dokumantasyon.html" class="nav-btn nav-btn-doc" aria-label="AGY101-02 Doküman sayfasına git"><span class="nav-icon">📑</span> AGY101-02 Doküman</a>
     </div>
 </nav>
@@ -683,6 +684,15 @@
     </div>
 </section>
 
+<!-- ====== DOKÜMANTASYONLAR ====== -->
+<section id="documents" class="section">
+    <div class="section-title">
+        <h2>Proje Dokümantasyonları</h2>
+        <p>Tüm teknik dokümanlar — PDF olarak indirilebilir</p>
+    </div>
+    <div class="docs-grid" id="docsGrid"></div>
+</section>
+
 </main>
 
 <!-- ═══════════════════ FOOTER ═══════════════════ -->
@@ -706,6 +716,10 @@
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
 </button>
 
+<div id="pdfRenderContainer"></div>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="script.js"></script>
 </body>
 </html>
