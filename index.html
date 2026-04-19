@@ -3,12 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="TÜBİTAK 1507 Proje No: 7260634 — Elektrikli Araç Bataryaları İçin Yapay Zekâ Destekli Yeşil Dönüşüm ve Analiz Sistemi. KOBİNERJİ Mühendislik A.Ş.">
+    <meta name="author" content="KOBİNERJİ MÜHENDİSLİK VE ENERJİ VERİMLİLİĞİ DANIŞMANLIK A.Ş.">
+    <meta name="theme-color" content="#0f172a">
+    <meta property="og:title" content="TÜBİTAK 7260634 — Proje Yönetim Paneli">
+    <meta property="og:description" content="Elektrikli Araç Bataryaları İçin Yapay Zekâ Destekli Yeşil Dönüşüm ve Analiz Sistemi">
+    <meta property="og:type" content="website">
     <title>TÜBİTAK 7260634 — Proje Yönetim Paneli</title>
+    <link rel="icon" type="image/png" href="firmalogo.png">
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 </head>
 <body>
+<!-- Loading Screen -->
+<div class="loading-screen" id="loadingScreen">
+    <div class="loading-content">
+        <div class="loading-spinner"></div>
+        <p class="loading-text">Proje Paneli Yükleniyor</p>
+    </div>
+</div>
+
+<!-- Scroll Progress Indicator -->
+<div class="scroll-progress" id="scrollProgress"></div>
+
 <div class="app">
 
 <!-- ═══════════════════ HEADER ═══════════════════ -->
@@ -45,7 +63,7 @@
         <button class="nav-btn" data-section="budget"><span class="nav-icon">💰</span> Bütçe</button>
         <button class="nav-btn" data-section="team"><span class="nav-icon">👥</span> Ekip</button>
         <button class="nav-btn" data-section="technical"><span class="nav-icon">💻</span> Teknik Altyapı</button>
-        <a href="dokumantasyon.html" class="nav-btn nav-btn-doc" style="text-decoration:none;border:1.5px solid #8b5cf6;color:#8b5cf6;background:rgba(139,92,246,.06);"><span class="nav-icon">📑</span> AGY101-02 Doküman</a>
+        <a href="dokumantasyon.html" class="nav-btn nav-btn-doc" aria-label="AGY101-02 Doküman sayfasına git"><span class="nav-icon">📑</span> AGY101-02 Doküman</a>
     </div>
 </nav>
 
@@ -124,8 +142,8 @@
         <div class="kpi-card kpi-time">
             <div class="kpi-top"><span class="kpi-label">PROJE TAKVİMİ</span><span class="kpi-icon">📅</span></div>
             <div class="kpi-value">18 Ay</div>
-            <div class="kpi-bar"><div class="kpi-bar-fill kpi-bar-blue" style="width: 9%;"></div></div>
-            <div class="kpi-sub">01.03.2026 → 01.09.2027 · <strong>49 gün geçti</strong></div>
+            <div class="kpi-bar"><div class="kpi-bar-fill kpi-bar-blue" id="timeBarFill" style="width: 9%;"></div></div>
+            <div class="kpi-sub">01.03.2026 → 01.09.2027 · <strong id="daysElapsed">49 gün geçti</strong></div>
         </div>
         <div class="kpi-card kpi-budget">
             <div class="kpi-top"><span class="kpi-label">BÜTÇE KULLANIMI</span><span class="kpi-icon">💰</span></div>
@@ -205,7 +223,7 @@
             <p>Proje takviminin önünde ilerliyoruz. VGX BMS gömülü yazılımı geliştirildi (STM32 + MPS entegreler), 7 modüllük Python backend tamamlandı, 13 API endpoint canlıya alındı, 34 test geçti, PCB şematik tasarımı bitti. Web dashboard Netlify'da yayında.</p>
         </div>
         <div class="highlight-right">
-            <div class="highlight-stat"><span class="stat-number">43</span><span class="stat-label">Gün Kaldı (İP-1)</span></div>
+            <div class="highlight-stat"><span class="stat-number" id="daysRemaining">43</span><span class="stat-label">Gün Kaldı (İP-1)</span></div>
         </div>
     </div>
 
@@ -682,6 +700,12 @@
 </footer>
 
 </div>
+
+<!-- Back to Top Button -->
+<button class="back-to-top" id="backToTop" aria-label="Sayfanın başına dön" title="Yukarı çık">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
+</button>
+
 <script src="script.js"></script>
 </body>
 </html>

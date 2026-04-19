@@ -1,11 +1,92 @@
 /* ============================================================
    TÜBİTAK 7260634 — PROJE YÖNETİM PANELİ
-   Professional Dashboard CSS — v2.0
+   Professional Dashboard CSS — v3.0
    ============================================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+/* ============ LOADING SCREEN ============ */
+.loading-screen {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #0f172a 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+.loading-screen.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+.loading-content { text-align: center; }
+.loading-spinner {
+    width: 48px;
+    height: 48px;
+    border: 4px solid rgba(255,255,255,0.15);
+    border-top-color: #3b82f6;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 16px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-text {
+    color: rgba(255,255,255,0.7);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9em;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
+
+/* ============ SCROLL PROGRESS ============ */
+.scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 3px;
+    background: linear-gradient(90deg, #10b981, #3b82f6, #8b5cf6);
+    z-index: 9998;
+    transition: width 0.1s linear;
+    border-radius: 0 2px 2px 0;
+}
+
+/* ============ BACK TO TOP ============ */
+.back-to-top {
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 20px rgba(59,130,246,0.4);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(16px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 200;
+}
+.back-to-top.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+.back-to-top:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 30px rgba(59,130,246,0.5);
+}
+.back-to-top:active { transform: translateY(-2px); }
 
 :root {
     --primary: #0f172a;
@@ -35,20 +116,24 @@ html { scroll-behavior: smooth; }
 body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     background: var(--bg);
+    background-image: radial-gradient(circle at 1px 1px, rgba(0,0,0,0.03) 1px, transparent 0);
+    background-size: 32px 32px;
     color: var(--text);
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 /* ============ HEADER ============ */
 .header {
-    background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #0f172a 100%);
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 40%, #0c2d4a 70%, #0f172a 100%);
     color: #fff;
     padding: 0;
     position: sticky;
     top: 0;
     z-index: 100;
     box-shadow: 0 4px 30px rgba(0,0,0,0.3);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
 }
 .header-inner {
     max-width: 1400px;
@@ -118,7 +203,9 @@ body {
 
 /* ============ NAVIGATION ============ */
 .nav {
-    background: var(--surface);
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     border-bottom: 1px solid var(--border);
     position: sticky;
     top: 140px;
@@ -153,6 +240,27 @@ body {
 }
 .nav-btn:hover { color: var(--accent); background: #f1f5f9; }
 .nav-btn.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 600; }
+.nav-btn-doc {
+    text-decoration: none;
+    border: 1.5px solid #8b5cf6;
+    color: #8b5cf6;
+    background: rgba(139,92,246,.06);
+    border-radius: 8px;
+    margin: 6px 4px;
+}
+.nav-btn-doc:hover { background: rgba(139,92,246,.12); color: #7c3aed; border-bottom-color: transparent; }
+.nav-btn-pdf {
+    border: 1.5px solid #dc2626;
+    color: #dc2626;
+    background: rgba(220,38,38,.06);
+    border-radius: 8px;
+    margin: 6px 4px;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.nav-btn-pdf:hover { background: rgba(220,38,38,.12); color: #b91c1c; border-bottom-color: transparent; }
+.nav-btn-pdf:disabled { opacity: 0.6; cursor: wait; }
 .nav-icon { font-size: 1.1em; }
 
 /* ============ MAIN ============ */
@@ -185,8 +293,22 @@ body {
     padding: 24px;
     box-shadow: var(--shadow);
     border: 1px solid var(--border);
-    transition: all 0.3s;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
 }
+.kpi-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--success), var(--accent));
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+.kpi-card:hover::before { opacity: 1; }
 .kpi-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
 .kpi-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
 .kpi-label { font-size: 0.72em; font-weight: 700; letter-spacing: 1px; color: var(--text-muted); text-transform: uppercase; }
@@ -711,10 +833,11 @@ body {
 }
 
 @media print {
-    .nav { display: none; }
+    .nav, .back-to-top, .scroll-progress, .loading-screen { display: none; }
     .header { position: relative; }
     .section { display: block !important; page-break-inside: avoid; margin-bottom: 40px; }
     .kpi-card:hover, .wp-card:hover, .ms-card:hover, .tm-card:hover { transform: none; }
+    .animate-in { opacity: 1 !important; transform: none !important; }
 }
 
 /* ============ REPORT TOOLBAR ============ */
@@ -962,7 +1085,7 @@ body {
 @media print {
     * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
     body { background: #fff !important; }
-    .report-toolbar, .nav, .edit-hint, .toast { display: none !important; }
+    .report-toolbar, .nav, .edit-hint, .toast, .scroll-progress, .back-to-top, .loading-screen { display: none !important; }
     .header { position: relative !important; }
     .header, .nav { box-shadow: none !important; }
     .pdf-cover { display: block !important; page-break-after: always; }
@@ -990,4 +1113,36 @@ body {
 @page {
     size: A4;
     margin: 15mm 12mm;
+}
+
+/* ============ INTERSECTION OBSERVER ANIMATIONS ============ */
+.animate-in {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.animate-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+.animate-in:nth-child(2) { transition-delay: 0.08s; }
+.animate-in:nth-child(3) { transition-delay: 0.16s; }
+.animate-in:nth-child(4) { transition-delay: 0.24s; }
+.animate-in:nth-child(5) { transition-delay: 0.32s; }
+
+/* ============ STAT COUNTER ANIMATION ============ */
+.stat-big[data-count],
+.stat-number[data-count] {
+    transition: color 0.3s;
+}
+
+/* ============ REDUCED MOTION ============ */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+    .loading-screen { display: none !important; }
+    .animate-in { opacity: 1; transform: none; }
+    .scroll-progress { display: none; }
 }

@@ -1,17 +1,22 @@
 // ============================================================
 // TÜBİTAK 7260634 — PROJE YÖNETİM PANELİ
-// Dashboard JavaScript — v2.0
+// Dashboard JavaScript — v3.0
 // ============================================================
 
 document.addEventListener('DOMContentLoaded', () => {
+    dismissLoadingScreen();
     initNavigation();
+    initScrollProgress();
+    initBackToTop();
     renderWorkPackages();
     renderMilestones();
     renderTeam();
+    updateDynamicDates();
     animateProgressBars();
+    initScrollAnimations();
+    initCounterAnimations();
     updateDate();
     initEditMode();
-    // restoreSavedEdits(); // Uncomment to auto-load saved edits
 });
 
 // ============ PROJECT DATA ============
@@ -141,17 +146,141 @@ const project = {
     ]
 };
 
+// ============ LOADING SCREEN ============
+function dismissLoadingScreen() {
+    const screen = document.getElementById('loadingScreen');
+    if (!screen) return;
+    screen.classList.add('hidden');
+    setTimeout(() => screen.remove(), 600);
+}
+
+// ============ SCROLL PROGRESS ============
+function initScrollProgress() {
+    const bar = document.getElementById('scrollProgress');
+    if (!bar) return;
+    window.addEventListener('scroll', () => {
+        const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+        const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const progress = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+        bar.style.width = progress + '%';
+    }, { passive: true });
+}
+
+// ============ BACK TO TOP ============
+function initBackToTop() {
+    const btn = document.getElementById('backToTop');
+    if (!btn) return;
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 400) {
+            btn.classList.add('visible');
+        } else {
+            btn.classList.remove('visible');
+        }
+    }, { passive: true });
+    btn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+}
+
+// ============ DYNAMIC DATE CALCULATIONS ============
+function updateDynamicDates() {
+    const projectStart = new Date('2026-03-01');
+    const projectEnd = new Date('2027-09-01');
+    const ip1End = new Date('2026-06-01');
+    const now = new Date();
+
+    // Days elapsed since project start
+    const daysElapsed = Math.max(0, Math.ceil((now - projectStart) / (1000 * 60 * 60 * 24)));
+    const totalProjectDays = Math.ceil((projectEnd - projectStart) / (1000 * 60 * 60 * 24));
+    const timePercent = Math.min(100, ((daysElapsed / totalProjectDays) * 100)).toFixed(1);
+
+    const elapsedEl = document.getElementById('daysElapsed');
+    if (elapsedEl) elapsedEl.textContent = daysElapsed + ' gün geçti';
+
+    const timeBar = document.getElementById('timeBarFill');
+    if (timeBar) timeBar.style.width = timePercent + '%';
+
+    // Days remaining for İP-1
+    const daysRemaining = Math.max(0, Math.ceil((ip1End - now) / (1000 * 60 * 60 * 24)));
+    const remainEl = document.getElementById('daysRemaining');
+    if (remainEl) remainEl.textContent = daysRemaining;
+}
+
+// ============ SCROLL ANIMATIONS (IntersectionObserver) ============
+function initScrollAnimations() {
+    // Add animate-in class to key elements
+    const selectors = '.card, .kpi-card, .stat-card, .wp-card, .ms-card, .tm-card, .target-item, .output-item, .bms-spec-card, .completed-category, .budget-kpi, .tech-item, .standard-item, .step-item';
+    document.querySelectorAll(selectors).forEach(el => {
+        el.classList.add('animate-in');
+    });
+
+    if (!('IntersectionObserver' in window)) {
+        document.querySelectorAll('.animate-in').forEach(el => el.classList.add('visible'));
+        return;
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.animate-in').forEach(el => observer.observe(el));
+}
+
+// ============ ANIMATED COUNTERS ============
+function initCounterAnimations() {
+    const statElements = document.querySelectorAll('.stat-big');
+    if (!('IntersectionObserver' in window)) return;
+
+    const counterObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                animateCounter(entry.target);
+                counterObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.5 });
+
+    statElements.forEach(el => counterObserver.observe(el));
+}
+
+function animateCounter(el) {
+    const text = el.textContent.trim();
+    const match = text.match(/^(\d+)/);
+    if (!match) return;
+    const target = parseInt(match[1], 10);
+    const suffix = text.replace(/^\d+/, '');
+    const duration = 1200;
+    const start = performance.now();
+
+    function step(now) {
+        const elapsed = now - start;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3); // easeOutCubic
+        const current = Math.round(eased * target);
+        el.textContent = current + suffix;
+        if (progress < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+}
+
 // ============ NAVIGATION ============
 function initNavigation() {
-    const btns = document.querySelectorAll('.nav-btn');
+    const btns = document.querySelectorAll('.nav-btn[data-section]');
     const sections = document.querySelectorAll('.section');
     btns.forEach(btn => {
         btn.addEventListener('click', () => {
             const target = btn.dataset.section;
+            if (!target) return;
             btns.forEach(b => b.classList.remove('active'));
             sections.forEach(s => s.classList.remove('active'));
             btn.classList.add('active');
-            document.getElementById(target).classList.add('active');
+            const targetSection = document.getElementById(target);
+            if (targetSection) targetSection.classList.add('active');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
     });
@@ -430,29 +559,7 @@ function restoreSavedEdits() {
 
 // ============ PDF EXPORT ============
 function exportPDF() {
-    showToast('📄 PDF hazırlanıyor...', 'info');
-
-    // Update PDF cover date
-    const pdfDate = document.getElementById('pdfDate');
-    if (pdfDate) {
-        pdfDate.textContent = new Date().toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' });
-    }
-
-    // Show all sections for PDF
-    const sections = document.querySelectorAll('.section');
-    const activeSection = document.querySelector('.section.active');
-    sections.forEach(s => s.classList.add('active'));
-
-    // Small delay then trigger print (browser PDF)
-    setTimeout(() => {
-        window.print();
-
-        // Restore single section view after print dialog
-        setTimeout(() => {
-            sections.forEach(s => s.classList.remove('active'));
-            if (activeSection) activeSection.classList.add('active');
-        }, 500);
-    }, 300);
+    window.print();
 }
 
 // ============ KEYBOARD SHORTCUTS ============
@@ -476,4 +583,4 @@ function saveState() { localStorage.setItem('tubitak_7260634_v2', JSON.stringify
 setInterval(saveState, 60000);
 saveState();
 
-console.log('✅ TÜBİTAK 7260634 Dashboard v3.0 yüklendi — Düzenleme ve PDF dışa aktarma hazır');
+console.log('%c✅ TÜBİTAK 7260634 Dashboard v3.0 yüklendi', 'color:#10b981;font-weight:700;font-size:13px;');
