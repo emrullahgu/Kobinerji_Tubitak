@@ -1258,8 +1258,8 @@ async function exportPDF() {
                 continue;
             }
 
-            // Force page break before secA2 (Kuruluş Bilgileri)
-            if (block.type === 'header' && block.parentId === 'secA2') {
+            // Force page breaks before specific sections
+            if (block.type === 'header' && (block.parentId === 'secA1' || block.parentId === 'secA2' || block.parentId === 'secB1')) {
                 pdf.addPage();
                 currentY = margin;
                 needsNewPage = false;
