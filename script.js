@@ -621,12 +621,12 @@ async function downloadDocPDF(filePath, docTitle) {
             document.body.appendChild(container);
         }
 
-        // Professional PDF layout with logo header
+        // Build structured HTML document for section-by-section rendering
         container.innerHTML = `
             <div class="pdf-doc-header">
                 <img src="firmalogo.png" class="pdf-doc-logo" crossorigin="anonymous">
                 <div class="pdf-doc-header-text">
-                    <div class="pdf-doc-company">KOBİNERJİ MÜHENDİSLİK VE ENERJİ VERİMLİLİĞİ DANIŞMANŚLIK A.Ş.</div>
+                    <div class="pdf-doc-company">KOBİNERJİ MÜHENDİSLİK VE ENERJİ VERİMLİLİĞİ DANIŞMANLIK A.Ş.</div>
                     <div class="pdf-doc-project">TÜBİTAK 1507 — Proje No: 7260634</div>
                     <div class="pdf-doc-subtitle">Elektrikli Araç Bataryaları İçin Yapay Zekâ Destekli Yeşil Dönüşüm ve Analiz Sistemi</div>
                 </div>
@@ -639,83 +639,128 @@ async function downloadDocPDF(filePath, docTitle) {
                     <span>Gizlilik: Proje İçi</span>
                 </div>
             </div>
-            <div class="pdf-doc-content">
-                ${htmlContent}
-            </div>
+            <div class="pdf-doc-content">${htmlContent}</div>
             <div class="pdf-doc-footer">
                 <div>© 2026 KOBİNERJİ A.Ş. — Tüm hakları saklıdır.</div>
                 <div>${docTitle}</div>
             </div>
         `;
 
-        // Wait for logo image to load
+        // Wait for logo to load
         const logoImg = container.querySelector('.pdf-doc-logo');
         if (logoImg && !logoImg.complete) {
-            await new Promise((resolve) => {
-                logoImg.onload = resolve;
-                logoImg.onerror = resolve;
-                setTimeout(resolve, 2000);
-            });
+            await new Promise(resolve => { logoImg.onload = resolve; logoImg.onerror = resolve; setTimeout(resolve, 2000); });
         }
-
-        // Small delay to ensure full render
         await new Promise(r => setTimeout(r, 300));
 
-        // Render the full content as a single high-quality canvas
-        const canvas = await html2canvas(container, {
-            scale: 2,
-            useCORS: true,
-            allowTaint: true,
-            width: container.offsetWidth,
-            height: container.scrollHeight,
-            windowWidth: container.offsetWidth,
-            windowHeight: container.scrollHeight,
-            scrollX: 0,
-            scrollY: 0,
-            logging: false
-        });
+        // Collect render blocks: split content by H1/H2 for clean page breaks
+        const renderBlocks = [];
+        const headerEl = container.querySelector('.pdf-doc-header');
+        const titleEl = container.querySelector('.pdf-doc-title-bar');
+        if (headerEl) renderBlocks.push(headerEl);
+        if (titleEl) renderBlocks.push(titleEl);
 
+        const contentEl = container.querySelector('.pdf-doc-content');
+        if (contentEl) {
+            // Split content children into groups at each H1/H2 boundary
+            let currentGroup = document.createElement('div');
+            currentGroup.className = 'pdf-doc-content';
+            let hasContent = false;
+
+            for (const child of [...contentEl.children]) {
+                const tag = child.tagName;
+                if ((tag === 'H1' || tag === 'H2') && hasContent) {
+                    container.appendChild(currentGroup);
+                    renderBlocks.push(currentGroup);
+                    currentGroup = document.createElement('div');
+                    currentGroup.className = 'pdf-doc-content';
+                    hasContent = false;
+                }
+                currentGroup.appendChild(child.cloneNode(true));
+                hasContent = true;
+            }
+            if (hasContent) {
+                container.appendChild(currentGroup);
+                renderBlocks.push(currentGroup);
+            }
+        }
+
+        const footerEl = container.querySelector('.pdf-doc-footer');
+        if (footerEl) renderBlocks.push(footerEl);
+
+        await new Promise(r => setTimeout(r, 200));
+
+        // Section-by-section PDF rendering (same proven approach as AGY101-02)
         const { jsPDF } = window.jspdf;
-        const pdf = new jsPDF('p', 'mm', 'a4');
-        const pageW = 210;
-        const pageH = 297;
-        const margin = 5;
-        const usableW = pageW - margin * 2;
+        const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+        const pageW = 210, pageH = 297, margin = 7;
+        const contentW = pageW - margin * 2;
         const usableH = pageH - margin * 2;
 
-        // Calculate how the full image maps to pages
-        const fullImgW = usableW;
-        const fullImgH = (canvas.height / canvas.width) * fullImgW;
+        const h2cOpts = {
+            scale: 2, useCORS: true, allowTaint: true,
+            backgroundColor: '#ffffff', logging: false,
+            windowWidth: 794, imageTimeout: 15000
+        };
 
-        // How many mm of image content per page
-        const mmPerPage = usableH;
-        const totalPages = Math.ceil(fullImgH / mmPerPage);
+        let currentY = margin;
 
-        for (let page = 0; page < totalPages; page++) {
-            if (page > 0) pdf.addPage();
+        for (let i = 0; i < renderBlocks.length; i++) {
+            const el = renderBlocks[i];
+            if (!el || !el.offsetHeight || el.offsetHeight < 2) continue;
 
-            // Source crop from the full canvas
-            const srcY = Math.round((page * mmPerPage / fullImgH) * canvas.height);
-            const srcH = Math.round((mmPerPage / fullImgH) * canvas.height);
-            const actualSrcH = Math.min(srcH, canvas.height - srcY);
+            const canvas = await html2canvas(el, h2cOpts);
+            const imgW = contentW;
+            const imgH = (canvas.height * contentW) / canvas.width;
+            const remaining = usableH - (currentY - margin);
 
-            // Create cropped page canvas
-            const pageCanvas = document.createElement('canvas');
-            pageCanvas.width = canvas.width;
-            pageCanvas.height = actualSrcH;
-            const ctx = pageCanvas.getContext('2d');
-            ctx.fillStyle = '#ffffff';
-            ctx.fillRect(0, 0, pageCanvas.width, pageCanvas.height);
-            ctx.drawImage(canvas, 0, srcY, canvas.width, actualSrcH, 0, 0, canvas.width, actualSrcH);
+            if (imgH <= remaining) {
+                // Fits on current page
+                pdf.addImage(canvas.toDataURL('image/png'), 'PNG', margin, currentY, imgW, imgH);
+                currentY += imgH + 0.5;
+            } else if (imgH <= usableH) {
+                // Doesn't fit current page, but fits a fresh page
+                pdf.addPage();
+                currentY = margin;
+                pdf.addImage(canvas.toDataURL('image/png'), 'PNG', margin, currentY, imgW, imgH);
+                currentY += imgH + 0.5;
+            } else {
+                // Taller than one page → slice
+                if (currentY > margin + 2) { pdf.addPage(); currentY = margin; }
 
-            const imgData = pageCanvas.toDataURL('image/jpeg', 0.95);
-            const drawH = (actualSrcH / canvas.width) * fullImgW;
-            pdf.addImage(imgData, 'JPEG', margin, margin, usableW, drawH);
+                const pxPerMm = canvas.width / contentW;
+                const pxPerPage = Math.floor(usableH * pxPerMm);
+                let srcY = 0, sliceIdx = 0;
 
-            // Page number footer
+                while (srcY < canvas.height) {
+                    if (sliceIdx > 0) { pdf.addPage(); currentY = margin; }
+
+                    const sliceH = Math.min(pxPerPage, canvas.height - srcY);
+                    const slice = document.createElement('canvas');
+                    slice.width = canvas.width;
+                    slice.height = Math.ceil(sliceH);
+                    const ctx = slice.getContext('2d');
+                    ctx.fillStyle = '#ffffff';
+                    ctx.fillRect(0, 0, slice.width, slice.height);
+                    ctx.drawImage(canvas, 0, srcY, canvas.width, sliceH, 0, 0, canvas.width, sliceH);
+
+                    const sliceImgH = sliceH / pxPerMm;
+                    pdf.addImage(slice.toDataURL('image/png'), 'PNG', margin, margin, contentW, sliceImgH);
+                    currentY = margin + sliceImgH + 0.5;
+                    srcY += pxPerPage;
+                    sliceIdx++;
+                }
+            }
+        }
+
+        // Add page numbers on every page
+        const numPages = pdf.internal.getNumberOfPages();
+        for (let p = 1; p <= numPages; p++) {
+            pdf.setPage(p);
             pdf.setFontSize(8);
-            pdf.setTextColor(150, 150, 150);
-            pdf.text(`Sayfa ${page + 1} / ${totalPages}`, pageW / 2, pageH - 3, { align: 'center' });
+            pdf.setTextColor(160);
+            pdf.text(docTitle, margin, pageH - 4);
+            pdf.text('Sayfa ' + p + ' / ' + numPages, pageW - margin - 25, pageH - 4);
         }
 
         const safeTitle = docTitle.replace(/[^a-zA-Z0-9_\-ğüşıöçĞÜŞİÖÇ ]/g, '').replace(/\s+/g, '_');
