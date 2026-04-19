@@ -594,7 +594,7 @@ function renderDocuments() {
                 ${doc.tags.map(t => `<span class="doc-tag">${t}</span>`).join('')}
             </div>
             <div class="doc-card-footer">
-                <span class="doc-card-meta">📄 Markdown → PDF</span>
+                <span class="doc-card-meta"></span>
                 <button class="doc-download-btn" onclick="downloadDocPDF('${doc.file}', '${doc.id} — ${doc.title.replace(/'/g, "\\'")}')">
                     <span class="btn-text">⬇ PDF İndir</span>
                     <span class="spinner"></span>
@@ -620,61 +620,102 @@ async function downloadDocPDF(filePath, docTitle) {
             container.id = 'pdfRenderContainer';
             document.body.appendChild(container);
         }
+
+        // Professional PDF layout with logo header
         container.innerHTML = `
-            <div style="text-align:center; margin-bottom:32px; padding-bottom:20px; border-bottom:3px solid #6366f1;">
-                <div style="font-size:11px; color:#6366f1; font-weight:700; letter-spacing:2px; margin-bottom:6px;">KOBİNERJİ MÜHENDİSLİK A.Ş.</div>
-                <div style="font-size:10px; color:#94a3b8;">TÜBİTAK 1507 — Proje No: 7260634</div>
+            <div class="pdf-doc-header">
+                <img src="firmalogo.png" class="pdf-doc-logo" crossorigin="anonymous">
+                <div class="pdf-doc-header-text">
+                    <div class="pdf-doc-company">KOBİNERJİ MÜHENDİSLİK VE ENERJİ VERİMLİLİĞİ DANIŞMANŚLIK A.Ş.</div>
+                    <div class="pdf-doc-project">TÜBİTAK 1507 — Proje No: 7260634</div>
+                    <div class="pdf-doc-subtitle">Elektrikli Araç Bataryaları İçin Yapay Zekâ Destekli Yeşil Dönüşüm ve Analiz Sistemi</div>
+                </div>
             </div>
-            ${htmlContent}
-            <div style="margin-top:40px; padding-top:16px; border-top:1px solid #e2e8f0; text-align:center; font-size:10px; color:#94a3b8;">
-                © 2026 KOBİNERJİ A.Ş. — Tüm hakları saklıdır. — ${docTitle}
+            <div class="pdf-doc-title-bar">
+                <h1 class="pdf-doc-main-title">${docTitle}</h1>
+                <div class="pdf-doc-meta-row">
+                    <span>Tarih: 19 Nisan 2026</span>
+                    <span>Sürüm: 1.0.0</span>
+                    <span>Gizlilik: Proje İçi</span>
+                </div>
+            </div>
+            <div class="pdf-doc-content">
+                ${htmlContent}
+            </div>
+            <div class="pdf-doc-footer">
+                <div>© 2026 KOBİNERJİ A.Ş. — Tüm hakları saklıdır.</div>
+                <div>${docTitle}</div>
             </div>
         `;
 
-        // Render the full content as a single canvas
+        // Wait for logo image to load
+        const logoImg = container.querySelector('.pdf-doc-logo');
+        if (logoImg && !logoImg.complete) {
+            await new Promise((resolve) => {
+                logoImg.onload = resolve;
+                logoImg.onerror = resolve;
+                setTimeout(resolve, 2000);
+            });
+        }
+
+        // Small delay to ensure full render
+        await new Promise(r => setTimeout(r, 300));
+
+        // Render the full content as a single high-quality canvas
         const canvas = await html2canvas(container, {
             scale: 2,
             useCORS: true,
+            allowTaint: true,
             width: container.offsetWidth,
             height: container.scrollHeight,
             windowWidth: container.offsetWidth,
             windowHeight: container.scrollHeight,
             scrollX: 0,
-            scrollY: 0
+            scrollY: 0,
+            logging: false
         });
 
         const { jsPDF } = window.jspdf;
         const pdf = new jsPDF('p', 'mm', 'a4');
         const pageW = 210;
         const pageH = 297;
-        const imgW = pageW;
-        const imgH = (canvas.height / canvas.width) * imgW;
-        const pageImgH = pageH; // each page shows this much mm of the image
+        const margin = 5;
+        const usableW = pageW - margin * 2;
+        const usableH = pageH - margin * 2;
 
-        let position = 0;
-        let pageNum = 0;
+        // Calculate how the full image maps to pages
+        const fullImgW = usableW;
+        const fullImgH = (canvas.height / canvas.width) * fullImgW;
 
-        while (position < imgH) {
-            if (pageNum > 0) pdf.addPage();
+        // How many mm of image content per page
+        const mmPerPage = usableH;
+        const totalPages = Math.ceil(fullImgH / mmPerPage);
 
-            // Calculate crop from canvas
-            const srcY = Math.round((position / imgH) * canvas.height);
-            const srcH = Math.round((pageImgH / imgH) * canvas.height);
+        for (let page = 0; page < totalPages; page++) {
+            if (page > 0) pdf.addPage();
+
+            // Source crop from the full canvas
+            const srcY = Math.round((page * mmPerPage / fullImgH) * canvas.height);
+            const srcH = Math.round((mmPerPage / fullImgH) * canvas.height);
             const actualSrcH = Math.min(srcH, canvas.height - srcY);
 
-            // Create a cropped canvas for this page
+            // Create cropped page canvas
             const pageCanvas = document.createElement('canvas');
             pageCanvas.width = canvas.width;
             pageCanvas.height = actualSrcH;
             const ctx = pageCanvas.getContext('2d');
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, pageCanvas.width, pageCanvas.height);
             ctx.drawImage(canvas, 0, srcY, canvas.width, actualSrcH, 0, 0, canvas.width, actualSrcH);
 
-            const pageImgData = pageCanvas.toDataURL('image/jpeg', 0.95);
-            const drawH = (actualSrcH / canvas.width) * imgW;
-            pdf.addImage(pageImgData, 'JPEG', 0, 0, imgW, drawH);
+            const imgData = pageCanvas.toDataURL('image/jpeg', 0.95);
+            const drawH = (actualSrcH / canvas.width) * fullImgW;
+            pdf.addImage(imgData, 'JPEG', margin, margin, usableW, drawH);
 
-            position += pageImgH;
-            pageNum++;
+            // Page number footer
+            pdf.setFontSize(8);
+            pdf.setTextColor(150, 150, 150);
+            pdf.text(`Sayfa ${page + 1} / ${totalPages}`, pageW / 2, pageH - 3, { align: 'center' });
         }
 
         const safeTitle = docTitle.replace(/[^a-zA-Z0-9_\-ğüşıöçĞÜŞİÖÇ ]/g, '').replace(/\s+/g, '_');
