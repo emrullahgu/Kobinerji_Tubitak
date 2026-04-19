@@ -631,41 +631,50 @@ async function downloadDocPDF(filePath, docTitle) {
             </div>
         `;
 
+        // Render the full content as a single canvas
+        const canvas = await html2canvas(container, {
+            scale: 2,
+            useCORS: true,
+            width: container.offsetWidth,
+            height: container.scrollHeight,
+            windowWidth: container.offsetWidth,
+            windowHeight: container.scrollHeight,
+            scrollX: 0,
+            scrollY: 0
+        });
+
         const { jsPDF } = window.jspdf;
         const pdf = new jsPDF('p', 'mm', 'a4');
         const pageW = 210;
         const pageH = 297;
-        const margin = 0;
+        const imgW = pageW;
+        const imgH = (canvas.height / canvas.width) * imgW;
+        const pageImgH = pageH; // each page shows this much mm of the image
 
-        // Split content into chunks for multi-page rendering
-        const totalHeight = container.scrollHeight;
-        const renderWidth = container.offsetWidth;
-        const scale = 2;
-        const pxPerPage = Math.floor((pageH / pageW) * renderWidth * 0.95);
-
-        let yOffset = 0;
+        let position = 0;
         let pageNum = 0;
 
-        while (yOffset < totalHeight) {
-            const chunkH = Math.min(pxPerPage, totalHeight - yOffset);
-            const canvas = await html2canvas(container, {
-                scale: scale,
-                useCORS: true,
-                y: yOffset,
-                height: chunkH,
-                width: renderWidth,
-                windowWidth: renderWidth,
-                windowHeight: chunkH
-            });
-
-            const imgData = canvas.toDataURL('image/jpeg', 0.92);
-            const imgW = pageW - margin * 2;
-            const imgH = (chunkH / renderWidth) * imgW;
-
+        while (position < imgH) {
             if (pageNum > 0) pdf.addPage();
-            pdf.addImage(imgData, 'JPEG', margin, margin, imgW, imgH);
+
+            // Calculate crop from canvas
+            const srcY = Math.round((position / imgH) * canvas.height);
+            const srcH = Math.round((pageImgH / imgH) * canvas.height);
+            const actualSrcH = Math.min(srcH, canvas.height - srcY);
+
+            // Create a cropped canvas for this page
+            const pageCanvas = document.createElement('canvas');
+            pageCanvas.width = canvas.width;
+            pageCanvas.height = actualSrcH;
+            const ctx = pageCanvas.getContext('2d');
+            ctx.drawImage(canvas, 0, srcY, canvas.width, actualSrcH, 0, 0, canvas.width, actualSrcH);
+
+            const pageImgData = pageCanvas.toDataURL('image/jpeg', 0.95);
+            const drawH = (actualSrcH / canvas.width) * imgW;
+            pdf.addImage(pageImgData, 'JPEG', 0, 0, imgW, drawH);
+
+            position += pageImgH;
             pageNum++;
-            yOffset += chunkH;
         }
 
         const safeTitle = docTitle.replace(/[^a-zA-Z0-9_\-ğüşıöçĞÜŞİÖÇ ]/g, '').replace(/\s+/g, '_');
