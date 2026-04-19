@@ -10,6 +10,8 @@ document.addEventListener('DOMContentLoaded', () => {
     renderTeam();
     animateProgressBars();
     updateDate();
+    initEditMode();
+    // restoreSavedEdits(); // Uncomment to auto-load saved edits
 });
 
 // ============ PROJECT DATA ============
@@ -287,6 +289,172 @@ function exportJSON() {
     URL.revokeObjectURL(url);
 }
 
+// ============ TOAST NOTIFICATIONS ============
+function showToast(message, type = 'success') {
+    const existing = document.querySelectorAll('.toast');
+    existing.forEach(t => t.remove());
+    const toast = document.createElement('div');
+    toast.className = `toast toast-${type}`;
+    toast.innerHTML = message;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+}
+
+// ============ EDIT MODE ============
+let isEditMode = false;
+let editSnapshot = '';
+
+function initEditMode() {
+    const btnEdit = document.getElementById('btnEdit');
+    const btnSave = document.getElementById('btnSave');
+    const btnCancel = document.getElementById('btnCancel');
+    const btnPDF = document.getElementById('btnPDF');
+    const btnPrint = document.getElementById('btnPrint');
+    const btnJSON = document.getElementById('btnJSON');
+
+    if (btnEdit) btnEdit.addEventListener('click', enterEditMode);
+    if (btnSave) btnSave.addEventListener('click', saveEdits);
+    if (btnCancel) btnCancel.addEventListener('click', cancelEdits);
+    if (btnPDF) btnPDF.addEventListener('click', exportPDF);
+    if (btnPrint) btnPrint.addEventListener('click', () => window.print());
+    if (btnJSON) btnJSON.addEventListener('click', exportJSON);
+
+    // Make specific elements editable
+    makeEditable();
+}
+
+function makeEditable() {
+    // Mark text elements as editable targets
+    const selectors = [
+        '.section-title h2',
+        '.section-title p',
+        '.card h3',
+        '.kpi-value',
+        '.kpi-sub',
+        '.info-value',
+        '.highlight-left h3',
+        '.highlight-left p',
+        '.check-list li',
+        '.risk-detail strong',
+        '.risk-detail p',
+        '.risk-mitigation',
+        '.target-value',
+        '.target-label',
+        '.step-content h4',
+        '.step-content li',
+        '.output-item h4',
+        '.output-item p',
+        '.budget-note',
+        '.bms-spec-card h4',
+        '.bms-spec-card li'
+    ];
+    document.querySelectorAll(selectors.join(',')).forEach(el => {
+        el.classList.add('editable');
+    });
+}
+
+function enterEditMode() {
+    isEditMode = true;
+    document.querySelector('.app').classList.add('edit-mode');
+    editSnapshot = document.querySelector('.main').innerHTML;
+
+    // Enable contentEditable on all .editable elements
+    document.querySelectorAll('.editable').forEach(el => {
+        el.setAttribute('contenteditable', 'true');
+        el.setAttribute('spellcheck', 'true');
+    });
+
+    document.getElementById('btnEdit').style.display = 'none';
+    document.getElementById('btnSave').style.display = 'inline-flex';
+    document.getElementById('btnCancel').style.display = 'inline-flex';
+    document.getElementById('tbStatus').innerHTML = '✏️ <strong style="color:#3b82f6">Düzenleme Modu</strong> — İçeriklere tıklayarak düzenleyebilirsiniz';
+
+    showToast('✏️ Düzenleme modu açıldı — herhangi bir mavi çerçeveli alana tıklayıp yazabilirsiniz', 'info');
+}
+
+function saveEdits() {
+    // Remove contentEditable
+    document.querySelectorAll('.editable').forEach(el => {
+        el.removeAttribute('contenteditable');
+        el.removeAttribute('spellcheck');
+    });
+
+    document.querySelector('.app').classList.remove('edit-mode');
+    isEditMode = false;
+
+    document.getElementById('btnEdit').style.display = 'inline-flex';
+    document.getElementById('btnSave').style.display = 'none';
+    document.getElementById('btnCancel').style.display = 'none';
+    document.getElementById('tbStatus').innerHTML = '📋 Rapor Görüntüleme Modu';
+
+    // Save to localStorage
+    const content = document.querySelector('.main').innerHTML;
+    localStorage.setItem('tubitak_7260634_edited', content);
+    localStorage.setItem('tubitak_7260634_editDate', new Date().toISOString());
+
+    showToast('💾 Değişiklikler kaydedildi!', 'success');
+}
+
+function cancelEdits() {
+    // Restore snapshot
+    document.querySelector('.main').innerHTML = editSnapshot;
+    document.querySelector('.app').classList.remove('edit-mode');
+    isEditMode = false;
+
+    document.getElementById('btnEdit').style.display = 'inline-flex';
+    document.getElementById('btnSave').style.display = 'none';
+    document.getElementById('btnCancel').style.display = 'none';
+    document.getElementById('tbStatus').innerHTML = '📋 Rapor Görüntüleme Modu';
+
+    // Re-render dynamic sections
+    renderWorkPackages();
+    renderMilestones();
+    renderTeam();
+    animateProgressBars();
+    makeEditable();
+
+    showToast('✖️ Düzenlemeler iptal edildi', 'error');
+}
+
+// Restore saved edits on load
+function restoreSavedEdits() {
+    const saved = localStorage.getItem('tubitak_7260634_edited');
+    if (saved) {
+        const editDate = localStorage.getItem('tubitak_7260634_editDate');
+        const dateStr = editDate ? new Date(editDate).toLocaleDateString('tr-TR') : '';
+        document.querySelector('.main').innerHTML = saved;
+        makeEditable();
+        showToast(`📂 Kaydedilmiş düzenlemeler yüklendi (${dateStr})`, 'info');
+    }
+}
+
+// ============ PDF EXPORT ============
+function exportPDF() {
+    showToast('📄 PDF hazırlanıyor...', 'info');
+
+    // Update PDF cover date
+    const pdfDate = document.getElementById('pdfDate');
+    if (pdfDate) {
+        pdfDate.textContent = new Date().toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' });
+    }
+
+    // Show all sections for PDF
+    const sections = document.querySelectorAll('.section');
+    const activeSection = document.querySelector('.section.active');
+    sections.forEach(s => s.classList.add('active'));
+
+    // Small delay then trigger print (browser PDF)
+    setTimeout(() => {
+        window.print();
+
+        // Restore single section view after print dialog
+        setTimeout(() => {
+            sections.forEach(s => s.classList.remove('active'));
+            if (activeSection) activeSection.classList.add('active');
+        }, 500);
+    }, 300);
+}
+
 // ============ KEYBOARD SHORTCUTS ============
 document.addEventListener('keydown', (e) => {
     if (e.altKey && e.key >= '1' && e.key <= '8') {
@@ -294,7 +462,13 @@ document.addEventListener('keydown', (e) => {
         const idx = parseInt(e.key) - 1;
         if (secs[idx]) document.querySelector(`[data-section="${secs[idx]}"]`).click();
     }
-    if (e.ctrlKey && e.key === 'p') { e.preventDefault(); window.print(); }
+    if (e.ctrlKey && e.key === 'p') { e.preventDefault(); exportPDF(); }
+    if (e.ctrlKey && e.key === 'e') { e.preventDefault(); if (!isEditMode) enterEditMode(); }
+    if (e.ctrlKey && e.key === 's') {
+        e.preventDefault();
+        if (isEditMode) saveEdits();
+    }
+    if (e.key === 'Escape' && isEditMode) cancelEdits();
 });
 
 // ============ LOCAL STORAGE ============
@@ -302,4 +476,4 @@ function saveState() { localStorage.setItem('tubitak_7260634_v2', JSON.stringify
 setInterval(saveState, 60000);
 saveState();
 
-console.log('✅ TÜBİTAK 7260634 Dashboard v2.0 yüklendi');
+console.log('✅ TÜBİTAK 7260634 Dashboard v3.0 yüklendi — Düzenleme ve PDF dışa aktarma hazır');

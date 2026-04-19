@@ -716,3 +716,278 @@ body {
     .section { display: block !important; page-break-inside: avoid; margin-bottom: 40px; }
     .kpi-card:hover, .wp-card:hover, .ms-card:hover, .tm-card:hover { transform: none; }
 }
+
+/* ============ REPORT TOOLBAR ============ */
+.report-toolbar {
+    background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+    border-bottom: 2px solid var(--accent);
+    position: sticky;
+    top: 0;
+    z-index: 101;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+}
+.toolbar-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 8px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+.toolbar-left, .toolbar-right { display: flex; gap: 6px; }
+.toolbar-center { flex: 1; text-align: center; }
+.tb-status {
+    font-size: 0.82em;
+    font-weight: 600;
+    color: var(--text-secondary);
+    letter-spacing: 0.3px;
+}
+.tb-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 7px 14px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+    font-family: inherit;
+    font-size: 0.82em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: var(--text);
+}
+.tb-btn:hover { background: #f1f5f9; box-shadow: 0 2px 8px rgba(0,0,0,0.08); transform: translateY(-1px); }
+.tb-icon { font-size: 1.1em; }
+.tb-edit { border-color: var(--accent); color: var(--accent); }
+.tb-edit:hover { background: #eff6ff; }
+.tb-save { border-color: var(--success); color: var(--success); background: #ecfdf5; }
+.tb-save:hover { background: #d1fae5; }
+.tb-cancel { border-color: var(--danger); color: var(--danger); }
+.tb-cancel:hover { background: #fef2f2; }
+.tb-pdf { border-color: #dc2626; color: #dc2626; }
+.tb-pdf:hover { background: #fef2f2; }
+.tb-print { border-color: #7c3aed; color: #7c3aed; }
+.tb-print:hover { background: #f5f3ff; }
+.tb-json { border-color: #0891b2; color: #0891b2; }
+.tb-json:hover { background: #ecfeff; }
+
+/* ============ EDIT MODE ============ */
+.app.edit-mode .editable {
+    outline: 2px dashed rgba(59,130,246,0.4);
+    outline-offset: 4px;
+    border-radius: 4px;
+    cursor: text;
+    transition: outline 0.2s, background 0.2s;
+    min-height: 1em;
+}
+.app.edit-mode .editable:hover {
+    outline-color: var(--accent);
+    background: rgba(59,130,246,0.04);
+}
+.app.edit-mode .editable:focus {
+    outline: 2px solid var(--accent);
+    background: rgba(59,130,246,0.06);
+    box-shadow: 0 0 0 4px rgba(59,130,246,0.1);
+}
+.app.edit-mode .report-toolbar {
+    background: linear-gradient(135deg, #eff6ff, #dbeafe);
+    border-bottom-color: var(--accent);
+}
+.edit-hint {
+    display: none;
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--primary);
+    color: #fff;
+    padding: 10px 24px;
+    border-radius: 24px;
+    font-size: 0.85em;
+    font-weight: 600;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    z-index: 200;
+    animation: slideUp 0.3s ease;
+}
+.app.edit-mode .edit-hint { display: block; }
+@keyframes slideUp { from { opacity:0; transform: translateX(-50%) translateY(20px); } to { opacity:1; transform: translateX(-50%) translateY(0); } }
+
+/* Toast notification */
+.toast {
+    position: fixed;
+    top: 80px;
+    right: 24px;
+    padding: 14px 24px;
+    border-radius: 12px;
+    font-size: 0.9em;
+    font-weight: 600;
+    color: #fff;
+    z-index: 300;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+    animation: toastIn 0.3s ease, toastOut 0.3s ease 2.7s forwards;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.toast-success { background: linear-gradient(135deg, #059669, #10b981); }
+.toast-info { background: linear-gradient(135deg, #2563eb, #3b82f6); }
+.toast-error { background: linear-gradient(135deg, #dc2626, #ef4444); }
+@keyframes toastIn { from { opacity:0; transform: translateX(40px); } to { opacity:1; transform: translateX(0); } }
+@keyframes toastOut { from { opacity:1; } to { opacity:0; transform: translateY(-20px); } }
+
+/* ============ PDF COVER PAGE ============ */
+.pdf-cover {
+    display: none;
+}
+.pdf-cover-inner {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 60px;
+    background: #fff;
+    position: relative;
+}
+.pdf-cover-inner::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 8px;
+    background: linear-gradient(90deg, #10b981, #3b82f6, #8b5cf6);
+}
+.pdf-cover-top {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding-bottom: 24px;
+    border-bottom: 2px solid #e2e8f0;
+}
+.pdf-cover-logo {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+}
+.pdf-cover-company h3 {
+    font-size: 1.1em;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 4px;
+}
+.pdf-cover-company p {
+    font-size: 0.85em;
+    color: #64748b;
+    margin: 0;
+}
+.pdf-cover-middle {
+    text-align: center;
+    padding: 60px 0;
+}
+.pdf-cover-badge {
+    display: inline-block;
+    padding: 8px 24px;
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    color: #fff;
+    border-radius: 24px;
+    font-size: 0.9em;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-bottom: 24px;
+}
+.pdf-cover-title {
+    font-size: 3em;
+    font-weight: 900;
+    color: #0f172a;
+    letter-spacing: -0.03em;
+    margin-bottom: 16px;
+}
+.pdf-cover-subtitle {
+    font-size: 1.4em;
+    font-weight: 500;
+    color: #475569;
+    max-width: 600px;
+    margin: 0 auto 32px;
+    line-height: 1.5;
+}
+.pdf-cover-divider {
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(90deg, #10b981, #3b82f6);
+    margin: 0 auto 24px;
+    border-radius: 4px;
+}
+.pdf-cover-report-type {
+    font-size: 1.6em;
+    font-weight: 700;
+    color: #10b981;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+.pdf-cover-bottom { padding-top: 24px; border-top: 2px solid #e2e8f0; }
+.pdf-cover-meta {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin-bottom: 32px;
+}
+.pdf-meta-row {
+    display: flex;
+    flex-direction: column;
+    padding: 12px 16px;
+    background: #f8fafc;
+    border-left: 3px solid #3b82f6;
+    border-radius: 4px;
+}
+.pdf-meta-label { font-size: 0.72em; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
+.pdf-meta-value { font-size: 0.95em; font-weight: 600; color: #0f172a; }
+.pdf-cover-footer { text-align: center; }
+.pdf-cover-footer p { font-size: 0.82em; color: #94a3b8; }
+.pdf-confidential {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 4px 16px;
+    border: 2px solid #dc2626;
+    color: #dc2626;
+    font-weight: 700;
+    font-size: 0.78em;
+    letter-spacing: 2px;
+    border-radius: 4px;
+}
+
+/* ============ PRINT / PDF LAYOUT ============ */
+@media print {
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
+    body { background: #fff !important; }
+    .report-toolbar, .nav, .edit-hint, .toast { display: none !important; }
+    .header { position: relative !important; }
+    .header, .nav { box-shadow: none !important; }
+    .pdf-cover { display: block !important; page-break-after: always; }
+    .section { display: block !important; page-break-inside: avoid; margin-bottom: 24px; }
+    .card { break-inside: avoid; box-shadow: none !important; border: 1px solid #e2e8f0 !important; }
+    .kpi-card, .wp-card, .ms-card, .tm-card, .stat-card, .target-item, .output-item, .bms-spec-card {
+        break-inside: avoid;
+        box-shadow: none !important;
+        transform: none !important;
+    }
+    .kpi-card:hover, .wp-card:hover, .ms-card:hover, .tm-card:hover, .stat-card:hover { transform: none !important; }
+    .footer { page-break-before: avoid; }
+
+    /* PDF page header */
+    .header::after {
+        content: 'KOBİNERJİ A.Ş. — TÜBİTAK 7260634';
+        display: block;
+        text-align: right;
+        font-size: 0.7em;
+        opacity: 0.4;
+        margin-top: 4px;
+    }
+}
+
+@page {
+    size: A4;
+    margin: 15mm 12mm;
+}

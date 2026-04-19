@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AGY101-02 — Proje Öneri Bilgileri Formu — 7260634</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+/* ═══════════════════ BASE ═══════════════════ */
+:root {
+    --primary: #0f4c75;
+    --primary-dark: #0a2e4a;
+    --accent: #10b981;
+    --accent-gold: #f59e0b;
+    --danger: #ef4444;
+    --bg: #f0f2f5;
+    --card: #ffffff;
+    --text: #1e293b;
+    --text-secondary: #64748b;
+    --border: #e2e8f0;
+    --radius: 12px;
+    --shadow: 0 1px 3px rgba(0,0,0,.08), 0 4px 12px rgba(0,0,0,.04);
+    --shadow-lg: 0 4px 20px rgba(0,0,0,.1);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+
+/* ═══════════════════ TOOLBAR ═══════════════════ */
+.doc-toolbar {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(255,255,255,.95); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 24px; display: flex; align-items: center; justify-content: space-between; gap: 12px;
+}
+.doc-toolbar .tb-left { display: flex; gap: 8px; align-items: center; }
+.doc-toolbar .tb-center { display: flex; gap: 4px; flex-wrap: wrap; align-items: center; }
+.doc-toolbar .tb-right { display: flex; gap: 8px; align-items: center; }
+.tb-btn {
+    padding: 7px 14px; border: 1.5px solid var(--border); border-radius: 8px;
+    background: white; cursor: pointer; font-size: 0.82em; font-weight: 600;
+    display: inline-flex; align-items: center; gap: 5px; transition: all .2s;
+    font-family: 'Inter', sans-serif;
+}
+.tb-btn:hover { border-color: var(--primary); background: #f8fafc; }
+.tb-edit { border-color: #3b82f6; color: #3b82f6; }
+.tb-save { border-color: #10b981; color: #10b981; display: none; }
+.tb-cancel { border-color: #ef4444; color: #ef4444; display: none; }
+.tb-pdf { border-color: #8b5cf6; color: #8b5cf6; }
+.tb-print { border-color: #64748b; color: #64748b; }
+.tb-back { border-color: var(--primary); color: var(--primary); text-decoration: none; }
+.tb-status { font-size: 0.8em; color: var(--text-secondary); }
+.tb-nav-btn { padding: 5px 10px; font-size: 0.75em; border-radius: 6px; }
+.tb-nav-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+/* ═══════════════════ DOCUMENT CONTAINER ═══════════════════ */
+.doc-container {
+    max-width: 960px; margin: 0 auto; padding: 24px 20px 60px;
+}
+
+/* ═══════════════════ COVER PAGE ═══════════════════ */
+.cover-page {
+    background: white; border-radius: var(--radius); box-shadow: var(--shadow-lg);
+    overflow: hidden; margin-bottom: 32px; page-break-after: always;
+}
+.cover-header {
+    background: linear-gradient(145deg, var(--primary-dark), var(--primary), #1a6fa0);
+    color: white; padding: 40px; text-align: center;
+}
+.cover-logos { display: flex; justify-content: center; align-items: center; gap: 32px; margin-bottom: 28px; }
+.cover-logos img { height: 72px; filter: brightness(0) invert(1); }
+.cover-tubitak { font-size: 0.9em; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; opacity: 0.9; }
+.cover-program { font-size: 1.05em; margin-top: 6px; opacity: 0.85; }
+.cover-form-name { font-size: 0.85em; margin-top: 4px; opacity: 0.7; }
+.cover-form-code { display: inline-block; margin-top: 14px; background: rgba(255,255,255,.15); padding: 5px 20px; border-radius: 20px; font-size: 0.85em; font-weight: 700; letter-spacing: 1px; }
+.cover-body { padding: 48px 40px; }
+.cover-project-no {
+    text-align: center; font-size: 3em; font-weight: 900; color: var(--primary);
+    margin-bottom: 8px; letter-spacing: 2px;
+}
+.cover-project-name {
+    text-align: center; font-size: 1.3em; font-weight: 600; color: var(--text);
+    line-height: 1.5; max-width: 700px; margin: 0 auto 32px;
+}
+.cover-company-name {
+    text-align: center; font-size: 1.05em; color: var(--text-secondary); font-weight: 600;
+    margin-bottom: 40px;
+}
+.cover-meta-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px; max-width: 600px;
+    margin: 0 auto 40px;
+}
+.cover-meta-item {
+    background: #f8fafc; border: 1px solid var(--border); border-radius: 8px;
+    padding: 14px 18px; display: flex; flex-direction: column;
+}
+.cover-meta-label { font-size: 0.72em; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-secondary); margin-bottom: 4px; }
+.cover-meta-value { font-size: 0.95em; font-weight: 600; color: var(--text); }
+.cover-confidential {
+    text-align: center; margin-top: 32px; padding: 14px;
+    background: #fef3c7; border: 2px solid #f59e0b; border-radius: 8px;
+    font-weight: 700; color: #92400e; font-size: 0.9em; letter-spacing: 1px;
+}
+
+/* ═══════════════════ SECTIONS ═══════════════════ */
+.doc-section {
+    background: white; border-radius: var(--radius); box-shadow: var(--shadow);
+    margin-bottom: 24px; overflow: hidden;
+}
+.doc-section-header {
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+    color: white; padding: 18px 28px;
+    display: flex; align-items: center; gap: 14px;
+}
+.doc-section-header h2 { font-size: 1.1em; font-weight: 700; }
+.doc-section-header .sec-code {
+    background: rgba(255,255,255,.2); padding: 3px 12px; border-radius: 6px;
+    font-size: 0.78em; font-weight: 700; letter-spacing: 0.5px;
+}
+.doc-section-body { padding: 28px; }
+
+/* Sub-sections */
+.sub-section { margin-bottom: 28px; }
+.sub-section:last-child { margin-bottom: 0; }
+.sub-header {
+    font-size: 0.95em; font-weight: 700; color: var(--primary);
+    padding-bottom: 8px; border-bottom: 2px solid #e2e8f0; margin-bottom: 16px;
+}
+
+/* ═══════════════════ DATA TABLE ═══════════════════ */
+.info-table {
+    width: 100%; border-collapse: collapse; font-size: 0.88em; margin-bottom: 16px;
+}
+.info-table th, .info-table td {
+    padding: 10px 14px; border: 1px solid #e2e8f0; text-align: left; vertical-align: top;
+}
+.info-table th { background: #f1f5f9; font-weight: 600; color: var(--text-secondary); width: 200px; }
+.info-table td { background: white; color: var(--text); }
+.info-table .highlight { color: var(--primary); font-weight: 700; }
+.full-table { width: 100%; border-collapse: collapse; font-size: 0.85em; margin-bottom: 16px; }
+.full-table th, .full-table td { padding: 9px 12px; border: 1px solid #e2e8f0; text-align: left; vertical-align: top; }
+.full-table th { background: var(--primary); color: white; font-weight: 600; font-size: 0.9em; }
+.full-table tr:nth-child(even) td { background: #f8fafc; }
+
+/* ═══════════════════ PROSE TEXT ═══════════════════ */
+.prose { font-size: 0.9em; line-height: 1.8; color: var(--text); }
+.prose p { margin-bottom: 12px; text-align: justify; }
+.prose strong { color: var(--primary); }
+
+/* ═══════════════════ VISUALIZATIONS ═══════════════════ */
+.viz-budget-bars { display: flex; flex-direction: column; gap: 10px; margin: 20px 0; }
+.viz-bar-row { display: flex; align-items: center; gap: 12px; }
+.viz-bar-label { width: 180px; font-size: 0.82em; font-weight: 600; text-align: right; color: var(--text-secondary); }
+.viz-bar-track { flex: 1; height: 28px; background: #f1f5f9; border-radius: 6px; overflow: hidden; position: relative; }
+.viz-bar-fill { height: 100%; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 0.72em; font-weight: 700; color: white; transition: width 1s ease; }
+.viz-bar-amount { width: 120px; font-size: 0.82em; font-weight: 600; }
+.viz-bar-fill.bar-green { background: linear-gradient(90deg, #10b981, #059669); }
+.viz-bar-fill.bar-blue { background: linear-gradient(90deg, #3b82f6, #2563eb); }
+.viz-bar-fill.bar-purple { background: linear-gradient(90deg, #8b5cf6, #7c3aed); }
+.viz-bar-fill.bar-orange { background: linear-gradient(90deg, #f59e0b, #d97706); }
+.viz-bar-fill.bar-teal { background: linear-gradient(90deg, #14b8a6, #0d9488); }
+
+/* THS Progression */
+.ths-progress { display: flex; align-items: center; gap: 6px; margin: 20px 0; flex-wrap: wrap; }
+.ths-node {
+    width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 0.9em; color: white; position: relative;
+}
+.ths-node.ths-done { background: var(--accent); }
+.ths-node.ths-current { background: var(--primary); box-shadow: 0 0 0 4px rgba(15,76,117,.3); }
+.ths-node.ths-future { background: #cbd5e1; color: #64748b; }
+.ths-arrow { font-size: 1.2em; color: #94a3b8; }
+
+/* Gantt micro */
+.gantt-micro { margin: 20px 0; }
+.gantt-micro-row { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+.gantt-micro-label { width: 100px; font-size: 0.75em; font-weight: 600; color: var(--text-secondary); text-align: right; }
+.gantt-micro-track { flex: 1; height: 22px; background: #f1f5f9; border-radius: 4px; position: relative; }
+.gantt-micro-bar {
+    position: absolute; height: 100%; border-radius: 4px; font-size: 0.65em;
+    font-weight: 700; color: white; display: flex; align-items: center; justify-content: center;
+    transition: width 1s ease;
+}
+.gantt-micro-bar.g-active { background: linear-gradient(90deg, #10b981, #059669); }
+.gantt-micro-bar.g-upcoming { background: linear-gradient(90deg, #3b82f6, #2563eb); }
+.gantt-micro-bar.g-future { background: linear-gradient(90deg, #94a3b8, #64748b); }
+
+/* Risk Matrix */
+.risk-matrix { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin: 16px 0; }
+.risk-cell {
+    padding: 16px; border-radius: 10px; text-align: center;
+}
+.risk-cell h4 { font-size: 0.85em; margin-bottom: 6px; }
+.risk-cell p { font-size: 0.78em; line-height: 1.5; }
+.risk-medium { background: #fef3c7; border: 1px solid #fbbf24; }
+.risk-medium h4 { color: #92400e; }
+.risk-low { background: #d1fae5; border: 1px solid #34d399; }
+.risk-low h4 { color: #065f46; }
+
+/* Team Org */
+.team-mini { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; margin: 16px 0; }
+.team-mini-card {
+    background: #f8fafc; border: 1px solid var(--border); border-radius: 10px;
+    padding: 16px; text-align: center;
+}
+.team-mini-avatar {
+    width: 44px; height: 44px; border-radius: 50%; margin: 0 auto 8px;
+    background: var(--primary); color: white; display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 0.85em;
+}
+.team-mini-name { font-weight: 700; font-size: 0.85em; }
+.team-mini-role { font-size: 0.72em; color: var(--text-secondary); margin-top: 2px; }
+
+/* Budget donut (CSS) */
+.donut-wrap { display: flex; align-items: center; gap: 28px; margin: 20px 0; flex-wrap: wrap; justify-content: center; }
+.donut {
+    width: 180px; height: 180px; border-radius: 50%; position: relative;
+    background: conic-gradient(#3b82f6 0% 56.69%, #f59e0b 56.69% 92.71%, #8b5cf6 92.71% 97.14%, #14b8a6 97.14% 100%);
+}
+.donut-hole {
+    position: absolute; inset: 35px; border-radius: 50%; background: white;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+}
+.donut-total { font-size: 0.72em; color: var(--text-secondary); font-weight: 600; }
+.donut-amount { font-size: 1.05em; font-weight: 800; color: var(--text); }
+.donut-legend { display: flex; flex-direction: column; gap: 8px; }
+.legend-item { display: flex; align-items: center; gap: 8px; font-size: 0.82em; }
+.legend-dot { width: 12px; height: 12px; border-radius: 3px; }
+
+/* ═══════════════════ SIGNATURE ═══════════════════ */
+.signature-section {
+    margin-top: 40px; padding-top: 28px; border-top: 2px solid var(--border);
+}
+.signature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 20px; }
+.signature-block { text-align: center; }
+.signature-label { font-size: 0.82em; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+.signature-name { font-weight: 700; font-size: 0.95em; margin-bottom: 4px; }
+.signature-title { font-size: 0.82em; color: var(--text-secondary); margin-bottom: 12px; }
+.signature-canvas-wrap {
+    border: 2px dashed #cbd5e1; border-radius: 8px; padding: 4px;
+    background: #fafbfc; position: relative; cursor: crosshair;
+}
+.signature-canvas { display: block; width: 100%; height: 120px; border-radius: 6px; }
+.sig-actions { display: flex; gap: 6px; justify-content: center; margin-top: 8px; }
+.sig-clear {
+    font-size: 0.72em; padding: 4px 12px; border: 1px solid #ef4444; color: #ef4444;
+    border-radius: 6px; background: white; cursor: pointer; font-family: 'Inter', sans-serif;
+}
+.sig-clear:hover { background: #fef2f2; }
+.signature-date { font-size: 0.78em; color: var(--text-secondary); margin-top: 10px; }
+.sig-saved-indicator { font-size: 0.72em; color: var(--accent); font-weight: 600; display: none; }
+
+/* ═══════════════════ WATERMARK / STAMPS ═══════════════════ */
+.doc-stamp {
+    display: inline-block; padding: 6px 16px; border-radius: 6px;
+    font-weight: 700; font-size: 0.78em; letter-spacing: 0.5px;
+}
+.stamp-approved { background: #d1fae5; color: #065f46; border: 1px solid #34d399; }
+.stamp-draft { background: #fef3c7; color: #92400e; border: 1px solid #fbbf24; }
+.stamp-confidential { background: #fee2e2; color: #991b1b; border: 1px solid #f87171; }
+
+/* ═══════════════════ TOC ═══════════════════ */
+.toc { margin: 20px 0; }
+.toc-item { display: flex; align-items: center; padding: 8px 0; border-bottom: 1px dotted #e2e8f0; font-size: 0.88em; }
+.toc-item:last-child { border-bottom: none; }
+.toc-code { width: 60px; font-weight: 700; color: var(--primary); }
+.toc-text { flex: 1; }
+.toc-page { color: var(--text-secondary); font-weight: 600; font-size: 0.85em; }
+.toc-item a { color: var(--text); text-decoration: none; }
+.toc-item a:hover { color: var(--primary); }
+
+/* ═══════════════════ KEYWORD TAGS ═══════════════════ */
+.keyword-tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+.keyword-tag {
+    background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe;
+    padding: 4px 14px; border-radius: 20px; font-size: 0.78em; font-weight: 600;
+}
+
+/* ═══════════════════ EDIT MODE ═══════════════════ */
+.edit-mode .editable {
+    outline: 2px dashed rgba(59,130,246,.4); outline-offset: 2px;
+    border-radius: 4px; transition: outline-color .2s;
+}
+.edit-mode .editable:focus {
+    outline-color: #3b82f6; background: #eff6ff;
+}
+.edit-mode .signature-canvas-wrap { border-color: #3b82f6; }
+
+/* ═══════════════════ TOAST ═══════════════════ */
+.toast {
+    position: fixed; bottom: 24px; right: 24px; z-index: 9999;
+    padding: 14px 24px; border-radius: 10px; font-size: 0.85em; font-weight: 600;
+    color: white; animation: slideIn .3s ease;
+    box-shadow: 0 8px 24px rgba(0,0,0,.2);
+}
+.toast-success { background: linear-gradient(135deg, #10b981, #059669); }
+.toast-info { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+.toast-error { background: linear-gradient(135deg, #ef4444, #dc2626); }
+@keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ═══════════════════ FOOTER ═══════════════════ */
+.doc-footer {
+    text-align: center; padding: 28px; color: var(--text-secondary); font-size: 0.82em;
+    border-top: 1px solid var(--border); margin-top: 40px;
+}
+.doc-footer strong { color: var(--text); }
+
+/* ═══════════════════ PRINT / PDF ═══════════════════ */
+@page { size: A4; margin: 14mm 12mm; }
+@media print {
+    body { background: white; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .doc-toolbar { display: none !important; }
+    .sig-actions { display: none !important; }
+    .doc-container { padding: 0; max-width: 100%; }
+    .doc-section { box-shadow: none; break-inside: avoid; margin-bottom: 16px; }
+    .cover-page { box-shadow: none; }
+    .signature-canvas-wrap { border-style: solid; }
+    .doc-footer { page-break-before: avoid; }
+}
+
+/* ═══════════════════ RESPONSIVE ═══════════════════ */
+@media (max-width: 768px) {
+    .doc-toolbar { flex-direction: column; gap: 8px; }
+    .cover-meta-grid { grid-template-columns: 1fr; }
+    .signature-grid { grid-template-columns: 1fr; }
+    .risk-matrix { grid-template-columns: 1fr; }
+    .team-mini { grid-template-columns: 1fr 1fr; }
+    .viz-bar-label { width: 120px; }
+    .donut-wrap { flex-direction: column; }
+}
+    </style>
+</head>
+<body>
+
+<!-- ═══════════════════ TOOLBAR ═══════════════════ -->
+<div class="doc-toolbar" id="docToolbar">
+    <div class="tb-left">
+        <a href="index.html" class="tb-btn tb-back">← Dashboard</a>
+        <button class="tb-btn tb-edit" id="btnEdit" onclick="enterEditMode()">✏️ Düzenle</button>
+        <button class="tb-btn tb-save" id="btnSave" onclick="saveEdits()">💾 Kaydet</button>
+        <button class="tb-btn tb-cancel" id="btnCancel" onclick="cancelEdits()">✖️ İptal</button>
+    </div>
+    <div class="tb-center">
+        <span class="tb-status" id="tbStatus">📋 AGY101-02 Proje Öneri Bilgileri Formu</span>
+    </div>
+    <div class="tb-right">
+        <button class="tb-btn tb-pdf" onclick="exportPDF()">📄 PDF İndir</button>
+        <button class="tb-btn tb-print" onclick="window.print()">🖨️ Yazdır</button>
+    </div>
+</div>
+
+<!-- ═══════════════════ DOCUMENT ═══════════════════ -->
+<div class="doc-container" id="docContainer">
+
+<!-- ═══════════════════ COVER PAGE ═══════════════════ -->
+<div class="cover-page">
+    <div class="cover-header">
+        <div class="cover-logos">
+            <img src="firmalogo.png" alt="KOBİNERJİ">
+        </div>
+        <div class="cover-tubitak">TÜBİTAK</div>
+        <div class="cover-program">KOBİ AR-GE BAŞLANGIÇ DESTEK PROGRAMI</div>
+        <div class="cover-form-name">PROJE DEĞERLENDİRME VE İZLEME SİSTEMİ — PROJE ÖNERİ BİLGİLERİ FORMU</div>
+        <div class="cover-form-code">AGY101-02</div>
+    </div>
+    <div class="cover-body">
+        <div class="cover-project-no">7260634</div>
+        <div class="cover-project-name editable">Elektrikli Araç Bataryaları İçin Yapay Zeka Destekli Yeşil Dönüşüm ve Analiz Sistemi</div>
+        <div class="cover-company-name editable">KOBİNERJİ MÜHENDİSLİK VE ENERJİ VERİMLİLİĞİ DANIŞMANLIK ANONİM ŞİRKETİ</div>
+        <div class="cover-meta-grid">
+            <div class="cover-meta-item"><span class="cover-meta-label">Proje Numarası</span><span class="cover-meta-value">7260634</span></div>
+            <div class="cover-meta-item"><span class="cover-meta-label">Program</span><span class="cover-meta-value">TÜBİTAK 1507</span></div>
+            <div class="cover-meta-item"><span class="cover-meta-label">Proje Süresi</span><span class="cover-meta-value">01.03.2026 – 01.09.2027 (18 Ay)</span></div>
+            <div class="cover-meta-item"><span class="cover-meta-label">Toplam Bütçe</span><span class="cover-meta-value">3.497.730 TL</span></div>
+            <div class="cover-meta-item"><span class="cover-meta-label">Proje Yürütücüsü</span><span class="cover-meta-value">Cem Bülbül</span></div>
+            <div class="cover-meta-item"><span class="cover-meta-label">THS Hedefi</span><span class="cover-meta-value">THS 3 → THS 7</span></div>
+            <div class="cover-meta-item"><span class="cover-meta-label">Rapor Tarihi</span><span class="cover-meta-value" id="coverDate">19 Nisan 2026</span></div>
+            <div class="cover-meta-item"><span class="cover-meta-label">Durum</span><span class="cover-meta-value"><span class="doc-stamp stamp-draft">TASLAK</span></span></div>
+        </div>
+        <div class="cover-confidential">GİZLİ — BU DOKÜMAN KOBİNERJİ A.Ş. TARAFINDAN TÜBİTAK'A SUNULMAK ÜZERE HAZIRLANMIŞTIR</div>
+    </div>
+</div>
+
+<!-- ═══════════════════ TABLE OF CONTENTS ═══════════════════ -->
+<div class="doc-section" id="toc">
+    <div class="doc-section-header"><span class="sec-code">İÇİNDEKİLER</span><h2>Doküman İçeriği</h2></div>
+    <div class="doc-section-body">
+        <div class="toc">
+            <div class="toc-item"><span class="toc-code">A.1</span><a href="#secA1" class="toc-text">Proje Ön Bilgileri</a></div>
+            <div class="toc-item"><span class="toc-code">A.2</span><a href="#secA2" class="toc-text">Kuruluş Bilgileri</a></div>
+            <div class="toc-item"><span class="toc-code">A.3</span><a href="#secA3" class="toc-text">Proje Kısa Tanıtımı</a></div>
+            <div class="toc-item"><span class="toc-code">B.1</span><a href="#secB1" class="toc-text">Projenin Hedefleri</a></div>
+            <div class="toc-item"><span class="toc-code">B.2</span><a href="#secB2" class="toc-text">Projenin Teknoloji Düzeyi</a></div>
+            <div class="toc-item"><span class="toc-code">B.3</span><a href="#secB3" class="toc-text">Somut/Ölçülebilir Hedefler ve Ar-Ge Sistematiği</a></div>
+            <div class="toc-item"><span class="toc-code">B.4</span><a href="#secB4" class="toc-text">Projenin Yenilikçi Yönleri</a></div>
+            <div class="toc-item"><span class="toc-code">C.1</span><a href="#secC1" class="toc-text">İş Planı ve İş Paketleri</a></div>
+            <div class="toc-item"><span class="toc-code">C.2</span><a href="#secC2" class="toc-text">Proje Yönetimi ve Organizasyonu</a></div>
+            <div class="toc-item"><span class="toc-code">C.3</span><a href="#secC3" class="toc-text">Kuruluş Altyapısı</a></div>
+            <div class="toc-item"><span class="toc-code">D</span><a href="#secD" class="toc-text">Ticarileşme Planı</a></div>
+            <div class="toc-item"><span class="toc-code">E.1</span><a href="#secE1" class="toc-text">Risk ve Finansman Yönetimi</a></div>
+            <div class="toc-item"><span class="toc-code">F.1</span><a href="#secF1" class="toc-text">Proje Bütçesi</a></div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════ A.1 PROJE ÖN BİLGİLERİ ═══════════════════ -->
+<div class="doc-section" id="secA1">
+    <div class="doc-section-header"><span class="sec-code">A.1</span><h2>Proje Ön Bilgileri</h2></div>
+    <div class="doc-section-body">
+        <div class="sub-section">
+            <div class="sub-header">A.1.1 — Proje Bilgileri</div>
+            <table class="info-table">
+                <tr><th>Proje Numarası</th><td class="highlight">7260634</td></tr>
+                <tr><th>Projenin Adı</th><td class="editable">Elektrikli Araç Bataryaları İçin Yapay Zeka Destekli Yeşil Dönüşüm ve Analiz Sistemi</td></tr>
+                <tr><th>Proje Başlama Tarihi</th><td>01.03.2026</td></tr>
+                <tr><th>Proje Bitiş Tarihi</th><td>01.09.2027</td></tr>
+                <tr><th>Proje Süresi</th><td>18 ay</td></tr>
+                <tr><th>Destek Süresi</th><td>18 ay</td></tr>
+                <tr><th>Teknoloji Grubu</th><td class="editable">ELEKTRİK-ELEKTRONİK TEKNOLOJİLERİ GRUBU</td></tr>
+                <tr><th>Yasal/Özel İzin</th><td>Proje çalışmaları yasal/özel izin gerektirmemektedir.</td></tr>
+            </table>
+
+            <!-- THS Progression Visualization -->
+            <p style="font-size:0.85em; font-weight:600; color:var(--text-secondary); margin: 16px 0 8px;">Teknoloji Hazırlık Seviyesi İlerlemesi</p>
+            <div class="ths-progress">
+                <div class="ths-node ths-done">1</div><span class="ths-arrow">→</span>
+                <div class="ths-node ths-done">2</div><span class="ths-arrow">→</span>
+                <div class="ths-node ths-current">3</div><span class="ths-arrow">→</span>
+                <div class="ths-node ths-future">4</div><span class="ths-arrow">→</span>
+                <div class="ths-node ths-future">5</div><span class="ths-arrow">→</span>
+                <div class="ths-node ths-future">6</div><span class="ths-arrow">→</span>
+                <div class="ths-node ths-future" style="border: 3px solid var(--accent);">7</div>
+            </div>
+            <p style="font-size:0.75em; color:var(--text-secondary); margin-top: 4px;">
+                <strong>Başlangıç:</strong> THS 3 (Kritik işlev kanıtlandı) → <strong>Hedef:</strong> THS 7 (Prototip operasyonel ortamda gösterildi)
+            </p>
+        </div>
+
+        <div class="sub-section">
+            <div class="sub-header">A.1.1 — Bilimsel ve Teknolojik Alanlar</div>
+            <table class="full-table">
+                <thead><tr><th>Kod</th><th>Alan</th></tr></thead>
+                <tbody>
+                    <tr><td>40.90.100</td><td>Teknik Bilimler > Bilgisayar Bilimleri > Yapay Zeka, Bilgisayarda Öğrenme ve Örüntü Tanıma</td></tr>
+                    <tr><td>40.110.30.20</td><td>Teknik Bilimler > Elektrik-Elektronik Mühendisliği > Enerji > Doğrudan Enerji Dönüşümü ve Enerji Depolaması</td></tr>
+                    <tr><td>40.110.40</td><td>Teknik Bilimler > Elektrik-Elektronik Mühendisliği > Güç Elektroniği</td></tr>
+                </tbody>
+            </table>
+
+            <div class="keyword-tags">
+                <span class="keyword-tag">Batarya Gerilim Dengeleme</span>
+                <span class="keyword-tag">Batarya Optimizasyonu</span>
+                <span class="keyword-tag">Batarya İzleme</span>
+                <span class="keyword-tag">Batarya Yönetim Sistemi</span>
+                <span class="keyword-tag">Elektrikli Araç Bataryası</span>
+                <span class="keyword-tag">Yapay Zeka</span>
+                <span class="keyword-tag">Batarya Karakterizasyonu</span>
+            </div>
+        </div>
+
+        <div class="sub-section">
+            <div class="sub-header">A.1.2 — Proje Yürütücüsü</div>
+            <table class="info-table">
+                <tr><th>Adı, Soyadı</th><td class="highlight">CEM BÜLBÜL</td></tr>
+                <tr><th>Unvanı/Görevi</th><td>Kurucu / Yönetici</td></tr>
+                <tr><th>Yazışma Adresi</th><td class="editable">Kemalpaşa OSB Mahallesi, Gazi Bulvarı No:177 İç Kapı No:19 Kemalpaşa OSB 35370 Kemalpaşa İzmir</td></tr>
+                <tr><th>Telefon</th><td>232-5045005</td></tr>
+                <tr><th>E-Posta</th><td>info@kobinerji.com</td></tr>
+            </table>
+        </div>
+
+        <div class="sub-section">
+            <div class="sub-header">A.1.3 — Kuruluş Bilgileri</div>
+            <table class="info-table">
+                <tr><th>Kuruluş Adı</th><td class="highlight editable">KOBİNERJİ MÜHENDİSLİK VE ENERJİ VERİMLİLİĞİ DANIŞMANLIK ANONİM ŞİRKETİ</td></tr>
+                <tr><th>Kuruluş Türü</th><td>Anonim Şirket</td></tr>
+                <tr><th>Kuruluş Ölçeği</th><td>KOBİ (Küçük) — Özel Sektör</td></tr>
+                <tr><th>Vergi Dairesi</th><td>Kemalpaşa</td></tr>
+                <tr><th>Vergi Sicil No</th><td>5641385589</td></tr>
+                <tr><th>Kuruluş Tescil Tarihi</th><td>13.06.2024</td></tr>
+                <tr><th>Ticaret Sicil No</th><td>256557</td></tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════ A.2 KURULUŞ BİLGİLERİ ═══════════════════ -->
+<div class="doc-section" id="secA2">
+    <div class="doc-section-header"><span class="sec-code">A.2</span><h2>Kuruluş Bilgileri</h2></div>
+    <div class="doc-section-body">
+        <div class="sub-section">
+            <div class="sub-header">A.2.1 — Kuruluş Detayları</div>
+            <table class="info-table">
+                <tr><th>Kuruluş Yetkilisi</th><td class="highlight">CEM BÜLBÜL — Yönetici</td></tr>
+                <tr><th>Kuruluş Ortakları</th><td>CEM BÜLBÜL — Ortaklık yüzdesi: <strong>%100</strong></td></tr>
+            </table>
+        </div>
+
+        <div class="sub-section">
+            <div class="sub-header">A.2.1.3 — Personel Dağılımı</div>
+            <table class="full-table">
+                <thead><tr><th>Birimi</th><th>Doktora</th><th>Yüksek Lisans</th><th>Lisans</th><th>Teknik/Meslek</th><th>Lise</th><th>Toplam</th></tr></thead>
+                <tbody>
+                    <tr><td>Üretim</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+                    <tr><td><strong>Ar-Ge</strong></td><td>0</td><td><strong>1</strong></td><td><strong>4</strong></td><td>0</td><td>0</td><td><strong>5</strong></td></tr>
+                    <tr><td>Diğer</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+                    <tr style="background:#f1f5f9"><td><strong>Toplam</strong></td><td>0</td><td>1</td><td>4</td><td>0</td><td>0</td><td><strong>5</strong></td></tr>
+                </tbody>
+            </table>
+
+            <div class="team-mini">
+                <div class="team-mini-card"><div class="team-mini-avatar">CB</div><div class="team-mini-name">Cem Bülbül</div><div class="team-mini-role">Kurucu / Yönetici</div></div>
+                <div class="team-mini-card"><div class="team-mini-avatar">AH</div><div class="team-mini-name">Alperen Helva</div><div class="team-mini-role">Elektrik-Elektronik Müh.</div></div>
+                <div class="team-mini-card"><div class="team-mini-avatar">EG</div><div class="team-mini-name">Emrullah Günay</div><div class="team-mini-role">Elektrik-Elektronik Müh.</div></div>
+                <div class="team-mini-card"><div class="team-mini-avatar">GT</div><div class="team-mini-name">Görkem Tanır</div><div class="team-mini-role">Elektrik-Elektronik Müh.</div></div>
+                <div class="team-mini-card"><div class="team-mini-avatar">İÇ</div><div class="team-mini-name">İbrahim Çağdaş</div><div class="team-mini-role">Makina Mühendisi</div></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════ A.3 PROJE KISA TANITIMI ═══════════════════ -->
+<div class="doc-section" id="secA3">
+    <div class="doc-section-header"><span class="sec-code">A.3</span><h2>Proje Kısa Tanıtımı</h2></div>
+    <div class="doc-section-body">
+        <div class="sub-section">
+            <div class="sub-header">1 — Kuruluş Kısa Tanıtımı ve Projenin Başlatılma Gerekçesi</div>
+            <div class="prose editable">
+                <p>KOBİNERJİ Mühendislik ve Enerji Verimliliği Danışmanlık A.Ş., elektrik-elektronik mühendisliği, enerji verimliliği çözümleri, elektrik tesis projelendirme ve endüstriyel tesislere yönelik mühendislik hizmetleri alanlarında faaliyet göstermektedir. Kuruluş; güç dağıtım sistemleri, kompanzasyon, enerji etütleri ve saha mühendisliği uygulamalarında edindiği deneyim ile teknik analiz ve uygulama süreçlerini bütüncül şekilde yürütebilmektedir.</p>
+                <p>Kuruluşun temel yetkinlikleri; enerji sistemlerinin analizi ve optimizasyonu, saha tecrübesine dayalı çözüm geliştirme ve güç elektroniği tabanlı yaklaşımları uygulayabilme kabiliyetidir. Bu yetkinlikler, karmaşık enerji problemlerine hızlı ve uygulanabilir çözümler üretilebilmesini sağlamaktadır.</p>
+                <p>Kuruluşun vizyonu, enerji sistemleri ve enerji depolama teknolojileri alanında Ar-Ge odaklı, yenilikçi ve ticarileşebilir çözümler geliştiren bir mühendislik yapısına dönüşmektir. Bu kapsamda, yalnızca hizmet sunan değil, aynı zamanda teknoloji geliştiren ve ürün ortaya koyan bir yapıya evrilme hedeflenmektedir.</p>
+                <p>Önerilen proje, kuruluşun mevcut teknik birikimi ile doğrudan ilişkili olup, enerji sistemleri alanındaki deneyimin yapay zekâ tabanlı analiz yöntemleri ile birleştirilmesini mümkün kılmaktadır. Bu yönüyle proje, kuruluşun Ar-Ge kapasitesini güçlendirecek ve enerji depolama teknolojileri alanında stratejik bir konum elde etmesine katkı sağlayacaktır.</p>
+            </div>
+        </div>
+
+        <div class="sub-section">
+            <div class="sub-header">2 — Projenin Amacı</div>
+            <div class="prose editable">
+                <p>Elektrikli araçların yaygınlaşmasıyla birlikte, kullanım ömrünü tamamlayan lityum-iyon bataryaların yönetimi önemli bir sorun haline gelmiştir. Mevcut yaklaşımlarda bu bataryalar çoğunlukla doğrudan geri dönüşüme yönlendirilmekte, ancak ikinci ömür kullanım potansiyeli yeterince değerlendirilememektedir.</p>
+                <p>Bu projenin amacı; söz konusu bataryaların sağlık durumunu (SoH) hızlı ve güvenilir şekilde belirleyebilen <strong>yapay zekâ destekli bir analiz sistemi</strong> geliştirmek ve uygun olanların enerji depolama sistemlerinde yeniden kullanılmasını sağlamaktır. İkinci ömre uygun olmayan bataryaların ise hammadde geri kazanım süreçlerine yönlendirilmesi hedeflenmektedir.</p>
+                <p>Bu kapsamda geliştirilecek çözüm ile bataryaların sınıflandırılması, yeniden kullanım kararının verilmesi ve geri kazanım süreçlerine entegrasyonu mümkün hale getirilerek, hem kaynak verimliliği hem de ekonomik katma değer sağlanması amaçlanmaktadır.</p>
+            </div>
+        </div>
+
+        <div class="sub-section">
+            <div class="sub-header">3 — Yenilikçi Yönleri</div>
+            <div class="prose editable">
+                <p>Projenin yenilikçi yönü; ömrünü tamamlamış elektrikli araç bataryalarının sağlık durumunun (SoH), klasik ve zaman alıcı şarj/deşarj testleri yerine, <strong>empedans tabanlı ölçümler ve yapay zekâ algoritmaları</strong> ile hızlı ve yüksek doğrulukta belirlenmesine dayanmaktadır. Bu yaklaşım, batarya analiz süresini önemli ölçüde kısaltarak pratik ve ölçeklenebilir bir çözüm sunmaktadır.</p>
+                <p>Ayrıca, farklı sağlık durumlarına sahip heterojen batarya hücrelerinin birlikte çalışmasını mümkün kılan <strong>çift yönlü aktif dengeleme temelli BMS</strong> yapısı, mevcut pasif sistemlere göre önemli bir teknik üstünlük sağlamaktadır.</p>
+            </div>
+        </div>
+
+        <div class="sub-section">
+            <div class="sub-header">4 — Ekonomik ve Ulusal Kazanımlar</div>
+            <div class="prose editable">
+                <p>Geliştirilecek yapay zeka tabanlı SoH tahmin modeli ile batarya durumunun en az %90 doğruluk oranı ile belirlenmesi hedeflenmektedir. Bu sayede yeniden kullanılabilir bataryaların doğru şekilde tespit edilmesi sağlanarak toplam batarya kullanım ömründe %20'ye kadar artış öngörülmektedir.</p>
+                <p>Mekanik geri kazanım sürecinde ise, ayrıştırma verimliliğinin mevcut uygulamalara göre en az %10 artırılması hedeflenmektedir. Bataryaların ikinci ömür veya hammadde geri kazanımına yönlendirilmesini sağlayan bütüncül yapı projenin özgün değerini oluşturmaktadır.</p>
+            </div>
+        </div>
+
+        <div class="sub-section">
+            <div class="sub-header">5–8 — Öncelikli Alan, Yeşil Mutabakat ve NACE</div>
+            <table class="info-table">
+                <tr><th>Öncelikli Alan</th><td class="editable">Alan Bilgisine Sahip, Verimli, Güvenilir Modeller</td></tr>
+                <tr><th>Yeşil Mutabakat</th><td class="editable">Temiz ve Döngüsel Ekonomi — Kritik Hammaddelerin Geri Kazanımı</td></tr>
+                <tr><th>NACE Kodu</th><td>72.19 — Doğal bilimler ve mühendislikle ilgili diğer Ar-Ge faaliyetleri</td></tr>
+                <tr><th>GTİP Kodu</th><td>85 — Elektrikli Makina ve Cihazlar</td></tr>
+                <tr><th>Başlangıç THS</th><td><strong>THS 3</strong> — Analitik ve tecrübeye dayalı olarak, kritik işlev kanıtlandı</td></tr>
+                <tr><th>Hedef THS</th><td><strong>THS 7</strong> — Prototip operasyonel ortamda gösterildi</td></tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════ B.1 PROJE HEDEFLERİ ═══════════════════ -->
+<div class="doc-section" id="secB1">
+    <div class="doc-section-header"><span class="sec-code">B.1</span><h2>Projenin Hedefleri</h2></div>
+    <div class="doc-section-body">
+        <div class="sub-section">
+            <div class="sub-header">1 — Genel Amaç ve Problem Tanımı</div>
+            <div class="prose editable">
+                <p>Elektrikli araçlar, taşınabilir elektronik cihazlar ve enerji depolama sistemlerinin yaygınlaşmasıyla birlikte lityum-iyon başta olmak üzere batarya kullanımı hızla artmaktadır. Buna paralel olarak kullanım ömrünü tamamlamış bataryaların çevresel etkileri ve ekonomik kayıpları önemli bir problem haline gelmiştir.</p>
+                <p>Bu proje, atık bataryaların yalnızca bertaraf edilmesi veya klasik yöntemlerle geri dönüştürülmesi yerine, <strong>yapay zeka destekli analiz yöntemleri</strong> ile değerlendirilmesini amaçlamaktadır. Bataryaların durumuna göre sınıflandırılması, yeniden kullanılabilir olanların ikinci kullanım alanlarına yönlendirilmesi ve geri kalanların yüksek verimle ham maddeye dönüştürülmesi hedeflenmektedir.</p>
+            </div>
+        </div>
+
+        <div class="sub-section">
+            <div class="sub-header">2 — Önerilen Çözüm</div>
+            <div class="prose editable">
+                <p>Geliştirilecek sistemde, bataryaların elektriksel ve fiziksel verileri toplanarak yapay zeka tabanlı algoritmalar aracılığıyla analiz edilecek ve her bir bataryanın durumu (State of Health - SoH) yüksek doğrulukla belirlenecektir.</p>
+                <p>Bu analiz sonucunda bataryalar; yeniden kullanım için uygun olanlar ve geri dönüşüme yönlendirilecek olanlar şeklinde sınıflandırılacaktır. Geliştirilecek yapay zeka modeli sayesinde sistemin zamanla kendini geliştiren ve farklı batarya tiplerine uyum sağlayabilen bir yapıya kavuşması hedeflenmektedir.</p>
+            </div>
+        </div>
+
+        <div class="sub-section">
+            <div class="sub-header">3 — Somut Hedefler</div>
+            <table class="full-table">
+                <thead><tr><th>Başarı Ölçütü</th><th>Hedeflenen Değer</th><th>Doğrulama İP</th></tr></thead>
+                <tbody>
+                    <tr><td>SoH Tahmin Doğruluğu</td><td><strong>≥ %90</strong></td><td>İP-3</td></tr>
+                    <tr><td>Batarya Sınıflandırma Doğruluğu</td><td><strong>≥ %85</strong></td><td>İP-4</td></tr>
+                    <tr><td>Geri Kazanım Verim Artışı</td><td><strong>≥ %10</strong></td><td>İP-5</td></tr>
+                    <tr><td>Uygulanabilir Batarya Tipi Sayısı</td><td><strong>≥ 3 (NMC, LFP, NCA)</strong></td><td>İP-6</td></tr>
+                    <tr><td>Test Süresi / Batarya</td><td><strong>≤ 5 dakika</strong></td><td>İP-3</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="sub-section">
+            <div class="sub-header">4 — Nihai Faydalanıcılar</div>
+            <div class="prose editable">
+                <p>Projenin hedef kitlesi; elektrikli araç üreticileri, batarya üreticileri, batarya geri dönüşüm tesisleri, enerji depolama sistemi sağlayıcıları, yenilenebilir enerji santrali işletmecileri ve sanayi tesislerinden oluşmaktadır. Mikro şebeke uygulamaları geliştiren firmalar ile belediyeler ve atık yönetim kuruluşları da hedef kitle içerisinde yer almaktadır.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════ B.2 TEKNOLOJİ DÜZEYİ ═══════════════════ -->
+<div class="doc-section" id="secB2">
+    <div class="doc-section-header"><span class="sec-code">B.2</span><h2>Projenin Teknoloji Düzeyi</h2></div>
+    <div class="doc-section-body">
+        <div class="sub-section">
+            <div class="sub-header">Tekniğin/Teknolojinin Bilinen Güncel Durumu</div>
+            <div class="prose editable">
+                <p>Günümüzde batarya geri dönüşümü alanında uluslararası düzeyde yaygın olarak kullanılan yöntemler; pirometalurjik, hidrometalurjik ve mekanik ayrıştırma süreçlerine dayanmaktadır. Pirometalurjik yöntemler, yüksek sıcaklık gereksinimi nedeniyle yüksek enerji tüketimine yol açmakta ve bazı değerli elementlerin kaybına neden olabilmektedir.</p>
+                <p>Son yıllarda, bataryaların yalnızca geri dönüştürülmesi yerine yeniden kullanım potansiyelinin değerlendirilmesine yönelik çalışmalar uluslararası literatürde giderek artmaktadır. Yapay zeka ve makine öğrenmesi temelli yöntemler ön plana çıkmıştır. Ulusal düzeyde ise batarya geri dönüşüm faaliyetlerinin ağırlıklı olarak geleneksel yöntemlere dayandığı, yapay zeka destekli sınıflandırma ve ikinci yaşam uygulamalarını entegre eden sistemlerin henüz sınırlı olduğu görülmektedir.</p>
+            </div>
+        </div>
+
+        <div class="sub-section">
+            <div class="sub-header">Teknik / Teknoloji ve Özgün Katkılar</div>
+            <table class="full-table">
+                <thead><tr><th>Teknik / Teknoloji</th><th>Kullanım</th><th>İhtiyaç Nedeni</th><th>İlgili İP</th></tr></thead>
+                <tbody>
+                    <tr><td>Yapay Zeka Tabanlı SoH Tahmini ve Sınıflandırma</td><td>Geliştirilecek</td><td>Batarya yeniden kullanım potansiyelinin doğru belirlenmesi</td><td>Proje Geneli</td></tr>
+                    <tr><td>BMS Gömülü Yazılım (VGX)</td><td>Geliştirilecek</td><td>Hücre izleme, dengeleme, koruma ve veri toplama</td><td>İP-1, İP-6</td></tr>
+                    <tr><td>Mekanik Geri Kazanım Sistemi</td><td>Geliştirilecek</td><td>Black mass üretimi ve hammadde geri kazanımı</td><td>İP-5</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════ B.3 SOMUT HEDEFLER ═══════════════════ -->
+<div class="doc-section" id="secB3">
+    <div class="doc-section-header"><span class="sec-code">B.3</span><h2>Somut / Ölçülebilir Hedefler ve Ar-Ge Sistematiği</h2></div>
+    <div class="doc-section-body">
+        <div class="sub-section">
+            <div class="sub-header">Proje Hazırlık Çalışmaları</div>
+            <div class="prose editable">
+                <p>Proje kapsamında ön fizibilite çalışmaları kapsamında literatür taraması ve mevcut teknolojilerin analizi gerçekleştirilmiştir. Batarya geri dönüşüm yöntemleri (pirometalurjik ve hidrometalurjik süreçler) incelenmiş, bu yöntemlerin yüksek maliyet, enerji tüketimi ve sınırlı verim gibi dezavantajları tespit edilmiştir.</p>
+                <p>Bununla birlikte, batarya durum tahmini (SoH) için kullanılan yapay zeka ve makine öğrenmesi tabanlı yöntemler analiz edilmiş ve bu alanda geliştirilecek bir modelin teknik olarak uygulanabilir olduğu değerlendirilmiştir.</p>
+            </div>
+        </div>
+
+        <div class="sub-section">
+            <div class="sub-header">Takip Edilecek Standartlar</div>
+            <div class="keyword-tags">
+                <span class="keyword-tag">IEC 62660</span>
+                <span class="keyword-tag">IEC 62133</span>
+                <span class="keyword-tag">UN 38.3</span>
+                <span class="keyword-tag">ISO 14001</span>
+                <span class="keyword-tag">ISO/IEC 27001</span>
+            </div>
+        </div>
+
+        <div class="sub-section">
+            <div class="sub-header">Ar-Ge Sürecinde Kullanılacak Yöntemler</div>
+            <div class="prose editable">
+                <p>Proje kapsamında Ar-Ge süreci, veri temelli modelleme, algoritma geliştirme ve deneysel doğrulama adımlarını içeren bütüncül bir metodoloji ile yürütülecektir. İlk aşamada farklı kullanım geçmişine sahip bataryalardan gerilim, akım, sıcaklık, iç direnç ve kapasite gibi parametreler ölçülerek veri seti oluşturulacaktır.</p>
+                <p>Batarya durumunun (SoH) tahmini amacıyla denetimli öğrenme yaklaşımlarına dayalı regresyon modelleri ve zaman serisi analiz yöntemleri kullanılacaktır. Model geliştirme sürecinde veri seti eğitim ve test olarak ayrılacak, çapraz doğrulama teknikleri ile performans analizi yapılacaktır.</p>
+                <p>Geri dönüşüm süreçlerine yönelik olarak ise mekanik ön işlem ve hidrometalurjik yöntemler üzerinde parametre optimizasyonu çalışmaları yürütülecektir.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════ B.4 YENİLİKÇİ YÖNLERİ ═══════════════════ -->
+<div class="doc-section" id="secB4">
+    <div class="doc-section-header"><span class="sec-code">B.4</span><h2>Projenin Yenilikçi Yönleri</h2></div>
+    <div class="doc-section-body">
+        <div class="prose editable">
+            <p>Proje kapsamında geliştirilecek sistemin yenilikçi yönü, batarya geri dönüşümü ve ikinci kullanım süreçlerini yapay zeka destekli analiz ve karar mekanizması ile entegre şekilde ele almasıdır.</p>
+            <p>Geliştirilecek yapay zeka tabanlı SoH tahmin modeli ile batarya durumunun <strong>en az %90 doğruluk oranı</strong> ile belirlenmesi hedeflenmektedir. Bu sayede yeniden kullanılabilir bataryaların doğru şekilde tespit edilmesi sağlanarak toplam batarya kullanım ömründe <strong>%20'ye kadar artış</strong> öngörülmektedir.</p>
+            <p>Mekanik geri kazanım sürecinde ise, ayrıştırma verimliliğinin mevcut uygulamalara göre <strong>en az %10 artırılması</strong> hedeflenmektedir. Ayrıca batarya analiz süresinin batarya başına maksimum <strong>5 dakika</strong> olacak şekilde optimize edilmesi planlanmaktadır.</p>
+            <p>Projenin bir diğer yenilikçi yönü, geliştirilecek sistemin <strong>modüler ve ölçeklenebilir</strong> yapıda tasarlanmasıdır.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════ C.1 İŞ PLANI ═══════════════════ -->
+<div class="doc-section" id="secC1">
+    <div class="doc-section-header"><span class="sec-code">C.1</span><h2>İş Planı ve İş Paketleri</h2></div>
+    <div class="doc-section-body">
+        <div class="sub-section">
+            <div class="sub-header">C.1.1 — İş Zaman Çizelgesi (Gantt)</div>
+            <div class="gantt-micro">
+                <div class="gantt-micro-row"><span class="gantt-micro-label">İP-1</span><div class="gantt-micro-track"><div class="gantt-micro-bar g-active" style="left:0%;width:16.67%;">Veri Toplama</div></div></div>
+                <div class="gantt-micro-row"><span class="gantt-micro-label">İP-2</span><div class="gantt-micro-track"><div class="gantt-micro-bar g-upcoming" style="left:16.67%;width:16.67%;">Veri Ön İşleme</div></div></div>
+                <div class="gantt-micro-row"><span class="gantt-micro-label">İP-3</span><div class="gantt-micro-track"><div class="gantt-micro-bar g-future" style="left:33.33%;width:22.22%;">AI SoH Modeli</div></div></div>
+                <div class="gantt-micro-row"><span class="gantt-micro-label">İP-4</span><div class="gantt-micro-track"><div class="gantt-micro-bar g-future" style="left:55.56%;width:11.11%;">Karar Destek</div></div></div>
+                <div class="gantt-micro-row"><span class="gantt-micro-label">İP-5</span><div class="gantt-micro-track"><div class="gantt-micro-bar g-future" style="left:66.67%;width:11.11%;">Mek. Geri Kaz.</div></div></div>
+                <div class="gantt-micro-row"><span class="gantt-micro-label">İP-6</span><div class="gantt-micro-track"><div class="gantt-micro-bar g-future" style="left:77.78%;width:11.11%;">Entegrasyon</div></div></div>
+                <div class="gantt-micro-row"><span class="gantt-micro-label">İP-7</span><div class="gantt-micro-track"><div class="gantt-micro-bar g-future" style="left:88.89%;width:11.11%;">Optimizasyon</div></div></div>
+            </div>
+            <p style="font-size:0.75em; color:var(--text-secondary);">MAR 2026 ──────────────────────────────────── EYL 2027 (18 Ay)</p>
+        </div>
+
+        <div class="sub-section">
+            <div class="sub-header">C.1.2 — İş Paketleri Detayı</div>
+            <table class="full-table">
+                <thead><tr><th>İP</th><th>İş Paketi Adı</th><th>Başlama</th><th>Bitiş</th><th>Süre</th><th>Durum</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>İP-1</strong></td><td>Batarya Veri Toplama Altyapısı</td><td>01.03.2026</td><td>01.06.2026</td><td>92 gün</td><td><span class="doc-stamp stamp-approved">%65 DEVAM</span></td></tr>
+                    <tr><td><strong>İP-2</strong></td><td>Veri Ön İşleme ve Özellik Çıkarımı</td><td>01.06.2026</td><td>01.09.2026</td><td>92 gün</td><td><span class="doc-stamp stamp-draft">SIRADA</span></td></tr>
+                    <tr><td><strong>İP-3</strong></td><td>Yapay Zeka SoH Modeli Geliştirme</td><td>01.09.2026</td><td>01.01.2027</td><td>122 gün</td><td><span class="doc-stamp stamp-draft">BEKLEMEDE</span></td></tr>
+                    <tr><td><strong>İP-4</strong></td><td>Otomatik Karar Destek Sistemi</td><td>01.01.2027</td><td>01.03.2027</td><td>59 gün</td><td><span class="doc-stamp stamp-draft">BEKLEMEDE</span></td></tr>
+                    <tr><td><strong>İP-5</strong></td><td>Mekanik Geri Kazanım Sistemi</td><td>01.03.2027</td><td>01.05.2027</td><td>61 gün</td><td><span class="doc-stamp stamp-draft">BEKLEMEDE</span></td></tr>
+                    <tr><td><strong>İP-6</strong></td><td>Sistem Entegrasyonu ve Testler</td><td>01.05.2027</td><td>01.07.2027</td><td>61 gün</td><td><span class="doc-stamp stamp-draft">BEKLEMEDE</span></td></tr>
+                    <tr><td><strong>İP-7</strong></td><td>Nihai Optimizasyon ve Ticarileştirme</td><td>01.07.2027</td><td>01.09.2027</td><td>62 gün</td><td><span class="doc-stamp stamp-draft">BEKLEMEDE</span></td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="sub-section">
+            <div class="sub-header">C.1.3 — Ara Çıktılar (Kilometre Taşları)</div>
+            <table class="full-table">
+                <thead><tr><th>#</th><th>Ara Çıktı</th><th>İş Paketi</th><th>Tarih</th></tr></thead>
+                <tbody>
+                    <tr><td>1</td><td>Batarya veri toplama altyapısının kurulması ve ilk veri setinin oluşturulması</td><td>İP-1</td><td>01.06.2026</td></tr>
+                    <tr><td>2</td><td>Batarya testlerinin tamamlanması ve ölçüm verilerinin doğrulanması</td><td>İP-1</td><td>01.06.2026</td></tr>
+                    <tr><td>3</td><td>Veri temizleme ve normalizasyon işlemlerinin tamamlanması</td><td>İP-2</td><td>01.08.2026</td></tr>
+                    <tr><td>4</td><td>Özellik çıkarımı tamamlanmış nihai veri setinin oluşturulması</td><td>İP-2</td><td>01.09.2026</td></tr>
+                    <tr><td>5</td><td>İlk SoH tahmin modelinin oluşturulması</td><td>İP-3</td><td>01.11.2026</td></tr>
+                    <tr><td>6</td><td>Optimize edilmiş ve doğrulanmış SoH modelinin elde edilmesi</td><td>İP-3</td><td>01.01.2027</td></tr>
+                    <tr><td>7</td><td>Sınıflandırma algoritmasının oluşturulması</td><td>İP-4</td><td>01.02.2027</td></tr>
+                    <tr><td>8</td><td>Karar destek sisteminin tamamlanması</td><td>İP-4</td><td>01.03.2027</td></tr>
+                    <tr><td>9</td><td>Mekanik parçalama sisteminin kurulması</td><td>İP-5</td><td>01.04.2027</td></tr>
+                    <tr><td>10</td><td>Kara kütle (black mass) üretiminin gerçekleştirilmesi</td><td>İP-5</td><td>01.05.2027</td></tr>
+                    <tr><td>11</td><td>Entegre sistem testlerinin tamamlanması</td><td>İP-6</td><td>01.06.2027</td></tr>
+                    <tr><td>12</td><td>Sistem performans doğrulama raporunun hazırlanması</td><td>İP-6</td><td>01.07.2027</td></tr>
+                    <tr><td>13</td><td>Nihai sistem ve teknik dokümantasyonun tamamlanması</td><td>İP-7</td><td>01.08.2027</td></tr>
+                    <tr><td>14</td><td>Proje çıktılarının sunulması ve ticarileştirme planının oluşturulması</td><td>İP-7</td><td>01.09.2027</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════ C.2 PROJE YÖNETİMİ ═══════════════════ -->
+<div class="doc-section" id="secC2">
+    <div class="doc-section-header"><span class="sec-code">C.2</span><h2>Proje Yönetimi ve Organizasyonu</h2></div>
+    <div class="doc-section-body">
+        <div class="sub-section">
+            <div class="sub-header">C.2.1 — Proje Personel Listesi</div>
+            <table class="full-table">
+                <thead><tr><th>Personel</th><th>Unvan</th><th>Eğitim</th><th>İşe Başlama</th><th>Fikir Sahibi</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>Alperen Helva</strong></td><td>Elektrik-Elektronik Müh.</td><td>Yüksek Lisans</td><td>24.03.2026</td><td>Hayır</td></tr>
+                    <tr><td><strong>Cem Bülbül</strong></td><td>Kurucu</td><td>Lisans</td><td>02.06.2024</td><td>Hayır</td></tr>
+                    <tr><td><strong>Emrullah Günay</strong></td><td>Elektrik-Elektronik Müh.</td><td>Lisans</td><td>01.10.2025</td><td>Hayır</td></tr>
+                    <tr><td><strong>Görkem Tanır</strong></td><td>Elektrik-Elektronik Müh.</td><td>Lisans</td><td>01.12.2025</td><td>Evet</td></tr>
+                    <tr><td><strong>İbrahim Çağdaş</strong></td><td>Makina Mühendisi</td><td>Lisans</td><td>10.11.2025</td><td>Hayır</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════ C.3 KURULUŞ ALTYAPISI ═══════════════════ -->
+<div class="doc-section" id="secC3">
+    <div class="doc-section-header"><span class="sec-code">C.3</span><h2>Kuruluş Altyapısı</h2></div>
+    <div class="doc-section-body">
+        <div class="prose editable">
+            <p>Kuruluşumuz bünyesinde Ar-Ge faaliyetleri, elektrik-elektronik sistemler, enerji verimliliği ve veri temelli analiz uygulamaları üzerine yoğunlaşmaktadır. Bu kapsamda, proje geliştirme süreçlerinde kullanılmak üzere temel ölçüm altyapısı, test düzenekleri ve veri toplama sistemleri aktif olarak kullanılmaktadır.</p>
+            <p>Kuruluşumuzda veri analizi ve modelleme süreçlerinde Python tabanlı yazılım araçları, makine öğrenmesi kütüphaneleri ve mühendislik hesaplama araçları kullanılmaktadır. Bu sayede veri ön işleme, model geliştirme ve performans analizleri etkin şekilde yürütülebilmektedir.</p>
+            <p>Kuruluşumuz, Ar-Ge faaliyetlerini proje bazlı ve disiplinler arası bir yaklaşımla yürütmekte olup, ihtiyaç duyulan alanlarda üniversiteler ve uzman kuruluşlarla iş birliği yaparak teknik kapasitesini güçlendirmektedir.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════ D TİCARİLEŞME PLANI ═══════════════════ -->
+<div class="doc-section" id="secD">
+    <div class="doc-section-header"><span class="sec-code">D</span><h2>Ticarileşme Planı</h2></div>
+    <div class="doc-section-body">
+        <div class="sub-section">
+            <div class="sub-header">1 — Pazar Büyüklüğü ve Hedefler</div>
+            <div class="prose editable">
+                <p>Küresel ölçekte batarya geri dönüşüm pazarının önümüzdeki yıllarda milyarlarca dolar seviyesine ulaşması öngörülmektedir. Türkiye'de ise henüz gelişmekte olan bu alan, elektrikli araç kullanımının artmasıyla birlikte önemli bir büyüme potansiyeline sahiptir.</p>
+            </div>
+            <table class="info-table">
+                <tr><th>Pazar Payı — 1. Yıl</th><td>%1</td></tr>
+                <tr><th>Pazar Payı — 3. Yıl</th><td>%3</td></tr>
+                <tr><th>Pazar Payı — 5. Yıl</th><td>%5</td></tr>
+                <tr><th>İş Modeli</th><td class="editable">Yazılım lisans + analiz hizmeti + kara kütle satışı (hibrit model)</td></tr>
+                <tr><th>Ticarileşme Süresi</th><td>Proje bitiminden itibaren 1–3 yıl</td></tr>
+            </table>
+        </div>
+
+        <div class="sub-section">
+            <div class="sub-header">2 — Satış Öngörüleri</div>
+            <table class="full-table">
+                <thead><tr><th></th><th>1. Yıl</th><th>3. Yıl</th><th>5. Yıl</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>Yurtiçi Satış</strong></td><td>2.000.000 TL</td><td>10.000.000 TL</td><td>25.000.000 TL</td></tr>
+                    <tr><td><strong>Yurtdışı Satış</strong></td><td>0 USD</td><td>500.000 USD</td><td>2.000.000 USD</td></tr>
+                    <tr><td><strong>Müşteri Hedefi</strong></td><td>5–10 kurumsal</td><td>20–30 kurumsal</td><td>50+ kurumsal</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="sub-section">
+            <div class="sub-header">3 — Birim Maliyet ve Fiyatlandırma</div>
+            <table class="info-table">
+                <tr><th>Yazılım Lisans (Yıllık)</th><td>150.000 – 300.000 TL</td></tr>
+                <tr><th>Analiz Hizmeti / Batarya</th><td>200 – 500 TL</td></tr>
+                <tr><th>Birim Değişken Maliyet</th><td>90.000 TL</td></tr>
+                <tr><th>Kara Geçiş Noktası</th><td>~2–3 yıl</td></tr>
+                <tr><th>Başa Baş Noktası</th><td>0,45 adet</td></tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════ E.1 RİSK YÖNETİMİ ═══════════════════ -->
+<div class="doc-section" id="secE1">
+    <div class="doc-section-header"><span class="sec-code">E.1</span><h2>Risk ve Finansman Yönetimi</h2></div>
+    <div class="doc-section-body">
+        <div class="risk-matrix">
+            <div class="risk-cell risk-medium">
+                <h4>⚠️ Veri Kalitesi Riski</h4>
+                <p><strong>Olasılık:</strong> Orta · <strong>Etki:</strong> Yüksek</p>
+                <p>Yeterli ve kaliteli batarya verisinin toplanamaması</p>
+                <p><em>B Planı: Simülasyon verileri ve literatür verileri ile destekleme</em></p>
+            </div>
+            <div class="risk-cell risk-medium">
+                <h4>⚠️ Model Doğruluğu Riski</h4>
+                <p><strong>Olasılık:</strong> Orta · <strong>Etki:</strong> Orta</p>
+                <p>AI modelinin istenen doğruluğa ulaşamaması</p>
+                <p><em>B Planı: Kural tabanlı hibrit sistem kullanılması</em></p>
+            </div>
+            <div class="risk-cell risk-low">
+                <h4>✅ Geri Kazanım Verim Riski</h4>
+                <p><strong>Olasılık:</strong> Düşük · <strong>Etki:</strong> Orta</p>
+                <p>Mekanik geri kazanım sürecinde verim düşüklüğü</p>
+                <p><em>B Planı: Alternatif ayrıştırma yöntemleri</em></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════ F.1 BÜTÇE ═══════════════════ -->
+<div class="doc-section" id="secF1">
+    <div class="doc-section-header"><span class="sec-code">F.1</span><h2>Proje Bütçesi</h2></div>
+    <div class="doc-section-body">
+        <div class="sub-section">
+            <div class="sub-header">Toplam Bütçe Dağılımı — 3.497.730 TL</div>
+
+            <!-- Donut Chart -->
+            <div class="donut-wrap">
+                <div class="donut">
+                    <div class="donut-hole">
+                        <span class="donut-total">TOPLAM</span>
+                        <span class="donut-amount">3.497.730 TL</span>
+                    </div>
+                </div>
+                <div class="donut-legend">
+                    <div class="legend-item"><div class="legend-dot" style="background:#3b82f6;"></div><span><strong>Personel</strong> — 1.982.730 TL (%56,69)</span></div>
+                    <div class="legend-item"><div class="legend-dot" style="background:#f59e0b;"></div><span><strong>Alet/Teçhizat/Yazılım</strong> — 1.260.000 TL (%36,02)</span></div>
+                    <div class="legend-item"><div class="legend-dot" style="background:#8b5cf6;"></div><span><strong>Malzeme</strong> — 155.000 TL (%4,43)</span></div>
+                    <div class="legend-item"><div class="legend-dot" style="background:#14b8a6;"></div><span><strong>Seyahat</strong> — 100.000 TL (%2,86)</span></div>
+                </div>
+            </div>
+
+            <!-- Budget Bars -->
+            <div class="viz-budget-bars">
+                <div class="viz-bar-row"><span class="viz-bar-label">Personel Giderleri</span><div class="viz-bar-track"><div class="viz-bar-fill bar-blue" style="width:56.69%;">%56,69</div></div><span class="viz-bar-amount">1.982.730 TL</span></div>
+                <div class="viz-bar-row"><span class="viz-bar-label">Alet/Teçhizat/Yazılım</span><div class="viz-bar-track"><div class="viz-bar-fill bar-orange" style="width:36.02%;">%36,02</div></div><span class="viz-bar-amount">1.260.000 TL</span></div>
+                <div class="viz-bar-row"><span class="viz-bar-label">Malzeme Alımları</span><div class="viz-bar-track"><div class="viz-bar-fill bar-purple" style="width:4.43%;"></div></div><span class="viz-bar-amount">155.000 TL</span></div>
+                <div class="viz-bar-row"><span class="viz-bar-label">Seyahat Giderleri</span><div class="viz-bar-track"><div class="viz-bar-fill bar-teal" style="width:2.86%;"></div></div><span class="viz-bar-amount">100.000 TL</span></div>
+            </div>
+        </div>
+
+        <div class="sub-section">
+            <div class="sub-header">Dönemsel Harcama Takibi</div>
+            <table class="full-table">
+                <thead><tr><th>Dönem</th><th>Personel</th><th>Seyahat</th><th>Alet/Teçhizat</th><th>Malzeme</th><th>TOPLAM</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>I. Dönem 2026</strong></td><td>500.000</td><td>40.000</td><td>600.000</td><td>50.000</td><td><strong>1.190.000</strong></td></tr>
+                    <tr><td><strong>II. Dönem 2026</strong></td><td>500.000</td><td>30.000</td><td>660.000</td><td>50.000</td><td><strong>1.240.000</strong></td></tr>
+                    <tr><td><strong>I. Dönem 2027</strong></td><td>500.000</td><td>20.000</td><td>0</td><td>30.000</td><td><strong>550.000</strong></td></tr>
+                    <tr><td><strong>II. Dönem 2027</strong></td><td>482.730</td><td>10.000</td><td>0</td><td>25.000</td><td><strong>517.730</strong></td></tr>
+                    <tr style="background:#f1f5f9"><td><strong>TOPLAM</strong></td><td><strong>1.982.730</strong></td><td><strong>100.000</strong></td><td><strong>1.260.000</strong></td><td><strong>155.000</strong></td><td><strong>3.497.730</strong></td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="sub-section">
+            <div class="sub-header">Temel Ekipman Listesi</div>
+            <table class="full-table">
+                <thead><tr><th>Ekipman</th><th>Adet</th><th>Tutar (TL)</th></tr></thead>
+                <tbody>
+                    <tr><td>İklimlendirme Test Kabini</td><td>1</td><td>250.000</td></tr>
+                    <tr><td>Battery Cycler</td><td>1</td><td>200.000</td></tr>
+                    <tr><td>BMS Geliştirme ve Test Platformu</td><td>1</td><td>125.000</td></tr>
+                    <tr><td>Batarya Şarj/Deşarj Test Cihazı</td><td>1</td><td>100.000</td></tr>
+                    <tr><td>Electronic Load (Yük Bankası)</td><td>1</td><td>90.000</td></tr>
+                    <tr><td>Yüksek İşlemcili Bilgisayar</td><td>1</td><td>80.000</td></tr>
+                    <tr><td>LISN</td><td>1</td><td>70.000</td></tr>
+                    <tr><td>PCB Prototipleme Sistemi</td><td>1</td><td>70.000</td></tr>
+                    <tr><td>Dijital Osiloskop + DAQ + Diğer</td><td>5</td><td>275.000</td></tr>
+                    <tr style="background:#f1f5f9"><td><strong>TOPLAM</strong></td><td><strong>15</strong></td><td><strong>1.260.000</strong></td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════ SIGNATURES ═══════════════════ -->
+<div class="doc-section" id="signatures">
+    <div class="doc-section-header"><span class="sec-code">İMZA</span><h2>Onay ve İmzalar</h2></div>
+    <div class="doc-section-body">
+        <p style="font-size:0.85em; color:var(--text-secondary); margin-bottom: 20px;">Bu doküman, aşağıda imzaları bulunan kişiler tarafından incelenerek onaylanmıştır.</p>
+
+        <div class="signature-grid">
+            <div class="signature-block">
+                <div class="signature-label">Proje Yürütücüsü</div>
+                <div class="signature-name">Cem Bülbül</div>
+                <div class="signature-title">Kurucu / Yönetici — KOBİNERJİ A.Ş.</div>
+                <div class="signature-canvas-wrap">
+                    <canvas class="signature-canvas" id="sigCanvas1" data-sig="yurutucu"></canvas>
+                </div>
+                <div class="sig-actions">
+                    <button class="sig-clear" onclick="clearSig('sigCanvas1')">Temizle</button>
+                </div>
+                <div class="signature-date" id="sigDate1">Tarih: ___/___/2026</div>
+                <div class="sig-saved-indicator" id="sigSaved1">✓ İmza kaydedildi</div>
+            </div>
+            <div class="signature-block">
+                <div class="signature-label">Hazırlayan</div>
+                <div class="signature-name">Emrullah Günay</div>
+                <div class="signature-title">Elektrik-Elektronik Mühendisi — KOBİNERJİ A.Ş.</div>
+                <div class="signature-canvas-wrap">
+                    <canvas class="signature-canvas" id="sigCanvas2" data-sig="hazirlayan"></canvas>
+                </div>
+                <div class="sig-actions">
+                    <button class="sig-clear" onclick="clearSig('sigCanvas2')">Temizle</button>
+                </div>
+                <div class="signature-date" id="sigDate2">Tarih: ___/___/2026</div>
+                <div class="sig-saved-indicator" id="sigSaved2">✓ İmza kaydedildi</div>
+            </div>
+        </div>
+
+        <div class="signature-grid" style="margin-top: 32px;">
+            <div class="signature-block">
+                <div class="signature-label">Teknik Sorumlu</div>
+                <div class="signature-name">Görkem Tanır</div>
+                <div class="signature-title">Elektrik-Elektronik Mühendisi — KOBİNERJİ A.Ş.</div>
+                <div class="signature-canvas-wrap">
+                    <canvas class="signature-canvas" id="sigCanvas3" data-sig="teknik"></canvas>
+                </div>
+                <div class="sig-actions">
+                    <button class="sig-clear" onclick="clearSig('sigCanvas3')">Temizle</button>
+                </div>
+                <div class="signature-date" id="sigDate3">Tarih: ___/___/2026</div>
+                <div class="sig-saved-indicator" id="sigSaved3">✓ İmza kaydedildi</div>
+            </div>
+            <div class="signature-block">
+                <div class="signature-label">Model Geliştirme Sorumlusu</div>
+                <div class="signature-name">Alperen Helva</div>
+                <div class="signature-title">Elektrik-Elektronik Mühendisi — KOBİNERJİ A.Ş.</div>
+                <div class="signature-canvas-wrap">
+                    <canvas class="signature-canvas" id="sigCanvas4" data-sig="model"></canvas>
+                </div>
+                <div class="sig-actions">
+                    <button class="sig-clear" onclick="clearSig('sigCanvas4')">Temizle</button>
+                </div>
+                <div class="signature-date" id="sigDate4">Tarih: ___/___/2026</div>
+                <div class="sig-saved-indicator" id="sigSaved4">✓ İmza kaydedildi</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════ FOOTER ═══════════════════ -->
+<div class="doc-footer">
+    <p><strong>KOBİNERJİ MÜHENDİSLİK VE ENERJİ VERİMLİLİĞİ DANIŞMANLIK A.Ş.</strong></p>
+    <p>Ceran Plaza, Kemalpaşa OSB, Gazi Blv. No:177/19, 35730 Kemalpaşa/İzmir · Tel: 0535 714 52 88</p>
+    <p style="margin-top:8px;">TÜBİTAK 1507 KOBİ Ar-Ge Başlangıç Destek Programı — Proje No: 7260634 — AGY101-02</p>
+    <p style="margin-top:4px; font-size:0.9em;">© 2026 KOBİNERJİ A.Ş. — Tüm hakları saklıdır. · Son güncelleme: <span id="footerDate">19 Nisan 2026</span></p>
+</div>
+
+</div><!-- /doc-container -->
+
+<!-- ═══════════════════ JAVASCRIPT ═══════════════════ -->
+<script>
+// ============ DATE ============
+(function() {
+    const now = new Date();
+    const opts = { day: 'numeric', month: 'long', year: 'numeric' };
+    const ds = now.toLocaleDateString('tr-TR', opts);
+    ['coverDate','footerDate'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = ds;
+    });
+})();
+
+// ============ SIGNATURE SYSTEM ============
+const sigCanvases = {};
+
+function initSignatures() {
+    document.querySelectorAll('.signature-canvas').forEach(canvas => {
+        const ctx = canvas.getContext('2d');
+        const rect = canvas.getBoundingClientRect();
+        canvas.width = rect.width * 2;
+        canvas.height = rect.height * 2;
+        ctx.scale(2, 2);
+        ctx.lineWidth = 2;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.strokeStyle = '#1e293b';
+
+        let drawing = false;
+        let lastX = 0, lastY = 0;
+
+        const getPos = (e) => {
+            const r = canvas.getBoundingClientRect();
+            const x = (e.touches ? e.touches[0].clientX : e.clientX) - r.left;
+            const y = (e.touches ? e.touches[0].clientY : e.clientY) - r.top;
+            return [x, y];
+        };
+
+        const startDraw = (e) => { e.preventDefault(); drawing = true; [lastX, lastY] = getPos(e); };
+        const draw = (e) => {
+            if (!drawing) return;
+            e.preventDefault();
+            const [x, y] = getPos(e);
+            ctx.beginPath();
+            ctx.moveTo(lastX, lastY);
+            ctx.lineTo(x, y);
+            ctx.stroke();
+            [lastX, lastY] = [x, y];
+        };
+        const stopDraw = () => {
+            if (drawing) { drawing = false; saveSig(canvas.id); }
+        };
+
+        canvas.addEventListener('mousedown', startDraw);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDraw);
+        canvas.addEventListener('mouseleave', stopDraw);
+        canvas.addEventListener('touchstart', startDraw, { passive: false });
+        canvas.addEventListener('touchmove', draw, { passive: false });
+        canvas.addEventListener('touchend', stopDraw);
+
+        sigCanvases[canvas.id] = { canvas, ctx };
+
+        // Restore saved
+        const saved = localStorage.getItem('sig_7260634_' + canvas.id);
+        if (saved) {
+            const img = new Image();
+            img.onload = () => { ctx.drawImage(img, 0, 0, rect.width, rect.height); };
+            img.src = saved;
+            const dateEl = document.getElementById(canvas.id.replace('Canvas', 'Date'));
+            const savedEl = document.getElementById(canvas.id.replace('Canvas', 'Saved'));
+            if (dateEl) dateEl.textContent = 'Tarih: ' + localStorage.getItem('sig_date_' + canvas.id);
+            if (savedEl) savedEl.style.display = 'block';
+        }
+    });
+}
+
+function saveSig(canvasId) {
+    const canvas = document.getElementById(canvasId);
+    if (!canvas) return;
+    const data = canvas.toDataURL('image/png');
+    localStorage.setItem('sig_7260634_' + canvasId, data);
+    const now = new Date();
+    const ds = now.toLocaleDateString('tr-TR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    localStorage.setItem('sig_date_' + canvasId, ds);
+    const dateEl = document.getElementById(canvasId.replace('Canvas', 'Date'));
+    const savedEl = document.getElementById(canvasId.replace('Canvas', 'Saved'));
+    if (dateEl) dateEl.textContent = 'Tarih: ' + ds;
+    if (savedEl) savedEl.style.display = 'block';
+}
+
+function clearSig(canvasId) {
+    const entry = sigCanvases[canvasId];
+    if (!entry) return;
+    const r = entry.canvas.getBoundingClientRect();
+    entry.ctx.clearRect(0, 0, r.width, r.height);
+    localStorage.removeItem('sig_7260634_' + canvasId);
+    localStorage.removeItem('sig_date_' + canvasId);
+    const dateEl = document.getElementById(canvasId.replace('Canvas', 'Date'));
+    const savedEl = document.getElementById(canvasId.replace('Canvas', 'Saved'));
+    if (dateEl) dateEl.textContent = 'Tarih: ___/___/2026';
+    if (savedEl) savedEl.style.display = 'none';
+}
+
+// ============ EDIT MODE ============
+let isEditMode = false;
+let editSnapshot = '';
+
+function enterEditMode() {
+    isEditMode = true;
+    document.body.classList.add('edit-mode');
+    editSnapshot = document.getElementById('docContainer').innerHTML;
+    document.querySelectorAll('.editable').forEach(el => {
+        el.setAttribute('contenteditable', 'true');
+        el.setAttribute('spellcheck', 'true');
+    });
+    document.getElementById('btnEdit').style.display = 'none';
+    document.getElementById('btnSave').style.display = 'inline-flex';
+    document.getElementById('btnCancel').style.display = 'inline-flex';
+    document.getElementById('tbStatus').innerHTML = '✏️ <strong style="color:#3b82f6">Düzenleme Modu</strong>';
+    showToast('✏️ Düzenleme modu — mavi çerçeveli alanlara tıklayarak düzenleyin', 'info');
+}
+
+function saveEdits() {
+    document.querySelectorAll('.editable').forEach(el => {
+        el.removeAttribute('contenteditable');
+        el.removeAttribute('spellcheck');
+    });
+    document.body.classList.remove('edit-mode');
+    isEditMode = false;
+    document.getElementById('btnEdit').style.display = 'inline-flex';
+    document.getElementById('btnSave').style.display = 'none';
+    document.getElementById('btnCancel').style.display = 'none';
+    document.getElementById('tbStatus').innerHTML = '📋 AGY101-02 Proje Öneri Bilgileri Formu';
+    localStorage.setItem('doc_7260634_content', document.getElementById('docContainer').innerHTML);
+    localStorage.setItem('doc_7260634_date', new Date().toISOString());
+    showToast('💾 Değişiklikler kaydedildi!', 'success');
+}
+
+function cancelEdits() {
+    document.getElementById('docContainer').innerHTML = editSnapshot;
+    document.body.classList.remove('edit-mode');
+    isEditMode = false;
+    document.getElementById('btnEdit').style.display = 'inline-flex';
+    document.getElementById('btnSave').style.display = 'none';
+    document.getElementById('btnCancel').style.display = 'none';
+    document.getElementById('tbStatus').innerHTML = '📋 AGY101-02 Proje Öneri Bilgileri Formu';
+    initSignatures();
+    showToast('✖️ Düzenlemeler iptal edildi', 'error');
+}
+
+// ============ PDF EXPORT ============
+function exportPDF() {
+    showToast('📄 PDF oluşturuluyor...', 'info');
+    setTimeout(() => window.print(), 300);
+}
+
+// ============ TOAST ============
+function showToast(message, type) {
+    document.querySelectorAll('.toast').forEach(t => t.remove());
+    const t = document.createElement('div');
+    t.className = 'toast toast-' + type;
+    t.innerHTML = message;
+    document.body.appendChild(t);
+    setTimeout(() => t.remove(), 3000);
+}
+
+// ============ KEYBOARD ============
+document.addEventListener('keydown', (e) => {
+    if (e.ctrlKey && e.key === 'p') { e.preventDefault(); exportPDF(); }
+    if (e.ctrlKey && e.key === 'e') { e.preventDefault(); if (!isEditMode) enterEditMode(); }
+    if (e.ctrlKey && e.key === 's') { e.preventDefault(); if (isEditMode) saveEdits(); }
+    if (e.key === 'Escape' && isEditMode) cancelEdits();
+});
+
+// ============ INIT ============
+document.addEventListener('DOMContentLoaded', () => {
+    initSignatures();
+
+    // Restore saved edits
+    const saved = localStorage.getItem('doc_7260634_content');
+    if (saved) {
+        // Optional: uncomment to auto-restore
+        // document.getElementById('docContainer').innerHTML = saved;
+        // initSignatures();
+    }
+});
+
+console.log('✅ AGY101-02 Dokümantasyon Sistemi yüklendi — İmza, Düzenleme ve PDF hazır');
+</script>
+
+</body>
+</html>

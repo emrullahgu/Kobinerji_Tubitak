@@ -45,8 +45,62 @@
         <button class="nav-btn" data-section="budget"><span class="nav-icon">💰</span> Bütçe</button>
         <button class="nav-btn" data-section="team"><span class="nav-icon">👥</span> Ekip</button>
         <button class="nav-btn" data-section="technical"><span class="nav-icon">💻</span> Teknik Altyapı</button>
+        <a href="dokumantasyon.html" class="nav-btn nav-btn-doc" style="text-decoration:none;border:1.5px solid #8b5cf6;color:#8b5cf6;background:rgba(139,92,246,.06);"><span class="nav-icon">📑</span> AGY101-02 Doküman</a>
     </div>
 </nav>
+
+<!-- ═══════════════════ REPORT TOOLBAR ═══════════════════ -->
+<div class="report-toolbar" id="reportToolbar">
+    <div class="toolbar-inner">
+        <div class="toolbar-left">
+            <button class="tb-btn tb-edit" id="btnEdit" title="İçeriği düzenle"><span class="tb-icon">✏️</span> Düzenle</button>
+            <button class="tb-btn tb-save" id="btnSave" style="display:none" title="Değişiklikleri kaydet"><span class="tb-icon">💾</span> Kaydet</button>
+            <button class="tb-btn tb-cancel" id="btnCancel" style="display:none" title="Düzenlemeyi iptal et"><span class="tb-icon">✖️</span> İptal</button>
+        </div>
+        <div class="toolbar-center">
+            <span class="tb-status" id="tbStatus">📋 Rapor Görüntüleme Modu</span>
+        </div>
+        <div class="toolbar-right">
+            <button class="tb-btn tb-pdf" id="btnPDF" title="PDF olarak indir"><span class="tb-icon">📄</span> PDF İndir</button>
+            <button class="tb-btn tb-print" id="btnPrint" title="Yazdır"><span class="tb-icon">🖨️</span> Yazdır</button>
+            <button class="tb-btn tb-json" id="btnJSON" title="JSON olarak dışa aktar"><span class="tb-icon">📦</span> JSON</button>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════ PDF COVER PAGE (hidden, shown only in print/PDF) ═══════════════════ -->
+<div class="pdf-cover" id="pdfCover">
+    <div class="pdf-cover-inner">
+        <div class="pdf-cover-top">
+            <img src="firmalogo.png" alt="KOBİNERJİ" class="pdf-cover-logo">
+            <div class="pdf-cover-company">
+                <h3>KOBİNERJİ MÜHENDİSLİK VE ENERJİ VERİMLİLİĞİ DANIŞMANLIK A.Ş.</h3>
+                <p>Ceran Plaza, Kemalpaşa OSB, Gazi Blv. No:177/19, 35730 Kemalpaşa/İzmir</p>
+                <p>Tel: 0535 714 52 88</p>
+            </div>
+        </div>
+        <div class="pdf-cover-middle">
+            <div class="pdf-cover-badge">TÜBİTAK 1507 — KOBİ Ar-Ge Başlangıç Destek Programı</div>
+            <h1 class="pdf-cover-title">Proje No: 7260634</h1>
+            <h2 class="pdf-cover-subtitle">Elektrikli Araç Bataryaları İçin Yapay Zekâ Destekli Yeşil Dönüşüm ve Analiz Sistemi</h2>
+            <div class="pdf-cover-divider"></div>
+            <h3 class="pdf-cover-report-type" id="pdfReportType">Proje İlerleme Raporu</h3>
+        </div>
+        <div class="pdf-cover-bottom">
+            <div class="pdf-cover-meta">
+                <div class="pdf-meta-row"><span class="pdf-meta-label">Rapor Tarihi</span><span class="pdf-meta-value" id="pdfDate">19 Nisan 2026</span></div>
+                <div class="pdf-meta-row"><span class="pdf-meta-label">Proje Süresi</span><span class="pdf-meta-value">01.03.2026 – 01.09.2027 (18 Ay)</span></div>
+                <div class="pdf-meta-row"><span class="pdf-meta-label">Mevcut Aşama</span><span class="pdf-meta-value">İP-1: Batarya Veri Toplama (%65)</span></div>
+                <div class="pdf-meta-row"><span class="pdf-meta-label">Toplam Bütçe</span><span class="pdf-meta-value">3.497.730 TL</span></div>
+                <div class="pdf-meta-row"><span class="pdf-meta-label">Proje Yürütücüsü</span><span class="pdf-meta-value">Cem Bülbül — KOBİNERJİ A.Ş.</span></div>
+            </div>
+            <div class="pdf-cover-footer">
+                <p>Bu rapor KOBİNERJİ A.Ş. tarafından TÜBİTAK'a sunulmak üzere hazırlanmıştır.</p>
+                <p class="pdf-confidential">GİZLİ — TASLAK</p>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- ═══════════════════ MAIN CONTENT ═══════════════════ -->
 <main class="main">
