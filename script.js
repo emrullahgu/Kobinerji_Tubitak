@@ -734,7 +734,41 @@ function closeDocEditor() {
     setTimeout(() => modal.remove(), 300);
 }
 
-/* ═══════════ PDF GENERATION (jsPDF native text) ═══════════ */
+/* ═══════════ PDF FONT LOADING ═══════════ */
+let _pdfFontCache = null;
+
+async function loadPdfFonts(pdf) {
+    if (!_pdfFontCache) {
+        const base = 'https://cdn.jsdelivr.net/npm/roboto-fontface@0.10.0/fonts/roboto/';
+        const toBase64 = async (url) => {
+            const resp = await fetch(url);
+            if (!resp.ok) throw new Error('Font yüklenemedi');
+            const buf = await resp.arrayBuffer();
+            const bytes = new Uint8Array(buf);
+            let binary = '';
+            const chunk = 8192;
+            for (let i = 0; i < bytes.length; i += chunk) {
+                binary += String.fromCharCode.apply(null, bytes.subarray(i, Math.min(i + chunk, bytes.length)));
+            }
+            return btoa(binary);
+        };
+        const [regular, bold, italic] = await Promise.all([
+            toBase64(base + 'Roboto-Regular.ttf'),
+            toBase64(base + 'Roboto-Bold.ttf'),
+            toBase64(base + 'Roboto-Italic.ttf')
+        ]);
+        _pdfFontCache = { regular, bold, italic };
+    }
+    pdf.addFileToVFS('Roboto-Regular.ttf', _pdfFontCache.regular);
+    pdf.addFileToVFS('Roboto-Bold.ttf', _pdfFontCache.bold);
+    pdf.addFileToVFS('Roboto-Italic.ttf', _pdfFontCache.italic);
+    pdf.addFont('Roboto-Regular.ttf', 'Roboto', 'normal');
+    pdf.addFont('Roboto-Bold.ttf', 'Roboto', 'bold');
+    pdf.addFont('Roboto-Italic.ttf', 'Roboto', 'italic');
+    pdf.setFont('Roboto');
+}
+
+/* ═══════════ PDF GENERATION (jsPDF native text + Roboto Unicode) ═══════════ */
 async function downloadDocPDF(filePath, docTitle) {
     const btn = event.currentTarget;
     btn.classList.add('loading');
@@ -765,6 +799,9 @@ async function downloadDocPDF(filePath, docTitle) {
         let y = MT;
         let pageNum = 0;
 
+        /* ── Load Unicode font for Turkish characters ── */
+        await loadPdfFonts(pdf);
+
         /* ── Helper: add page with header/footer ── */
         function newPage() {
             if (pageNum > 0) pdf.addPage();
@@ -789,8 +826,9 @@ async function downloadDocPDF(filePath, docTitle) {
                 pdf.setLineWidth(0.4);
                 pdf.line(ML, MT - 6, PW - MR, MT - 6);
                 pdf.setFontSize(7);
+                pdf.setFont('Roboto', 'normal');
                 pdf.setTextColor(100, 116, 139);
-                pdf.text('KOBINERJI A.S. | TUBITAK 7260634', ML, MT - 9);
+                pdf.text('KOBİNERJİ A.Ş. | TÜBİTAK 7260634', ML, MT - 9);
                 const short = docTitle.length > 48 ? docTitle.substring(0, 45) + '...' : docTitle;
                 pdf.setFontSize(6.5);
                 pdf.setTextColor(99, 102, 241);
@@ -802,10 +840,10 @@ async function downloadDocPDF(filePath, docTitle) {
                 pdf.line(ML, fy, PW - MR, fy);
                 pdf.setFontSize(6.5);
                 pdf.setTextColor(148, 163, 184);
-                pdf.text('(c) 2026 KOBINERJI A.S.', ML, fy + 4);
+                pdf.text('© 2026 KOBİNERJİ A.Ş.', ML, fy + 4);
                 pdf.setFontSize(6);
                 pdf.setTextColor(220, 38, 38);
-                pdf.text('GIZLI', PW / 2, fy + 4, { align: 'center' });
+                pdf.text('GİZLİ', PW / 2, fy + 4, { align: 'center' });
                 pdf.setFontSize(7);
                 pdf.setTextColor(100, 116, 139);
                 pdf.text('Sayfa ' + (p - 1) + ' / ' + (total - 1), PW - MR, fy + 4, { align: 'right' });
@@ -816,7 +854,7 @@ async function downloadDocPDF(filePath, docTitle) {
         function printText(text, fontSize, bold, color, indent) {
             indent = indent || 0;
             pdf.setFontSize(fontSize);
-            pdf.setFont('helvetica', bold ? 'bold' : 'normal');
+            pdf.setFont('Roboto', bold ? 'bold' : 'normal');
             pdf.setTextColor(color[0], color[1], color[2]);
             const maxW = CW - indent;
             const lines = pdf.splitTextToSize(text, maxW);
@@ -829,7 +867,7 @@ async function downloadDocPDF(filePath, docTitle) {
         }
 
         function stripInline(text) {
-            // Remove markdown inline formatting for plain text rendering
+            if (!text || typeof text !== 'string') return String(text || '');
             return text
                 .replace(/\*\*(.+?)\*\*/g, '$1')
                 .replace(/\*(.+?)\*/g, '$1')
@@ -850,33 +888,34 @@ async function downloadDocPDF(filePath, docTitle) {
 
         // Company name on dark bar
         pdf.setFontSize(11);
-        pdf.setFont('helvetica', 'bold');
+        pdf.setFont('Roboto', 'bold');
         pdf.setTextColor(255, 255, 255);
-        pdf.text('KOBINERJI MUHENDISLIK VE ENERJI VERIMLILIGI DANISMANLIK A.S.', ML, 18);
+        pdf.text('KOBİNERJİ MÜHENDİSLİK VE ENERJİ VERİMLİLİĞİ DANIŞMANLIK A.Ş.', ML, 18);
         pdf.setFontSize(8);
+        pdf.setFont('Roboto', 'normal');
         pdf.setTextColor(180, 200, 220);
-        pdf.text('Ceran Plaza, Kemalpasa OSB, Gazi Blv. No:177/19, 35730 Kemalpasa/Izmir', ML, 25);
+        pdf.text('Ceran Plaza, Kemalpaşa OSB, Gazi Blv. No:177/19, 35730 Kemalpaşa/İzmir', ML, 25);
 
         // TÜBİTAK badge
         pdf.setFillColor(99, 102, 241);
         pdf.roundedRect(PW / 2 - 45, 58, 90, 12, 6, 6, 'F');
         pdf.setFontSize(9);
-        pdf.setFont('helvetica', 'bold');
+        pdf.setFont('Roboto', 'bold');
         pdf.setTextColor(255, 255, 255);
-        pdf.text('TUBITAK 1507 - KOBi Ar-Ge Destek Programi', PW / 2, 66, { align: 'center' });
+        pdf.text('TÜBİTAK 1507 - KOBİ Ar-Ge Destek Programı', PW / 2, 66, { align: 'center' });
 
         // Project number
         pdf.setFontSize(36);
-        pdf.setFont('helvetica', 'bold');
+        pdf.setFont('Roboto', 'bold');
         pdf.setTextColor(15, 23, 42);
         pdf.text('Proje No: 7260634', PW / 2, 95, { align: 'center' });
 
         // Project name
         pdf.setFontSize(13);
-        pdf.setFont('helvetica', 'normal');
+        pdf.setFont('Roboto', 'normal');
         pdf.setTextColor(51, 65, 85);
         const projNameLines = pdf.splitTextToSize(
-            'Elektrikli Arac Bataryalari Icin Yapay Zeka Destekli Yesil Donusum ve Analiz Sistemi', 140);
+            'Elektrikli Araç Bataryaları İçin Yapay Zekâ Destekli Yeşil Dönüşüm ve Analiz Sistemi', 140);
         let pny = 110;
         projNameLines.forEach(l => { pdf.text(l, PW / 2, pny, { align: 'center' }); pny += 7; });
 
@@ -887,7 +926,7 @@ async function downloadDocPDF(filePath, docTitle) {
 
         // Document title
         pdf.setFontSize(18);
-        pdf.setFont('helvetica', 'bold');
+        pdf.setFont('Roboto', 'bold');
         pdf.setTextColor(15, 76, 117);
         const titleLines = pdf.splitTextToSize(docTitle, 150);
         let ty = pny + 20;
@@ -895,12 +934,12 @@ async function downloadDocPDF(filePath, docTitle) {
 
         // Meta grid
         const metaItems = [
-            ['Dokuman Tarihi', dateStr],
-            ['Surum', '1.0.0'],
-            ['Proje Suresi', '01.03.2026 - 01.09.2027'],
-            ['Gizlilik', 'Proje Ici - Gizli'],
-            ['Proje Yurutucusu', 'Cem Bulbul'],
-            ['Hazirlayan', 'KOBINERJI A.S. Proje Ekibi']
+            ['Doküman Tarihi', dateStr],
+            ['Sürüm', '1.0.0'],
+            ['Proje Süresi', '01.03.2026 – 01.09.2027'],
+            ['Gizlilik', 'Proje İçi – Gizli'],
+            ['Proje Yürütücüsü', 'Cem Bülbül'],
+            ['Hazırlayan', 'KOBİNERJİ A.Ş. Proje Ekibi']
         ];
         let my = ty + 15;
         const mColW = 80;
@@ -914,12 +953,12 @@ async function downloadDocPDF(filePath, docTitle) {
             pdf.roundedRect(mx, my, mColW, 14, 2, 2, 'FD');
             // Label
             pdf.setFontSize(7);
-            pdf.setFont('helvetica', 'bold');
+            pdf.setFont('Roboto', 'bold');
             pdf.setTextColor(100, 116, 139);
             pdf.text(metaItems[i][0].toUpperCase(), mx + 4, my + 5);
             // Value
             pdf.setFontSize(9);
-            pdf.setFont('helvetica', 'bold');
+            pdf.setFont('Roboto', 'bold');
             pdf.setTextColor(15, 23, 42);
             pdf.text(metaItems[i][1], mx + 4, my + 11);
         }
@@ -931,19 +970,20 @@ async function downloadDocPDF(filePath, docTitle) {
         pdf.setDrawColor(226, 232, 240);
         pdf.line(0, bby, PW, bby);
         pdf.setFontSize(9);
-        pdf.setFont('helvetica', 'bold');
+        pdf.setFont('Roboto', 'bold');
         pdf.setTextColor(220, 38, 38);
-        pdf.text('GIZLI - Bu dokuman KOBINERJI A.S. tarafindan TUBITAK\'a sunulmak uzere hazirlanmistir.', PW / 2, bby + 12, { align: 'center' });
+        pdf.text('GİZLİ – Bu doküman KOBİNERJİ A.Ş. tarafından TÜBİTAK\'a sunulmak üzere hazırlanmıştır.', PW / 2, bby + 12, { align: 'center' });
         pdf.setFontSize(8);
+        pdf.setFont('Roboto', 'normal');
         pdf.setTextColor(148, 163, 184);
-        pdf.text('(c) 2026 KOBINERJI A.S. - Tum haklari saklidir.', PW / 2, bby + 20, { align: 'center' });
+        pdf.text('© 2026 KOBİNERJİ A.Ş. – Tüm hakları saklıdır.', PW / 2, bby + 20, { align: 'center' });
 
         /* ══════ 5. CONTENT PAGES ══════ */
         newPage();
 
         // Title at top of content
         pdf.setFontSize(16);
-        pdf.setFont('helvetica', 'bold');
+        pdf.setFont('Roboto', 'bold');
         pdf.setTextColor(15, 23, 42);
         const mainTitleLines = pdf.splitTextToSize(docTitle, CW);
         mainTitleLines.forEach(l => { pdf.text(l, ML, y); y += 7; });
@@ -953,9 +993,9 @@ async function downloadDocPDF(filePath, docTitle) {
         pdf.line(ML, y, PW - MR, y);
         y += 3;
         pdf.setFontSize(8);
-        pdf.setFont('helvetica', 'normal');
+        pdf.setFont('Roboto', 'normal');
         pdf.setTextColor(100, 116, 139);
-        pdf.text('Tarih: ' + dateStr + '  |  Surum: 1.0.0  |  Gizlilik: Proje Ici', ML, y);
+        pdf.text('Tarih: ' + dateStr + '  |  Sürüm: 1.0.0  |  Gizlilik: Proje İçi', ML, y);
         y += 8;
 
         /* ── Process tokens ── */
@@ -970,7 +1010,7 @@ async function downloadDocPDF(filePath, docTitle) {
                     checkSpace(gap + fs * 0.5 + 4);
                     y += gap;
                     pdf.setFontSize(fs);
-                    pdf.setFont('helvetica', 'bold');
+                    pdf.setFont('Roboto', 'bold');
                     if (depth === 1) pdf.setTextColor(15, 23, 42);
                     else if (depth === 2) pdf.setTextColor(30, 41, 59);
                     else pdf.setTextColor(51, 65, 85);
@@ -1000,7 +1040,7 @@ async function downloadDocPDF(filePath, docTitle) {
                         const bullet = token.ordered ? (i + 1) + '.' : '\u2022';
                         checkSpace(5);
                         pdf.setFontSize(9.5);
-                        pdf.setFont('helvetica', 'normal');
+                        pdf.setFont('Roboto', 'normal');
                         pdf.setTextColor(30, 41, 59);
                         pdf.text(bullet, ML + 3, y);
                         const listLines = pdf.splitTextToSize(text, CW - 10);
@@ -1029,7 +1069,7 @@ async function downloadDocPDF(filePath, docTitle) {
                     pdf.setFillColor(241, 245, 249);
                     pdf.rect(ML, y, CW, cellH, 'F');
                     pdf.setFontSize(7.5);
-                    pdf.setFont('helvetica', 'bold');
+                    pdf.setFont('Roboto', 'bold');
                     pdf.setTextColor(51, 65, 85);
                     headers.forEach((h, ci) => {
                         const txt = pdf.splitTextToSize(h, colW - cellPad * 2);
@@ -1045,7 +1085,7 @@ async function downloadDocPDF(filePath, docTitle) {
                     y += cellH;
 
                     // Data rows
-                    pdf.setFont('helvetica', 'normal');
+                    pdf.setFont('Roboto', 'normal');
                     pdf.setFontSize(7.5);
                     rows.forEach((row, ri) => {
                         checkSpace(cellH);
@@ -1069,7 +1109,7 @@ async function downloadDocPDF(filePath, docTitle) {
                     break;
                 }
                 case 'code': {
-                    const codeText = token.text;
+                    const codeText = token.text || '';
                     checkSpace(12);
                     pdf.setFillColor(30, 41, 59);
                     const codeLines = codeText.split('\n');
@@ -1081,7 +1121,7 @@ async function downloadDocPDF(filePath, docTitle) {
                     pdf.setFont('courier', 'normal');
                     pdf.setTextColor(226, 232, 240);
                     for (const cl of codeLines) {
-                        if (y + 4 > PH - MB) break; // Don't overflow
+                        if (y + 4 > PH - MB) break;
                         pdf.text(cl.substring(0, 100), ML + 4, y);
                         y += 4;
                     }
@@ -1089,15 +1129,24 @@ async function downloadDocPDF(filePath, docTitle) {
                     break;
                 }
                 case 'blockquote': {
-                    const text = stripInline(token.text || (token.tokens ? token.tokens.map(t => t.text || '').join(' ') : ''));
+                    let bqText = '';
+                    if (token.text && typeof token.text === 'string') {
+                        bqText = stripInline(token.text);
+                    } else if (token.tokens && Array.isArray(token.tokens)) {
+                        bqText = token.tokens.map(t => {
+                            if (t.text && typeof t.text === 'string') return stripInline(t.text);
+                            if (t.raw && typeof t.raw === 'string') return t.raw;
+                            return '';
+                        }).join(' ');
+                    }
                     checkSpace(10);
                     pdf.setDrawColor(99, 102, 241);
                     pdf.setLineWidth(1);
-                    const qLines = pdf.splitTextToSize(text, CW - 12);
+                    const qLines = pdf.splitTextToSize(bqText, CW - 12);
                     const qH = qLines.length * 4.5 + 2;
                     pdf.line(ML + 2, y, ML + 2, y + qH);
                     pdf.setFontSize(9);
-                    pdf.setFont('helvetica', 'italic');
+                    pdf.setFont('Roboto', 'italic');
                     pdf.setTextColor(100, 116, 139);
                     qLines.forEach(l => { checkSpace(4.5); pdf.text(l, ML + 8, y); y += 4.5; });
                     y += 4;
@@ -1117,7 +1166,7 @@ async function downloadDocPDF(filePath, docTitle) {
                     break;
                 }
                 default: {
-                    if (token.text) {
+                    if (token.text && typeof token.text === 'string') {
                         const text = stripInline(token.text);
                         if (text.trim()) {
                             checkSpace(6);
@@ -1139,14 +1188,14 @@ async function downloadDocPDF(filePath, docTitle) {
         pdf.line(PW / 2 - endLen, y, PW / 2 + endLen, y);
         y += 5;
         pdf.setFontSize(8);
-        pdf.setFont('helvetica', 'bold');
+        pdf.setFont('Roboto', 'bold');
         pdf.setTextColor(100, 116, 139);
-        pdf.text('-- Dokuman Sonu --', PW / 2, y, { align: 'center' });
+        pdf.text('— Doküman Sonu —', PW / 2, y, { align: 'center' });
         y += 5;
         pdf.setFontSize(7);
-        pdf.setFont('helvetica', 'normal');
+        pdf.setFont('Roboto', 'normal');
         pdf.setTextColor(148, 163, 184);
-        pdf.text(docTitle + '  |  KOBINERJI A.S.  |  (c) 2026', PW / 2, y, { align: 'center' });
+        pdf.text(docTitle + '  |  KOBİNERJİ A.Ş.  |  © 2026', PW / 2, y, { align: 'center' });
 
         /* ══════ 6. HEADERS & FOOTERS ══════ */
         addHeaderFooter();
