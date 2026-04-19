@@ -1233,8 +1233,10 @@ async function exportPDF() {
                 imageTimeout: 15000,
                 onclone: function(clonedDoc) {
                     // Force white backgrounds on cloned elements
-                    const clonedBlock = clonedDoc.querySelector('#' + block.id) || clonedDoc.body;
-                    clonedBlock.style.boxShadow = 'none';
+                    const clonedBlock = block.id
+                        ? clonedDoc.querySelector('#' + block.id)
+                        : null;
+                    if (clonedBlock) clonedBlock.style.boxShadow = 'none';
                 }
             });
 
