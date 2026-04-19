@@ -1161,24 +1161,23 @@ function cancelEdits() {
     showToast('✖️ Düzenlemeler iptal edildi', 'error');
 }
 
-// ============ PDF EXPORT (html2canvas + jsPDF — v4 tek canvas) ============
+// ============ PDF EXPORT (html2canvas + jsPDF — v5 section-aware) ============
 async function exportPDF() {
-    // Guard: libs loaded?
     if (typeof html2canvas === 'undefined' || typeof jspdf === 'undefined') {
-        showToast('❌ PDF kütüphaneleri yüklenemedi. Sayfayı yenileyip tekrar deneyin.', 'error');
+        showToast('\u274c PDF k\u00fct\u00fcphaneleri y\u00fcklenemedi. Sayfay\u0131 yenileyip tekrar deneyin.', 'error');
         return;
     }
 
     const pdfBtn = document.querySelector('.tb-pdf');
-    if (pdfBtn) { pdfBtn.disabled = true; pdfBtn.innerHTML = '⏳ Hazırlanıyor...'; }
-    showToast('📄 PDF oluşturuluyor, lütfen bekleyin...', 'info');
+    if (pdfBtn) { pdfBtn.disabled = true; pdfBtn.innerHTML = '\u23f3 Haz\u0131rlan\u0131yor...'; }
+    showToast('\ud83d\udcc4 PDF olu\u015fturuluyor, l\u00fctfen bekleyin...', 'info');
 
     // 1) Hide toolbar
     const toolbar = document.getElementById('docToolbar');
     const origToolbar = toolbar ? toolbar.style.display : '';
     if (toolbar) toolbar.style.display = 'none';
 
-    // 2) Convert signature canvases to static images (html2canvas can't read drawn canvas)
+    // 2) Convert signature canvases to static images
     const sigSwaps = [];
     document.querySelectorAll('.signature-canvas').forEach(cvs => {
         try {
@@ -1191,69 +1190,140 @@ async function exportPDF() {
             wrap.appendChild(img);
             cvs.style.display = 'none';
             sigSwaps.push({ cvs, img, wrap });
-        } catch(e) { /* ignore tainted */ }
+        } catch(e) {}
     });
 
-    // 3) Hide edit-mode buttons, clear buttons etc.
+    // 3) Hide edit-mode buttons
     const hideEls = document.querySelectorAll('.sig-clear, .sig-actions, .sig-saved-indicator, .toast');
     hideEls.forEach(el => { el.dataset._d = el.style.display; el.style.display = 'none'; });
 
-    // 4) Wait for reflow
     await new Promise(r => setTimeout(r, 400));
 
     try {
         const container = document.getElementById('docContainer');
-
-        // Render the ENTIRE document as one continuous canvas
-        const fullCanvas = await html2canvas(container, {
-            scale: 2,
-            useCORS: true,
-            allowTaint: true,
-            backgroundColor: '#ffffff',
-            logging: false,
-            windowWidth: 960,
-            imageTimeout: 15000
-        });
-
         const { jsPDF } = jspdf;
         const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-        const pageW = 210;
-        const pageH = 297;
-        const margin = 7;
+        const pageW = 210, pageH = 297, margin = 7;
         const contentW = pageW - margin * 2;
         const usableH = pageH - margin * 2;
 
-        // px↔mm ratio from the rendered canvas
-        const pxPerMm = fullCanvas.width / contentW;
-        const pxPerPage = Math.floor(usableH * pxPerMm);
-        const totalPxH = fullCanvas.height;
-        const totalPages = Math.ceil(totalPxH / pxPerPage);
+        // Collect render blocks: cover + each sub-section within each doc-section
+        const renderBlocks = [];
+        const coverPage = container.querySelector('.cover-page');
+        if (coverPage) renderBlocks.push({ el: coverPage, type: 'cover' });
 
-        for (let page = 0; page < totalPages; page++) {
-            if (page > 0) pdf.addPage();
+        // Flatten: each .doc-section-header and each .sub-section as separate blocks
+        container.querySelectorAll('.doc-section').forEach(sec => {
+            const header = sec.querySelector('.doc-section-header');
+            const subs = sec.querySelectorAll('.sub-section');
+            if (subs.length > 0) {
+                // Header as its own block, then each sub-section
+                if (header) renderBlocks.push({ el: header, type: 'header', parentId: sec.id });
+                subs.forEach(sub => renderBlocks.push({ el: sub, type: 'sub' }));
+            } else {
+                // No sub-sections → render entire section as one block
+                renderBlocks.push({ el: sec, type: 'section' });
+            }
+        });
 
-            const srcY = page * pxPerPage;
-            const sliceH = Math.min(pxPerPage, totalPxH - srcY);
+        const docFooter = container.querySelector('.doc-footer');
+        if (docFooter) renderBlocks.push({ el: docFooter, type: 'footer' });
 
-            // Create a clean slice canvas for this page
-            const slice = document.createElement('canvas');
-            slice.width = fullCanvas.width;
-            slice.height = sliceH;
-            const ctx = slice.getContext('2d');
-            ctx.fillStyle = '#ffffff';
-            ctx.fillRect(0, 0, slice.width, slice.height);
-            ctx.drawImage(fullCanvas,
-                0, srcY, fullCanvas.width, sliceH,   // source rect
-                0, 0, fullCanvas.width, sliceH        // dest rect
-            );
+        const h2cOpts = {
+            scale: 2, useCORS: true, allowTaint: true,
+            backgroundColor: '#ffffff', logging: false,
+            windowWidth: 960, imageTimeout: 15000
+        };
 
-            const imgData = slice.toDataURL('image/png');
-            const imgH = sliceH / pxPerMm;
+        let currentY = margin;
+        let needsNewPage = false;
 
-            pdf.addImage(imgData, 'PNG', margin, margin, contentW, imgH);
+        for (let i = 0; i < renderBlocks.length; i++) {
+            const block = renderBlocks[i];
+            const el = block.el;
+            if (!el || !el.offsetHeight || el.offsetHeight < 2) continue;
+
+            const canvas = await html2canvas(el, h2cOpts);
+            const imgW = contentW;
+            const imgH = (canvas.height * contentW) / canvas.width;
+
+            // Cover page → dedicated full page
+            if (block.type === 'cover') {
+                if (i > 0) pdf.addPage();
+                const coverH = Math.min(imgH, usableH);
+                pdf.addImage(canvas.toDataURL('image/png'), 'PNG', margin, margin, imgW, coverH);
+                pdf.addPage();
+                currentY = margin;
+                needsNewPage = false;
+                continue;
+            }
+
+            // Force page break before secA2 (Kuruluş Bilgileri)
+            if (block.type === 'header' && block.parentId === 'secA2') {
+                pdf.addPage();
+                currentY = margin;
+                needsNewPage = false;
+            }
+
+            // Needs a new page from previous overflow
+            if (needsNewPage) {
+                pdf.addPage();
+                currentY = margin;
+                needsNewPage = false;
+            }
+
+            const remaining = usableH - (currentY - margin);
+
+            // CASE 1: Block fits on current page
+            if (imgH <= remaining) {
+                pdf.addImage(canvas.toDataURL('image/png'), 'PNG', margin, currentY, imgW, imgH);
+                currentY += imgH + 1;
+            }
+            // CASE 2: Block doesn't fit current page but fits on a fresh page
+            else if (imgH <= usableH) {
+                pdf.addPage();
+                currentY = margin;
+                pdf.addImage(canvas.toDataURL('image/png'), 'PNG', margin, currentY, imgW, imgH);
+                currentY += imgH + 1;
+            }
+            // CASE 3: Block is taller than one page → slice it
+            else {
+                if (currentY > margin + 2) {
+                    pdf.addPage();
+                    currentY = margin;
+                }
+
+                const pxPerMm = canvas.width / contentW;
+                const pxPerPage = Math.floor(usableH * pxPerMm);
+                let srcY = 0;
+                let sliceIdx = 0;
+
+                while (srcY < canvas.height) {
+                    if (sliceIdx > 0) {
+                        pdf.addPage();
+                        currentY = margin;
+                    }
+
+                    const sliceH = Math.min(pxPerPage, canvas.height - srcY);
+                    const slice = document.createElement('canvas');
+                    slice.width = canvas.width;
+                    slice.height = Math.ceil(sliceH);
+                    const ctx = slice.getContext('2d');
+                    ctx.fillStyle = '#ffffff';
+                    ctx.fillRect(0, 0, slice.width, slice.height);
+                    ctx.drawImage(canvas, 0, srcY, canvas.width, sliceH, 0, 0, canvas.width, sliceH);
+
+                    const sliceImgH = sliceH / pxPerMm;
+                    pdf.addImage(slice.toDataURL('image/png'), 'PNG', margin, margin, contentW, sliceImgH);
+                    currentY = margin + sliceImgH + 1;
+
+                    srcY += pxPerPage;
+                    sliceIdx++;
+                }
+            }
         }
 
-        // Add page numbers
+        // Page numbers
         const numPages = pdf.internal.getNumberOfPages();
         for (let p = 1; p <= numPages; p++) {
             pdf.setPage(p);
@@ -1271,20 +1341,10 @@ async function exportPDF() {
         console.error('PDF hatas\u0131:', err);
         showToast('\u274c PDF olu\u015fturulamad\u0131: ' + err.message, 'error');
     } finally {
-        // Restore toolbar
         if (toolbar) toolbar.style.display = origToolbar;
-
-        // Restore signature canvases
-        sigSwaps.forEach(({ cvs, img }) => {
-            cvs.style.display = '';
-            img.remove();
-        });
-
-        // Restore hidden elements
+        sigSwaps.forEach(({ cvs, img }) => { cvs.style.display = ''; img.remove(); });
         hideEls.forEach(el => { el.style.display = el.dataset._d || ''; delete el.dataset._d; });
-
-        // Restore button
-        if (pdfBtn) { pdfBtn.disabled = false; pdfBtn.innerHTML = '📄 PDF İndir'; }
+        if (pdfBtn) { pdfBtn.disabled = false; pdfBtn.innerHTML = '\ud83d\udcc4 PDF \u0130ndir'; }
     }
 }
 
