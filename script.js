@@ -739,10 +739,10 @@ let _pdfFontCache = null;
 
 async function loadPdfFonts(pdf) {
     if (!_pdfFontCache) {
-        const base = 'https://cdn.jsdelivr.net/npm/roboto-fontface@0.10.0/fonts/roboto/';
+        const base = 'https://cdn.jsdelivr.net/gh/googlefonts/roboto@main/src/hinted/';
         const toBase64 = async (url) => {
             const resp = await fetch(url);
-            if (!resp.ok) throw new Error('Font yüklenemedi');
+            if (!resp.ok) throw new Error('Font yüklenemedi: ' + url);
             const buf = await resp.arrayBuffer();
             const bytes = new Uint8Array(buf);
             let binary = '';
