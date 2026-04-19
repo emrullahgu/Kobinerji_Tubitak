@@ -896,7 +896,7 @@ body {
     font-weight: 700;
     cursor: pointer;
     color: #fff;
-    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
     transition: opacity 0.2s, transform 0.15s;
 }
 .doc-download-btn:hover {
