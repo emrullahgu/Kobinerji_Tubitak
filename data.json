@@ -1,0 +1,338 @@
+{
+  "projectNumber": "7260634",
+  "projectName": "Elektrikli Araç Bataryaları İçin Yapay Zeka Destekli Yeşil Dönüşüm ve Analiz Sistemi",
+  "company": "KOBİNERJİ MÜHENDİSLİK VE ENERJİ VERİMLİLİĞİ DANIŞMANLIK A.Ş.",
+  "startDate": "2026-03-01",
+  "endDate": "2027-09-01",
+  "duration": 18,
+  "totalBudget": 3497730,
+  "spentBudget": 1220000,
+  "overallProgress": 35,
+  "budgetBreakdown": {
+    "personelGiderleri": 1982730,
+    "eletTeçhizatYazılım": 1260000,
+    "malzemeAlımları": 155000,
+    "seyahatGiderleri": 100000
+  },
+  "workPackages": [
+    {
+      "id": "IP1",
+      "name": "Batarya Veri Toplama Altyapısı",
+      "description": "Farklı tipte bataryalardan veri toplanmasına yönelik ölçüm altyapısının kurulması",
+      "startDate": "2026-03-01",
+      "endDate": "2026-06-01",
+      "duration": 92,
+      "progress": 65,
+      "status": "completed",
+      "activities": [
+        "Batarya veri toplama altyapısının kurulması",
+        "Ölçüm donanımlarının ve test düzeneklerinin hazırlanması",
+        "Bataryaların kontrollü koşullarda test edilmesi",
+        "Gerilim, akım, sıcaklık ve kapasite verilerinin toplanması",
+        "İlk veri setinin oluşturulması ve kayıt altına alınması"
+      ]
+    },
+    {
+      "id": "IP2",
+      "name": "Veri Ön İşleme",
+      "description": "Toplanan batarya verilerinin temizlenmesi ve yapay zeka modeline uygun hale getirilmesi",
+      "startDate": "2026-06-01",
+      "endDate": "2026-09-01",
+      "duration": 92,
+      "progress": 30,
+      "status": "in-progress",
+      "activities": [
+        "Verilerin temizlenmesi ve düzenlenmesi",
+        "Eksik ve hatalı verilerin giderilmesi",
+        "Verilerin normalizasyonu ve standartlaştırılması",
+        "Özellik çıkarımı (feature extraction) işlemleri",
+        "Model geliştirmeye uygun veri setinin oluşturulması"
+      ]
+    },
+    {
+      "id": "IP3",
+      "name": "Yapay Zeka SoH Modeli",
+      "description": "Batarya sağlık durumunu (SoH) tahmin eden yapay zeka modelinin tasarım ve geliştirilmesi",
+      "startDate": "2026-09-01",
+      "endDate": "2027-01-01",
+      "duration": 122,
+      "progress": 0,
+      "status": "pending",
+      "targetAccuracy": 90,
+      "activities": [
+        "Yapay zeka modelinin tasarlanması",
+        "Farklı algoritmaların (regresyon, ML) test edilmesi",
+        "Modelin eğitilmesi ve doğrulanması",
+        "Model performansının analiz edilmesi",
+        "Hiperparametre optimizasyonunun yapılması"
+      ]
+    },
+    {
+      "id": "IP4",
+      "name": "Karar Destek Sistemi",
+      "description": "Bataryaların yeniden kullanım/geri dönüşüm olarak sınıflandırma algoritması",
+      "startDate": "2027-01-01",
+      "endDate": "2027-03-01",
+      "duration": 59,
+      "progress": 0,
+      "status": "pending",
+      "targetAccuracy": 85,
+      "activities": [
+        "SoH model çıktılarının analiz edilmesi",
+        "Bataryaların yeniden kullanım / geri dönüşüm olarak sınıflandırılması",
+        "Karar algoritmasının geliştirilmesi",
+        "Karar destek sisteminin oluşturulması",
+        "Sistem entegrasyon sağlanması"
+      ]
+    },
+    {
+      "id": "IP5",
+      "name": "Mekanik Geri Kazanım",
+      "description": "Mekanik parçalama ve fiziksel ayrıştırma sistemi kurulumu",
+      "startDate": "2027-03-01",
+      "endDate": "2027-05-01",
+      "duration": 61,
+      "progress": 0,
+      "status": "pending",
+      "targetImprovement": 10,
+      "activities": [
+        "Bataryaların güvenli şekilde işleme alınması",
+        "Mekanik parçalama (shredding) sürecinin kurulması",
+        "Fiziksel ayrıştırma sistemlerinin oluşturulması",
+        "Plastik, bakır ve alüminyum bileşenlerin ayrılması",
+        "Kara kütle (black mass) elde edilmesi"
+      ]
+    },
+    {
+      "id": "IP6",
+      "name": "Sistem Entegrasyonu",
+      "description": "Geliştirilen tüm sistemlerin entegre şekilde çalıştırılması",
+      "startDate": "2027-05-01",
+      "endDate": "2027-07-01",
+      "duration": 61,
+      "progress": 0,
+      "status": "pending",
+      "activities": [
+        "Geliştirilen tüm sistemlerin entegre çalıştırılması",
+        "Farklı batarya tipleri ile testlerin gerçekleştirilmesi",
+        "Model doğruluğunun ve sistem performansının analiz edilmesi",
+        "Sistem hatalarının tespit edilmesi ve iyileştirilmesi",
+        "Performans değerlendirme raporlarının hazırlanması"
+      ]
+    },
+    {
+      "id": "IP7",
+      "name": "Nihai Optimizasyon",
+      "description": "Proje çıktılarının raporlanması, dokümantasyon ve ticarileştirme hazırlıkları",
+      "startDate": "2027-07-01",
+      "endDate": "2027-09-01",
+      "duration": 62,
+      "progress": 0,
+      "status": "pending",
+      "activities": [
+        "Nihai sistemin optimize edilmesi",
+        "Proje çıktılarının raporlanması",
+        "Teknik dokümantasyonun hazırlanması",
+        "Ürün/sistem çıktılarının sunuma hazır hale getirilmesi",
+        "Ticarileştirme ve iş modeli çalışmalarının yapılması"
+      ]
+    }
+  ],
+  "milestones": [
+    {
+      "id": 1,
+      "date": "2026-06-01",
+      "title": "Batarya Veri Toplama Altyapısı",
+      "description": "Ölçüm donanımlarının kurulması ve ilk veri setinin oluşturulması",
+      "status": "completed",
+      "criteria": [
+        "Test düzeneği hazır",
+        "En az 50 batarya hücresi test edildi",
+        "Veri kalitesi doğrulandı"
+      ]
+    },
+    {
+      "id": 2,
+      "date": "2026-09-01",
+      "title": "İşlemi Tamamlanmış Veri Seti",
+      "description": "Temizleme, normalizasyon ve özellik çıkarımı işlemlerinin tamamlanması",
+      "status": "in-progress",
+      "criteria": [
+        "Veri temizliği tamamlandı",
+        "100+ özellik çıkartıldı",
+        "Eğitim-test seti ayrımı yapıldı"
+      ]
+    },
+    {
+      "id": 3,
+      "date": "2027-01-01",
+      "title": "SoH Tahmin Modeli (%90 Doğruluk)",
+      "description": "Yapay zeka SoH modelinin geliştirilmesi ve doğrulanması",
+      "status": "pending",
+      "targetAccuracy": 90,
+      "criteria": [
+        "Model doğruluğu: ≥%90",
+        "Analiz süresi: ≤5 dakika",
+        "Validasyon R²: ≥0.85"
+      ]
+    },
+    {
+      "id": 4,
+      "date": "2027-03-01",
+      "title": "Karar Destek Sistemi",
+      "description": "Batarya sınıflandırma ve karar algoritmasının geliştirilmesi",
+      "status": "pending",
+      "targetAccuracy": 85,
+      "criteria": [
+        "Sınıflandırma doğruluğu: ≥%85",
+        "3 fatarya tipine uyumlu",
+        "Karar hızı: Real-time"
+      ]
+    },
+    {
+      "id": 5,
+      "date": "2027-05-01",
+      "title": "Mekanik Geri Kazanım Sistemi",
+      "description": "Mekanik parçalama sisteminin kurulması ve Black Mass üretimi",
+      "status": "pending",
+      "targetImprovement": 10,
+      "criteria": [
+        "Parçalama sistemi operasyonel",
+        "Geri kazanım verimi: +%10",
+        "5 ton black mass üretimi"
+      ]
+    },
+    {
+      "id": 6,
+      "date": "2027-07-01",
+      "title": "Sistem Entegrasyonu Tamamlandı",
+      "description": "Tüm bileşenlerin entegre çalışması ve performans doğrulaması",
+      "status": "pending",
+      "criteria": [
+        "End-to-end workflow test edildi",
+        "Hata oranı: <5%",
+        "10x batarya türü test edildi"
+      ]
+    },
+    {
+      "id": 7,
+      "date": "2027-09-01",
+      "title": "Nihai Sistem ve Dokümantasyon",
+      "description": "Proje tamamlanması, dokümantasyon ve ticarileştirme hazırlıkları",
+      "status": "pending",
+      "criteria": [
+        "Teknik dokümantasyon tamamlandı",
+        "Kullanıcı el kitabı hazır",
+        "Ticarileştirme planı oluşturuldu"
+      ]
+    }
+  ],
+  "teamMembers": [
+    {
+      "id": 1,
+      "name": "Cem Bülbül",
+      "role": "Kurucu - Proje Yürütücüsü",
+      "education": "Lisans",
+      "department": "Yönetim",
+      "responsibilities": [
+        "Proje koordinasyonu",
+        "Genel yönetim",
+        "Paydaş yönetimi"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Alperen Helva",
+      "role": "Elektrik-Elektronik Mühendisi",
+      "education": "Yüksek Lisans",
+      "department": "Ar-Ge",
+      "responsibilities": [
+        "Veri işleme",
+        "SoH model geliştirme",
+        "Model optimizasyonu"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Emrullah Günay",
+      "role": "Elektrik-Elektronik Mühendisi",
+      "education": "Lisans",
+      "department": "Ar-Ge",
+      "responsibilities": [
+        "Veri analizi",
+        "Sistem geliştirme",
+        "Sistem testleri"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Görkem Tanır",
+      "role": "Elektrik-Elektronik Mühendisi",
+      "education": "Lisans",
+      "department": "Ar-Ge",
+      "responsibilities": [
+        "Test altyapısı kurulum",
+        "Veri toplama",
+        "Batarya testleri"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "İbrahim Çağdaş",
+      "role": "Makina Mühendisi",
+      "education": "Lisans",
+      "department": "Ar-Ge",
+      "responsibilities": [
+        "Mekanik sistem kurulum",
+        "Geri kazanım sistemi",
+        "Test desteği"
+      ]
+    }
+  ],
+  "risks": [
+    {
+      "id": 1,
+      "title": "Yeterli ve kaliteli batarya verisinin toplanamaması",
+      "probability": "medium",
+      "impact": "high",
+      "mitigation": "Farklı kaynaklardan veri toplanması ve test altyapısının genişletilmesi",
+      "contingency": "Simülasyon verileri ve literatür verileri kullanılarak veri setinin desteklenmesi"
+    },
+    {
+      "id": 2,
+      "title": "Yapay zeka modelinin istenen doğruluğa ulaşamaması",
+      "probability": "medium",
+      "impact": "medium",
+      "mitigation": "Farklı algoritmaların denenmesi ve veri setinin zenginleştirilmesi",
+      "contingency": "Model sadeleştirilerek kural tabanlı hibrit sistem kullanılması"
+    },
+    {
+      "id": 3,
+      "title": "Mekanik geri kazanım sürecinde verim düşüklüğü",
+      "probability": "low",
+      "impact": "medium",
+      "mitigation": "Sistem tasarımının optimize edilmesi ve test süreçlerinin artırılması",
+      "contingency": "Alternatif ayrıştırma yöntemlerinin kullanılması ve süreç iyileştirmeleri yapılması"
+    }
+  ],
+  "measurableTargets": {
+    "sohPredictionAccuracy": 90,
+    "batteryClassificationAccuracy": 85,
+    "recoveryEfficiencyImprovement": 10,
+    "analysisTimePerBattery": 5,
+    "supportedBatteryTypes": 3
+  },
+  "commercializationPlan": {
+    "year1Revenue": 2000000,
+    "year3Revenue": 10000000,
+    "year5Revenue": 25000000,
+    "breakEvenPoint": "2-3 yıl",
+    "revenueModels": [
+      "Yazılım lisans ve abonelik",
+      "Batarya analiz hizmeti",
+      "Black mass satışı"
+    ]
+  },
+  "lastUpdated": "2026-04-19T00:00:00Z",
+  "version": "1.0"
+}

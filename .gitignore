@@ -1,0 +1,53 @@
+# Node modules
+node_modules/
+package-lock.json
+yarn.lock
+
+# Build files
+dist/
+build/
+.cache/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS files
+Thumbs.db
+.DS_Store
+
+# Temporary files
+*.tmp
+*.temp
+
+# OPU Build artifacts
+OPU/Objects/
+OPU/Listings/
+OPU/DebugConfig/
+OPU/RTE/
+OPU/*.BAT
+OPU/JLinkLog.txt
+OPU/JLinkSettings.ini
+OPU/*.uvguix.*
+OPU/*.uvoptx
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+venv/

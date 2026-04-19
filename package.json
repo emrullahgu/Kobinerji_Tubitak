@@ -1,0 +1,31 @@
+{
+  "name": "tubitak-7260634-dashboard",
+  "version": "1.0.0",
+  "description": "Elektrikli Araç Bataryaları İçin Yapay Zeka Destekli Yeşil Dönüşüm ve Analiz Sistemi - Proje Yönetimi Dashboard",
+  "main": "index.html",
+  "scripts": {
+    "start": "open index.html",
+    "build": "echo 'Project is ready for deployment'",
+    "test": "echo 'No tests configured'",
+    "serve": "python -m http.server 8000"
+  },
+  "keywords": [
+    "tubitak",
+    "project-management",
+    "dashboard",
+    "battery",
+    "recycling",
+    "artificial-intelligence"
+  ],
+  "author": "KOBİNERJİ A.Ş.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/tubitak-7260634"
+  },
+  "homepage": "https://tubitak-7260634.netlify.app",
+  "devDependencies": {
+    "prettier": "^2.8.0",
+    "eslint": "^8.0.0"
+  }
+}

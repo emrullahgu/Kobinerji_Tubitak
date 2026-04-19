@@ -1,0 +1,136 @@
+# TUBITAK 7260634 - Project Configuration
+# Python Kodu İçin Konfigürasyon Dosyası
+
+project:
+  name: "TUBITAK 7260634 - AI-Driven Battery Health Analysis"
+  version: "1.0.0"
+  description: "Elektrikli Araç Bataryaları İçin Yapay Zeka Destekli Yeşil Dönüşüm"
+
+data:
+  # Veri dosya yolları
+  raw_data_path: "data/raw"
+  processed_data_path: "data/processed"
+  models_path: "models"
+  
+  # Veri parametreleri
+  test_train_ratio: 0.8
+  validation_ratio: 0.1
+  random_seed: 42
+  
+  # Batarya parametreleri
+  nominal_voltage: 3.7  # V (Nominal cell voltage)
+  min_voltage: 2.5     # V (Minimum cutoff)
+  max_voltage: 4.2     # V (Maximum cutoff)
+  nominal_capacity: 2500  # mAh
+
+features:
+  # Özellik çıkarımı parametreleri
+  window_size: 100  # Time-series window size
+  stride: 10        # Window stride
+  
+  # Normalizasyon
+  normalize_method: "standardize"  # standardize, minmax
+  
+  # Feature types
+  statistical_features: true
+  temporal_features: true
+  spectral_features: false
+  impedance_features: true
+
+model:
+  # Model parametreleri
+  type: "random_forest"  # random_forest, xgboost, neural_network
+  
+  # Random Forest
+  rf_n_estimators: 100
+  rf_max_depth: 20
+  rf_min_samples_split: 5
+  
+  # XGBoost (optional)
+  xgb_n_estimators: 100
+  xgb_max_depth: 6
+  xgb_learning_rate: 0.1
+  
+  # Neural Network (optional)
+  nn_layers: [128, 64, 32]  # Hidden layer sizes
+  nn_dropout: 0.3
+  nn_epochs: 100
+  nn_batch_size: 32
+  
+  # Model targets
+  target_accuracy: 0.90  # 90% accuracy
+  target_r2: 0.85       # R² score
+
+training:
+  batch_size: 32
+  epochs: 100
+  learning_rate: 0.001
+  patience: 10  # Early stopping
+  validation_split: 0.2
+
+bms:
+  # Battery Management System parameters
+  max_cell_voltage: 4.2    # V
+  min_cell_voltage: 2.5    # V
+  max_charge_current: 5.0  # A
+  max_discharge_current: 10.0  # A
+  
+  # Balancing
+  balancing_enabled: true
+  balancing_threshold: 0.05  # 50 mV
+  balancing_current: 0.5     # A
+  
+  # Monitoring
+  monitor_interval: 1.0  # seconds
+  alert_on_imbalance: true
+  alert_threshold: 0.1   # 100 mV
+  
+  # Temperature
+  max_temperature: 60    # °C
+  min_temperature: 0     # °C
+  shutdown_temperature: 80  # °C
+  
+  # Safety
+  over_voltage_protection: true
+  under_voltage_protection: true
+  over_current_protection: true
+  over_temperature_protection: true
+
+logging:
+  level: "INFO"  # DEBUG, INFO, WARNING, ERROR, CRITICAL
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "logs/project.log"
+  max_file_size: 10485760  # 10 MB
+  backup_count: 5
+
+analysis:
+  # SoH Estimation
+  soh_min_threshold: 0.80  # 80% is minimum acceptable
+  soh_critical_threshold: 0.70  # Critical, needs recycling
+  
+  # Classification
+  reuse_threshold: 0.85   # >85% can be reused
+  recycle_threshold: 0.70  # <70% must be recycled
+  
+  # Performance metrics
+  max_analysis_time: 5.0  # seconds per battery
+  min_data_points: 50
+
+output:
+  # Output paths
+  reports_path: "reports"
+  plots_path: "plots"
+  export_format: ["csv", "json", "excel"]
+  
+  # Report settings
+  generate_detailed_report: true
+  include_plots: true
+  include_recommendations: true
+
+api:
+  # API Server settings
+  host: "0.0.0.0"
+  port: 5000
+  debug: false
+  cors_enabled: true
+

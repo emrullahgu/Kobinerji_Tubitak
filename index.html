@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TÜBİTAK 7260634 — Proje Yönetim Paneli</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="app">
+
+<!-- ═══════════════════ HEADER ═══════════════════ -->
+<header class="header">
+    <div class="header-inner">
+        <div class="header-brand">
+            <div class="logo-area">
+                <img src="firmalogo.png" alt="KOBİNERJİ" class="logo-img">
+                <div>
+                    <h1>TÜBİTAK 1507 — Proje No: 7260634</h1>
+                    <p class="subtitle">Elektrikli Araç Bataryaları İçin Yapay Zekâ Destekli Yeşil Dönüşüm ve Analiz Sistemi</p>
+                </div>
+            </div>
+            <div class="header-badges">
+                <span class="badge badge-active">● AKTİF PROJE</span>
+                <span class="badge badge-phase">İP-1 DEVAM EDİYOR</span>
+                <span class="badge badge-date" id="headerDate">19 Nisan 2026</span>
+            </div>
+        </div>
+        <div class="header-company">
+            <span>KOBİNERJİ MÜHENDİSLİK VE ENERJİ VERİMLİLİĞİ DANIŞMANLIK A.Ş.</span>
+        </div>
+    </div>
+</header>
+
+<!-- ═══════════════════ NAVIGATION ═══════════════════ -->
+<nav class="nav">
+    <div class="nav-inner">
+        <button class="nav-btn active" data-section="overview"><span class="nav-icon">📊</span> Genel Bakış</button>
+        <button class="nav-btn" data-section="progress"><span class="nav-icon">🚀</span> Ne Yaptık?</button>
+        <button class="nav-btn" data-section="roadmap"><span class="nav-icon">🗺️</span> Ne Yapacağız?</button>
+        <button class="nav-btn" data-section="workpackages"><span class="nav-icon">📦</span> İş Paketleri</button>
+        <button class="nav-btn" data-section="milestones"><span class="nav-icon">🎯</span> Kilometre Taşları</button>
+        <button class="nav-btn" data-section="budget"><span class="nav-icon">💰</span> Bütçe</button>
+        <button class="nav-btn" data-section="team"><span class="nav-icon">👥</span> Ekip</button>
+        <button class="nav-btn" data-section="technical"><span class="nav-icon">💻</span> Teknik Altyapı</button>
+    </div>
+</nav>
+
+<!-- ═══════════════════ MAIN CONTENT ═══════════════════ -->
+<main class="main">
+
+<!-- ====== GENEL BAKIŞ ====== -->
+<section id="overview" class="section active">
+    <div class="section-title">
+        <h2>Proje Genel Bakış</h2>
+        <p>Projenin mevcut durumu, temel göstergeler ve özet bilgiler</p>
+    </div>
+
+    <div class="kpi-grid">
+        <div class="kpi-card kpi-progress">
+            <div class="kpi-top"><span class="kpi-label">GENEL İLERLEME</span><span class="kpi-icon">📈</span></div>
+            <div class="kpi-value">%9.3</div>
+            <div class="kpi-bar"><div class="kpi-bar-fill" style="width: 9.3%;"></div></div>
+            <div class="kpi-sub">İP1: %65 tamamlandı · 7 iş paketinden 1. aşamadayız</div>
+        </div>
+        <div class="kpi-card kpi-time">
+            <div class="kpi-top"><span class="kpi-label">PROJE TAKVİMİ</span><span class="kpi-icon">📅</span></div>
+            <div class="kpi-value">18 Ay</div>
+            <div class="kpi-bar"><div class="kpi-bar-fill kpi-bar-blue" style="width: 9%;"></div></div>
+            <div class="kpi-sub">01.03.2026 → 01.09.2027 · <strong>49 gün geçti</strong></div>
+        </div>
+        <div class="kpi-card kpi-budget">
+            <div class="kpi-top"><span class="kpi-label">BÜTÇE KULLANIMI</span><span class="kpi-icon">💰</span></div>
+            <div class="kpi-value">%34.9</div>
+            <div class="kpi-bar"><div class="kpi-bar-fill kpi-bar-gold" style="width: 34.9%;"></div></div>
+            <div class="kpi-sub">1.220.000 / 3.497.730 TL · Kalan: 2.277.730 TL</div>
+        </div>
+        <div class="kpi-card kpi-team">
+            <div class="kpi-top"><span class="kpi-label">EKİP</span><span class="kpi-icon">👥</span></div>
+            <div class="kpi-value">5 Kişi</div>
+            <div class="kpi-sub">1 Proje Yürütücü · 3 Elektrik-Elektronik Müh. · 1 Makina Müh.</div>
+        </div>
+    </div>
+
+    <!-- Proje Kimliği -->
+    <div class="card">
+        <h3>📋 Proje Kimliği</h3>
+        <div class="info-grid">
+            <div class="info-item"><span class="info-label">Proje Numarası</span><span class="info-value">7260634</span></div>
+            <div class="info-item"><span class="info-label">Program</span><span class="info-value">TÜBİTAK 1507 — KOBİ Ar-Ge Başlangıç Destek</span></div>
+            <div class="info-item"><span class="info-label">Firma</span><span class="info-value">KOBİNERJİ MÜH. VE ENERJİ VERİMLİLİĞİ DANIŞMANLIK A.Ş.</span></div>
+            <div class="info-item"><span class="info-label">Başlangıç THS</span><span class="info-value highlight-blue">THS-3</span></div>
+            <div class="info-item"><span class="info-label">Hedef THS</span><span class="info-value highlight-green">THS-7</span></div>
+            <div class="info-item"><span class="info-label">Toplam İş Paketi</span><span class="info-value">7 iş paketi · 7 kilometre taşı</span></div>
+            <div class="info-item"><span class="info-label">Mevcut Aşama</span><span class="info-value highlight-active">İP-1: Batarya Veri Toplama (%65)</span></div>
+            <div class="info-item"><span class="info-label">Bitiş Tarihi</span><span class="info-value">01 Eylül 2027</span></div>
+        </div>
+    </div>
+
+    <!-- Hedefler -->
+    <div class="card">
+        <h3>🎯 Proje Hedefleri ve Başarı Ölçütleri</h3>
+        <div class="targets-grid">
+            <div class="target-item"><div class="target-icon">🔬</div><div class="target-value">≥ %90</div><div class="target-label">SoH Tahmin Doğruluğu</div><div class="target-status">İP-3'te doğrulanacak</div></div>
+            <div class="target-item"><div class="target-icon">🏷️</div><div class="target-value">≥ %85</div><div class="target-label">Sınıflandırma Doğruluğu</div><div class="target-status">İP-4'te doğrulanacak</div></div>
+            <div class="target-item"><div class="target-icon">♻️</div><div class="target-value">≥ %10</div><div class="target-label">Geri Dönüşüm Verim Artışı</div><div class="target-status">İP-5'te doğrulanacak</div></div>
+            <div class="target-item"><div class="target-icon">🔋</div><div class="target-value">≥ 3 Tip</div><div class="target-label">Desteklenen Batarya Tipi</div><div class="target-status">NMC, LFP, NCA</div></div>
+            <div class="target-item"><div class="target-icon">⏱️</div><div class="target-value">≤ 5 dk</div><div class="target-label">Test Süresi / Batarya</div><div class="target-status">İP-3'te doğrulanacak</div></div>
+            <div class="target-item"><div class="target-icon">📊</div><div class="target-value">THS 3→7</div><div class="target-label">Teknoloji Hazırlık Seviyesi</div><div class="target-status">18 ay boyunca</div></div>
+        </div>
+    </div>
+
+    <!-- Risk -->
+    <div class="card">
+        <h3>⚠️ Güncel Risk Durumu</h3>
+        <div class="risk-table">
+            <div class="risk-row risk-medium">
+                <div class="risk-indicator">ORTA</div>
+                <div class="risk-detail"><strong>Veri Kalitesi Riski</strong><p>Yeterli ve kaliteli batarya verisinin toplanamaması</p><span class="risk-mitigation">Önlem: Çoklu sensör, kalite kontrol pipeline, simülasyon destekli veri seti</span></div>
+                <div class="risk-badge">TETİKLENMEDİ</div>
+            </div>
+            <div class="risk-row risk-medium">
+                <div class="risk-indicator">ORTA</div>
+                <div class="risk-detail"><strong>Model Doğruluğu Riski</strong><p>AI modelinin istenen %90 doğruluğa ulaşamaması</p><span class="risk-mitigation">Önlem: 4 farklı algoritma, ensemble yöntemler, hibrit kural tabanlı yedek</span></div>
+                <div class="risk-badge">TETİKLENMEDİ</div>
+            </div>
+            <div class="risk-row risk-low">
+                <div class="risk-indicator">DÜŞÜK</div>
+                <div class="risk-detail"><strong>Ekipman Tedarik Riski</strong><p>Mekanik geri kazanım ekipmanlarının tedarik gecikmesi</p><span class="risk-mitigation">Önlem: Erken sipariş, alternatif tedarikçi listesi hazır</span></div>
+                <div class="risk-badge">TETİKLENMEDİ</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ====== NE YAPTIK? ====== -->
+<section id="progress" class="section">
+    <div class="section-title">
+        <h2>Şu Ana Kadar Neler Yaptık?</h2>
+        <p>Proje başlangıcından bugüne tamamlanan tüm çalışmalar (01.03.2026 – 19.04.2026)</p>
+    </div>
+
+    <div class="highlight-banner">
+        <div class="highlight-left">
+            <span class="highlight-badge">49 GÜNDE YAPILAN İŞ</span>
+            <h3>İP-1 Aşamasında %65 İlerleme Sağlandı</h3>
+            <p>Proje takviminin önünde ilerliyoruz. VGX BMS gömülü yazılımı geliştirildi (STM32 + MPS entegreler), 7 modüllük Python backend tamamlandı, 13 API endpoint canlıya alındı, 34 test geçti, PCB şematik tasarımı bitti. Web dashboard Netlify'da yayında.</p>
+        </div>
+        <div class="highlight-right">
+            <div class="highlight-stat"><span class="stat-number">43</span><span class="stat-label">Gün Kaldı (İP-1)</span></div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>✅ Tamamlanan Çalışmalar — Detaylı Döküm</h3>
+        <div class="completed-grid">
+            <div class="completed-category">
+                <div class="cat-header cat-hardware"><span class="cat-icon">🔧</span><h4>Donanım ve Test Altyapısı</h4></div>
+                <ul class="check-list">
+                    <li class="done">Şarj-deşarj test cihazı kurulumu ve kalibrasyonu</li>
+                    <li class="done">DAQ (Veri Toplama) sistemi entegrasyonu</li>
+                    <li class="done">Sıcaklık sensörleri ve termal izleme kurulumu</li>
+                    <li class="done">Osiloskop ve ölçüm cihazları hazırlandı</li>
+                    <li class="done">Test masası / test standı düzenlendi</li>
+                    <li class="done">Batarya hücre setleri (NMC, LFP, NCA) tedarik edildi</li>
+                    <li class="done">İlk şarj-deşarj döngüsü testleri başlatıldı</li>
+                    <li class="done">Laboratuvar güvenlik protokolleri oluşturuldu</li>
+                </ul>
+            </div>
+            <div class="completed-category">
+                <div class="cat-header cat-software"><span class="cat-icon">💻</span><h4>Yazılım Geliştirme (3000+ Satır Kod)</h4></div>
+                <ul class="check-list">
+                    <li class="done">Python backend altyapısı (7 ana modül) geliştirildi</li>
+                    <li class="done">Veri işleme modülü (battery_data.py) — okuma, dönüşüm, temizleme</li>
+                    <li class="done">Öznitelik çıkarma modülü (feature_extraction.py) — istatistiksel + frekans özellikleri</li>
+                    <li class="done">SoH tahmin modeli mimarisi (soh_model.py) — Random Forest tabanlı</li>
+                    <li class="done">BMS kontrolcüsü (bms_controller.py) — durum izleme, alarm yönetimi</li>
+                    <li class="done">REST API (13 endpoint, Flask) — CRUD + analiz + raporlama</li>
+                    <li class="done">34 adet birim test yazıldı ve tamamı başarıyla geçti</li>
+                    <li class="done">Otomatik raporlama sistemi (progress_report.py) geliştirildi</li>
+                    <li class="done">Veri analiz araçları (data_analysis_tools.py) oluşturuldu</li>
+                    <li class="done">Uçtan uca demo senaryosu (demo_end_to_end.py) hazırlandı</li>
+                </ul>
+            </div>
+            <div class="completed-category">
+                <div class="cat-header cat-web"><span class="cat-icon">🌐</span><h4>Web Dashboard ve Canlı İzleme</h4></div>
+                <ul class="check-list">
+                    <li class="done">Profesyonel proje yönetim dashboard'u geliştirildi</li>
+                    <li class="done">Netlify üzerinde canlı yayına alındı (https üzerinden erişilebilir)</li>
+                    <li class="done">8 ana sekme: Genel Bakış, İlerleme, Yol Haritası, İş Paketleri, Kilometre Taşları, Bütçe, Ekip, Teknik</li>
+                    <li class="done">Responsive tasarım — mobil, tablet, masaüstü uyumlu</li>
+                    <li class="done">Veri dışa aktarma (JSON/CSV) fonksiyonları</li>
+                    <li class="done">Yazdırma desteği (print CSS) eklendi</li>
+                    <li class="done">Klavye kısayolları (Alt+1-8) ile hızlı gezinme</li>
+                </ul>
+            </div>
+            <div class="completed-category">
+                <div class="cat-header cat-embedded"><span class="cat-icon">🔌</span><h4>VGX BMS Gömülü Sistem Firmware</h4></div>
+                <ul class="check-list">
+                    <li class="done">STM32F030C8 tabanlı BMS firmware geliştirildi (C, Keil uVision 5)</li>
+                    <li class="done">7-16S Li-ion hücre voltaj/akım izleme ve OV/UV/Dead koruması</li>
+                    <li class="done">MP2797/MP2791 BMS IC I2C entegrasyonu</li>
+                    <li class="done">MPF4279x Fuel Gauge — SoC, SoH, Coulomb sayacı entegrasyonu</li>
+                    <li class="done">13 farklı arıza tipi algılama ve otomatik kurtarma</li>
+                    <li class="done">Pasif hücre dengeleme (Auto-Balance) algoritması</li>
+                    <li class="done">Şarj/deşarj MOSFET FET kontrolü ve pre-charge desteği</li>
+                    <li class="done">NTC sıcaklık izleme, ısıtıcı/fan PWM kontrolü</li>
+                    <li class="done">I2C / UART haberleşme, CRC doğrulama, register map protokolü</li>
+                    <li class="done">Flash üzerinden parametre kayıt ve saha güncellemesi</li>
+                    <li class="done">Interrupt-driven gerçek zamanlı mimari (RTC, Timer, EXTI)</li>
+                    <li class="done">PCB tasarımı ve şematik dokümanı tamamlandı</li>
+                </ul>
+            </div>
+            <div class="completed-category">
+                <div class="cat-header cat-docs"><span class="cat-icon">📄</span><h4>Dokümantasyon (10 Doküman)</h4></div>
+                <ul class="check-list">
+                    <li class="done">01 — Teknik Dokümantasyon</li>
+                    <li class="done">02 — API Referans Dokümanı (13 endpoint detaylı)</li>
+                    <li class="done">03 — Kullanıcı El Kitabı</li>
+                    <li class="done">04 — Sistem Mimarisi Dokümanı</li>
+                    <li class="done">05 — Kurulum ve Dağıtım Rehberi</li>
+                    <li class="done">06 — Test Raporu (34 test sonucu)</li>
+                    <li class="done">07 — İş Paketi Detaylandırması</li>
+                    <li class="done">08 — Kalite Kontrol Planı</li>
+                    <li class="done">09 — Hakem Ziyareti Durum Raporu</li>
+                    <li class="done">10 — VGX BMS Firmware Datasheet</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mimari -->
+    <div class="card">
+        <h3>🏗️ Geliştirilen Yazılım Mimarisi</h3>
+        <div class="architecture-diagram">
+            <div class="arch-layer arch-layer-top"><div class="arch-box arch-web">🌐 Web Dashboard (HTML5 / CSS3 / JS)<br><small>Netlify'da Canlı</small></div></div>
+            <div class="arch-arrow">▼</div>
+            <div class="arch-layer"><div class="arch-box arch-api">🔌 Flask REST API — 13 Endpoint<br><small>battery_api.py</small></div></div>
+            <div class="arch-arrow">▼</div>
+            <div class="arch-layer arch-layer-mid">
+                <div class="arch-box arch-module">📊 Veri İşleme<br><small>battery_data.py</small></div>
+                <div class="arch-box arch-module">🔬 Öznitelik Çıkarma<br><small>feature_extraction.py</small></div>
+                <div class="arch-box arch-module">🧠 SoH Model<br><small>soh_model.py</small></div>
+                <div class="arch-box arch-module">🔋 BMS Kontrolcü<br><small>bms_controller.py</small></div>
+            </div>
+            <div class="arch-arrow">▼</div>
+            <div class="arch-layer"><div class="arch-box arch-base">📈 Raporlama &amp; Analiz Araçları<br><small>progress_report.py · data_analysis_tools.py</small></div></div>
+            <div class="arch-arrow">▼</div>
+            <div class="arch-layer"><div class="arch-box arch-infra">⚙️ Python 3.8+ · NumPy · Pandas · scikit-learn · Flask<br><small>34 birim test ile doğrulanmış</small></div></div>
+        </div>
+    </div>
+
+    <!-- VGX BMS Firmware Spec -->
+    <div class="card">
+        <h3>🔋 VGX BMS Firmware — Gömülü Sistem Teknik Özeti</h3>
+        <div class="bms-banner">
+            <div class="bms-banner-left">
+                <span class="bms-chip">STM32F030C8</span>
+                <span class="bms-chip bms-chip-green">ARM Cortex-M0 · 48 MHz</span>
+                <span class="bms-chip bms-chip-orange">Keil uVision 5 · J-Link</span>
+            </div>
+            <div class="bms-banner-right">
+                <span class="bms-chip bms-chip-purple">7-16S Li-ion</span>
+            </div>
+        </div>
+        <div class="bms-specs">
+            <div class="bms-spec-card">
+                <div class="bms-spec-icon">⚡</div>
+                <h4>Hücre İzleme &amp; Koruma</h4>
+                <ul>
+                    <li>OV: 3.65 V · UV: 2.0 V · Dead: 1.8 V</li>
+                    <li>Aşırı deşarj: 45/52.5 A</li>
+                    <li>Aşırı şarj: 15 A · Kısa devre: 36 A</li>
+                </ul>
+            </div>
+            <div class="bms-spec-card">
+                <div class="bms-spec-icon">🌡️</div>
+                <h4>Sıcaklık Yönetimi</h4>
+                <ul>
+                    <li>NTC sensör izleme (batarya + PCB)</li>
+                    <li>Deşarj: -18°C – 55°C</li>
+                    <li>Şarj: 2°C – 43°C</li>
+                    <li>Isıtıcı &amp; fan PWM kontrolü</li>
+                </ul>
+            </div>
+            <div class="bms-spec-card">
+                <div class="bms-spec-icon">📊</div>
+                <h4>Fuel Gauge (MPF4279x)</h4>
+                <ul>
+                    <li>SoC / SoH / Kalan süre tahmini</li>
+                    <li>Coulomb sayacı</li>
+                    <li>Öğrenme algoritmaları</li>
+                </ul>
+            </div>
+            <div class="bms-spec-card">
+                <div class="bms-spec-icon">🔧</div>
+                <h4>Entegrasyon &amp; Haberleşme</h4>
+                <ul>
+                    <li>MP2797 / MP2791 BMS IC</li>
+                    <li>I2C + UART + CRC doğrulama</li>
+                    <li>MPS EVKT uyumlu register map</li>
+                    <li>Flash parametre kayıt &amp; güncelleme</li>
+                </ul>
+            </div>
+            <div class="bms-spec-card">
+                <div class="bms-spec-icon">🛡️</div>
+                <h4>Koruma &amp; Güvenlik</h4>
+                <ul>
+                    <li>13 farklı arıza tipi algılama</li>
+                    <li>Otomatik kurtarma mekanizması</li>
+                    <li>Yapılandırılabilir arıza maskeleri</li>
+                    <li>Donanımsal watchdog (IWDG)</li>
+                </ul>
+            </div>
+            <div class="bms-spec-card">
+                <div class="bms-spec-icon">🔋</div>
+                <h4>FET &amp; Dengeleme</h4>
+                <ul>
+                    <li>Şarj/deşarj MOSFET yönetimi</li>
+                    <li>Pre-charge desteği</li>
+                    <li>Otomatik pasif dengeleme</li>
+                    <li>Stand-by düşük güç modu</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="stats-row">
+        <div class="stat-card"><div class="stat-big">7</div><div class="stat-text">Python Modül</div></div>
+        <div class="stat-card"><div class="stat-big">13</div><div class="stat-text">API Endpoint</div></div>
+        <div class="stat-card"><div class="stat-big">34</div><div class="stat-text">Birim Test</div></div>
+        <div class="stat-card"><div class="stat-big">5000+</div><div class="stat-text">Satır Kod</div></div>
+        <div class="stat-card"><div class="stat-big">10</div><div class="stat-text">Doküman</div></div>
+        <div class="stat-card"><div class="stat-big">1</div><div class="stat-text">BMS Firmware</div></div>
+        <div class="stat-card"><div class="stat-big">1</div><div class="stat-text">PCB Tasarım</div></div>
+        <div class="stat-card"><div class="stat-big">13</div><div class="stat-text">Arıza Koruması</div></div>
+        <div class="stat-card"><div class="stat-big">3</div><div class="stat-text">Batarya Tipi</div></div>
+        <div class="stat-card"><div class="stat-big">1</div><div class="stat-text">Canlı Dashboard</div></div>
+    </div>
+</section>
+
+<!-- ====== NE YAPACAĞIZ? ====== -->
+<section id="roadmap" class="section">
+    <div class="section-title">
+        <h2>Bundan Sonra Ne Yapacağız?</h2>
+        <p>Kalan 6 iş paketi, proje yol haritası ve nihai çıktı hedeflerimiz</p>
+    </div>
+
+    <div class="highlight-banner" style="background: linear-gradient(135deg, #1e3a5f, #0f4c75, #1e3a5f);">
+        <div class="highlight-left">
+            <span class="highlight-badge" style="background: rgba(245,158,11,0.9);">YOL HARİTASI</span>
+            <h3>6 İş Paketi · 14 Ay · THS 3→7 Hedefi</h3>
+            <p>İP-1 tamamlandıktan sonra sırasıyla veri ön işleme, yapay zekâ modeli geliştirme, karar destek sistemi, mekanik geri kazanım, sistem entegrasyonu ve nihai optimizasyon aşamalarına geçilecektir.</p>
+        </div>
+        <div class="highlight-right">
+            <div class="highlight-stat"><span class="stat-number">6</span><span class="stat-label">Kalan İş Paketi</span></div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>📅 Proje Yol Haritası</h3>
+        <div class="gantt-chart">
+            <div class="gantt-header">
+                <div class="gantt-label-col"></div>
+                <div class="gantt-months">
+                    <span>MAR 26</span><span>HAZ 26</span><span>EYL 26</span><span>ARA 26</span><span>MAR 27</span><span>HAZ 27</span><span>EYL 27</span>
+                </div>
+            </div>
+            <div class="gantt-row"><div class="gantt-label">İP-1 Veri Toplama</div><div class="gantt-bar-area"><div class="gantt-bar gantt-active" style="left:0%;width:16.67%;"><div class="gantt-fill" style="width:65%;"></div><span>%65</span></div></div></div>
+            <div class="gantt-row"><div class="gantt-label">İP-2 Veri Ön İşleme</div><div class="gantt-bar-area"><div class="gantt-bar gantt-upcoming" style="left:16.67%;width:16.67%;"><span>Haz-Eyl 26</span></div></div></div>
+            <div class="gantt-row"><div class="gantt-label">İP-3 AI SoH Modeli</div><div class="gantt-bar-area"><div class="gantt-bar gantt-future" style="left:33.33%;width:22.22%;"><span>Eyl 26 - Oca 27</span></div></div></div>
+            <div class="gantt-row"><div class="gantt-label">İP-4 Karar Destek</div><div class="gantt-bar-area"><div class="gantt-bar gantt-future" style="left:55.56%;width:11.11%;"><span>Oca-Mar 27</span></div></div></div>
+            <div class="gantt-row"><div class="gantt-label">İP-5 Mek. Geri Kazanım</div><div class="gantt-bar-area"><div class="gantt-bar gantt-future" style="left:66.67%;width:11.11%;"><span>Mar-May 27</span></div></div></div>
+            <div class="gantt-row"><div class="gantt-label">İP-6 Sistem Entegrasyon</div><div class="gantt-bar-area"><div class="gantt-bar gantt-future" style="left:77.78%;width:11.11%;"><span>May-Tem 27</span></div></div></div>
+            <div class="gantt-row"><div class="gantt-label">İP-7 Nihai Optimizasyon</div><div class="gantt-bar-area"><div class="gantt-bar gantt-future" style="left:88.89%;width:11.11%;"><span>Tem-Eyl 27</span></div></div></div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>📌 Sonraki 3 Ayda Yapılacaklar — Detaylı Plan</h3>
+        <div class="next-steps">
+            <div class="step-item step-immediate">
+                <div class="step-timeline"><div class="step-dot"></div><div class="step-line"></div></div>
+                <div class="step-content">
+                    <span class="step-date">Nisan – Haziran 2026</span>
+                    <h4>İP-1 Tamamlama — Batarya Veri Toplama</h4>
+                    <ul><li>Kalan %35'lik kısım: İlk veri setinin finalize edilmesi</li><li>En az 50 batarya hücresinin farklı koşullarda test edilmesi</li><li>CC-CV şarj ve sabit akım deşarj döngülerinin tamamlanması</li><li>Veri kalitesinin istatistiksel doğrulaması</li><li>İP-1 sonuç raporu ve KT-1 teslimi</li></ul>
+                </div>
+            </div>
+            <div class="step-item step-next">
+                <div class="step-timeline"><div class="step-dot"></div><div class="step-line"></div></div>
+                <div class="step-content">
+                    <span class="step-date">Haziran – Eylül 2026</span>
+                    <h4>İP-2: Veri Ön İşleme ve Özellik Çıkarımı</h4>
+                    <ul><li>Ham verilerin temizlenmesi ve normalizasyonu</li><li>Eksik/hatalı veriler için interpolasyon ve imputation</li><li>100+ istatistiksel ve frekans bölgesi özelliği çıkarımı</li><li>Eğitim-test-doğrulama veri seti ayrımı (%70-%15-%15)</li><li>Özellik önem sıralaması (feature importance) analizi</li></ul>
+                </div>
+            </div>
+            <div class="step-item step-later">
+                <div class="step-timeline"><div class="step-dot"></div></div>
+                <div class="step-content">
+                    <span class="step-date">Eylül 2026 – Ocak 2027</span>
+                    <h4>İP-3: Yapay Zekâ SoH Tahmin Modeli</h4>
+                    <ul><li>4 farklı algoritma ile prototip: Random Forest, GBM, LSTM, CNN-LSTM</li><li>Hiperparametre optimizasyonu (Grid Search + Bayesian)</li><li>Ensemble yöntemlerle doğruluğu artırma</li><li>Hedef: ≥%90 SoH doğruluğu, ≤5 dk test süresi</li><li>Model açıklanabilirliği (SHAP analizi)</li></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>📋 Sonraki İş Paketleri Özeti (2027)</h3>
+        <div class="next-steps">
+            <div class="step-item step-later">
+                <div class="step-timeline"><div class="step-dot"></div><div class="step-line"></div></div>
+                <div class="step-content">
+                    <span class="step-date">Ocak – Mart 2027</span>
+                    <h4>İP-4: Otomatik Karar Destek Sistemi</h4>
+                    <ul><li>İkinci ömür vs. geri dönüşüm sınıflandırması (≥%85 doğruluk)</li><li>Karar ağacı ve kural tabanlı hibrit sistem</li><li>3 batarya tipine (NMC, LFP, NCA) uyumlu çalışma</li></ul>
+                </div>
+            </div>
+            <div class="step-item step-later">
+                <div class="step-timeline"><div class="step-dot"></div><div class="step-line"></div></div>
+                <div class="step-content">
+                    <span class="step-date">Mart – Mayıs 2027</span>
+                    <h4>İP-5: Mekanik Geri Kazanım Sistemi</h4>
+                    <ul><li>Batarya parçalama (shredding) mekanizması kurulumu</li><li>Fiziksel ayrıştırma: plastik, bakır, alüminyum separasyonu</li><li>Kara kütle (black mass) üretimi, ≥%10 verim artışı</li></ul>
+                </div>
+            </div>
+            <div class="step-item step-later">
+                <div class="step-timeline"><div class="step-dot"></div><div class="step-line"></div></div>
+                <div class="step-content">
+                    <span class="step-date">Mayıs – Temmuz 2027</span>
+                    <h4>İP-6: Sistem Entegrasyonu</h4>
+                    <ul><li>Tüm bileşenlerin uçtan uca entegrasyonu</li><li>Farklı batarya tipleri ile entegrasyon testleri</li><li>Performans ve hata oranı analizi (<5% hedef)</li></ul>
+                </div>
+            </div>
+            <div class="step-item step-later">
+                <div class="step-timeline"><div class="step-dot"></div></div>
+                <div class="step-content">
+                    <span class="step-date">Temmuz – Eylül 2027</span>
+                    <h4>İP-7: Nihai Optimizasyon ve Ticarileştirme</h4>
+                    <ul><li>Sistem performans optimizasyonu</li><li>Teknik dokümantasyon ve kullanıcı kılavuzları</li><li>İş modeli ve ticarileştirme planı oluşturma</li><li>Proje çıktılarının sunuma hazır hale getirilmesi</li></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>🏁 Proje Sonunda Elde Edilecek Çıktılar</h3>
+        <div class="outputs-grid">
+            <div class="output-item"><div class="output-icon">🧠</div><h4>AI SoH Tahmin Sistemi</h4><p>≤5 dk'da ≥%90 doğrulukla batarya sağlık tahmini</p></div>
+            <div class="output-item"><div class="output-icon">🏷️</div><h4>Otomatik Sınıflandırma</h4><p>İkinci ömür / geri dönüşüm kararı ≥%85 doğruluk</p></div>
+            <div class="output-item"><div class="output-icon">♻️</div><h4>Mekanik Geri Kazanım</h4><p>Parçalama ve ayrıştırma ile ≥%10 verim artışı</p></div>
+            <div class="output-item"><div class="output-icon">🖥️</div><h4>Entegre Platform</h4><p>Test → Analiz → Karar → Geri Kazanım tek çatı altında</p></div>
+        </div>
+    </div>
+</section>
+
+<!-- ====== İŞ PAKETLERİ ====== -->
+<section id="workpackages" class="section">
+    <div class="section-title">
+        <h2>İş Paketleri Detayı</h2>
+        <p>7 iş paketinin detaylı faaliyetleri, takvimi ve ilerleme durumu</p>
+    </div>
+    <div class="wp-grid" id="wpGrid"></div>
+</section>
+
+<!-- ====== KİLOMETRE TAŞLARI ====== -->
+<section id="milestones" class="section">
+    <div class="section-title">
+        <h2>Kilometre Taşları</h2>
+        <p>Projenin 7 kritik teslim noktası ve başarı kriterleri</p>
+    </div>
+    <div class="milestones-grid" id="milestonesGrid"></div>
+</section>
+
+<!-- ====== BÜTÇE ====== -->
+<section id="budget" class="section">
+    <div class="section-title">
+        <h2>Bütçe Yönetimi</h2>
+        <p>Kaynak dağılımı, harcama takibi ve dönemsel bütçe analizi</p>
+    </div>
+
+    <div class="budget-kpis">
+        <div class="budget-kpi"><span class="bk-label">TOPLAM BÜTÇE</span><span class="bk-value">3.497.730 TL</span></div>
+        <div class="budget-kpi bk-spent"><span class="bk-label">HARCANAN</span><span class="bk-value">1.220.000 TL</span></div>
+        <div class="budget-kpi bk-remaining"><span class="bk-label">KALAN</span><span class="bk-value">2.277.730 TL</span></div>
+        <div class="budget-kpi bk-percent"><span class="bk-label">HARCAMA ORANI</span><span class="bk-value">%34.9</span></div>
+    </div>
+
+    <div class="card">
+        <h3>📊 Kalem Bazlı Bütçe Dağılımı</h3>
+        <div class="budget-bars">
+            <div class="bb-row"><span class="bb-label">Personel Giderleri</span><div class="bb-bar-wrap"><div class="bb-bar" style="width:56.69%;"><span>%56.69</span></div></div><span class="bb-amount">1.982.730 TL</span></div>
+            <div class="bb-row"><span class="bb-label">Alet/Teçhizat/Yazılım</span><div class="bb-bar-wrap"><div class="bb-bar bb-orange" style="width:36.02%;"><span>%36.02</span></div></div><span class="bb-amount">1.260.000 TL</span></div>
+            <div class="bb-row"><span class="bb-label">Malzeme Alımları</span><div class="bb-bar-wrap"><div class="bb-bar bb-purple" style="width:4.43%;"><span>%4.43</span></div></div><span class="bb-amount">155.000 TL</span></div>
+            <div class="bb-row"><span class="bb-label">Seyahat Giderleri</span><div class="bb-bar-wrap"><div class="bb-bar bb-teal" style="width:2.86%;"><span>%2.86</span></div></div><span class="bb-amount">100.000 TL</span></div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>📆 Dönemsel Harcama Takibi</h3>
+        <table class="data-table">
+            <thead><tr><th>Dönem</th><th>Tarih Aralığı</th><th>Planlanan</th><th>Harcanan</th><th>Durum</th></tr></thead>
+            <tbody>
+                <tr class="row-active"><td><strong>I. Dönem 2026</strong></td><td>01.03 – 30.06.2026</td><td>1.190.000 TL</td><td>1.190.000 TL</td><td><span class="status-pill status-done">✓ Tamamlandı</span></td></tr>
+                <tr><td><strong>II. Dönem 2026</strong></td><td>01.07 – 30.09.2026</td><td>1.240.000 TL</td><td>30.000 TL</td><td><span class="status-pill status-progress">⧗ Devam Ediyor</span></td></tr>
+                <tr><td><strong>I. Dönem 2027</strong></td><td>01.01 – 30.06.2027</td><td>550.000 TL</td><td>0 TL</td><td><span class="status-pill status-pending">○ Beklemede</span></td></tr>
+                <tr><td><strong>II. Dönem 2027</strong></td><td>01.07 – 01.09.2027</td><td>517.730 TL</td><td>0 TL</td><td><span class="status-pill status-pending">○ Beklemede</span></td></tr>
+            </tbody>
+        </table>
+        <div class="budget-note"><strong>💡 Not:</strong> Makine-teçhizat harcaması yüksek görünmektedir çünkü İP-1'de tüm ana ekipmanlar tedarik edilmiştir. Bu planlı bir harcamadır.</div>
+    </div>
+</section>
+
+<!-- ====== EKİP ====== -->
+<section id="team" class="section">
+    <div class="section-title">
+        <h2>Proje Ekibi</h2>
+        <p>5 kişilik uzman ekibimiz ve sorumluluk alanları</p>
+    </div>
+    <div class="team-grid" id="teamGrid"></div>
+
+    <div class="card" style="margin-top:30px;">
+        <h3>📋 Ekip – İş Paketi Atama Matrisi</h3>
+        <table class="data-table">
+            <thead><tr><th>Ekip Üyesi</th><th>İP-1</th><th>İP-2</th><th>İP-3</th><th>İP-4</th><th>İP-5</th><th>İP-6</th><th>İP-7</th></tr></thead>
+            <tbody>
+                <tr><td><strong>Cem Bülbül</strong></td><td>●</td><td>●</td><td>●</td><td>●</td><td>●</td><td>●</td><td>●</td></tr>
+                <tr><td><strong>Alperen Helva</strong></td><td>●</td><td>●</td><td>●</td><td>●</td><td></td><td>●</td><td></td></tr>
+                <tr><td><strong>Emrullah Günay</strong></td><td>●</td><td>●</td><td>●</td><td></td><td></td><td>●</td><td>●</td></tr>
+                <tr><td><strong>Görkem Tanır</strong></td><td>●</td><td>●</td><td></td><td></td><td>●</td><td>●</td><td></td></tr>
+                <tr><td><strong>İbrahim Çağdaş</strong></td><td></td><td></td><td></td><td></td><td>●</td><td>●</td><td>●</td></tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- ====== TEKNİK ALTYAPI ====== -->
+<section id="technical" class="section">
+    <div class="section-title">
+        <h2>Teknik Altyapı</h2>
+        <p>Kullanılan teknolojiler, standartlar ve geliştirme ortamı</p>
+    </div>
+
+    <div class="card">
+        <h3>🛠️ Teknoloji Yığını</h3>
+        <h4 style="color:var(--text-secondary); font-size:0.85em; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:12px;">🔌 Gömülü Sistem (BMS Firmware)</h4>
+        <div class="tech-grid" style="margin-bottom:24px;">
+            <div class="tech-item"><div class="tech-badge tech-stm32">STM32F030C8</div><span>ARM Cortex-M0, 48 MHz MCU</span></div>
+            <div class="tech-item"><div class="tech-badge tech-c">C (Embedded)</div><span>Gömülü sistem firmware dili</span></div>
+            <div class="tech-item"><div class="tech-badge tech-keil">Keil uVision 5</div><span>IDE &amp; derleyici</span></div>
+            <div class="tech-item"><div class="tech-badge tech-jlink">J-Link</div><span>Debug &amp; programlama</span></div>
+            <div class="tech-item"><div class="tech-badge tech-mps">MPS MP2797</div><span>BMS IC (7-16S)</span></div>
+            <div class="tech-item"><div class="tech-badge tech-mps">MPF4279x</div><span>Fuel Gauge IC ailesi</span></div>
+        </div>
+        <h4 style="color:var(--text-secondary); font-size:0.85em; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:12px;">💻 Yazılım &amp; AI Platform</h4>
+        <div class="tech-grid" style="margin-bottom:24px;">
+            <div class="tech-item"><div class="tech-badge tech-python">Python 3.8+</div><span>Backend, AI, veri işleme</span></div>
+            <div class="tech-item"><div class="tech-badge tech-flask">Flask</div><span>REST API framework</span></div>
+            <div class="tech-item"><div class="tech-badge tech-numpy">NumPy</div><span>Sayısal hesaplama</span></div>
+            <div class="tech-item"><div class="tech-badge tech-pandas">Pandas</div><span>Veri analizi</span></div>
+            <div class="tech-item"><div class="tech-badge tech-sklearn">scikit-learn</div><span>Makine öğrenmesi</span></div>
+        </div>
+        <h4 style="color:var(--text-secondary); font-size:0.85em; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:12px;">🌐 Web &amp; Altyapı</h4>
+        <div class="tech-grid">
+            <div class="tech-item"><div class="tech-badge tech-html">HTML5/CSS3/JS</div><span>Web dashboard</span></div>
+            <div class="tech-item"><div class="tech-badge tech-netlify">Netlify</div><span>Hosting &amp; CI/CD</span></div>
+            <div class="tech-item"><div class="tech-badge tech-git">Git / GitHub</div><span>Versiyon kontrol</span></div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>📐 Uygulanacak Standartlar</h3>
+        <div class="standards-grid">
+            <div class="standard-item"><strong>IEC 62660</strong><p>Lityum-iyon pil performans testleri</p></div>
+            <div class="standard-item"><strong>IEC 62133</strong><p>Taşınabilir batarya güvenlik gereksinimleri</p></div>
+            <div class="standard-item"><strong>UN 38.3</strong><p>Tehlikeli madde taşıma testleri</p></div>
+            <div class="standard-item"><strong>ISO 14001</strong><p>Çevre yönetim sistemi</p></div>
+            <div class="standard-item"><strong>ISO/IEC 27001</strong><p>Bilgi güvenliği yönetim sistemi</p></div>
+            <div class="standard-item"><strong>EU Battery Reg.</strong><p>AB batarya yönetmeliği</p></div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>📂 Proje Dosya Yapısı</h3>
+        <pre class="code-block">Kobinerji_Tubitak/
+├── index.html, styles.css, script.js   # Dashboard (Netlify)
+├── data.json, config.yaml              # Veriler &amp; yapılandırma
+├── requirements.txt                    # Python bağımlılıkları
+├── OPU/                                # VGX BMS Gömülü Firmware
+│   ├── main.c, Init.c                  # Ana uygulama &amp; başlatma
+│   ├── MP279x_I2C.c / .h               # BMS IC sürücüsü
+│   ├── MPF4279x_I2C.c / .h             # Fuel Gauge sürücüsü
+│   ├── BMS_MP279x.h                    # BMS yapılandırma
+│   ├── Flash_Config.h                  # Flash parametre yönetimi
+│   └── *.uvprojx                       # Keil uVision 5 projesi
+├── python/                             # AI &amp; Backend modülleri
+│   ├── api/battery_api.py              # 13 endpoint REST API
+│   ├── bms/                            # Batarya yönetim sistemi
+│   ├── data_processing/                # Veri işleme
+│   ├── models/soh_model.py             # AI SoH modeli
+│   ├── utils/                          # Yardımcı araçlar
+│   └── reporting/                      # Raporlama
+├── tests/test_suite.py                 # 34 birim test
+├── examples/demo_end_to_end.py         # Uçtan uca demo
+└── docs/                               # 10 doküman</pre>
+    </div>
+</section>
+
+</main>
+
+<!-- ═══════════════════ FOOTER ═══════════════════ -->
+<footer class="footer">
+    <div class="footer-inner">
+        <div class="footer-top">
+            <div class="footer-brand">
+                <div class="footer-logo-row"><img src="firmalogo.png" alt="KOBİNERJİ" class="footer-logo"><strong>TÜBİTAK 1507 — Proje No: 7260634</strong></div>
+                <p>Elektrikli Araç Bataryaları İçin Yapay Zekâ Destekli Yeşil Dönüşüm ve Analiz Sistemi</p>
+            </div>
+            <div class="footer-info"><p>KOBİNERJİ MÜHENDİSLİK VE ENERJİ VERİMLİLİĞİ DANIŞMANLIK A.Ş.</p><p>Proje Süresi: 01.03.2026 – 01.09.2027 (18 Ay)</p><p>Toplam Bütçe: 3.497.730 TL</p></div>
+        </div>
+        <div class="footer-bottom"><p>© 2026 KOBİNERJİ A.Ş. — Tüm hakları saklıdır.</p><p class="footer-update">Son güncelleme: <span id="footerDate">19 Nisan 2026</span></p></div>
+    </div>
+</footer>
+
+</div>
+<script src="script.js"></script>
+</body>
+</html>
