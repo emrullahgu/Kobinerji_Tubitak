@@ -1,5 +1,5 @@
 [build]
-  command = "echo 'Proje yayınlanmaya hazır'"
+  command = "echo 'Static site - no build needed'"
   publish = "."
 
 [[redirects]]
