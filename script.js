@@ -1498,18 +1498,32 @@ async function downloadNotebookPDF(filePath, docTitle) {
                         }
                         case 'code': {
                             const codeText = token.text || '';
-                            checkSpace(10);
                             const mdCodeLines = codeText.split('\n');
-                            const mdBlockH = Math.min(mdCodeLines.length * 4 + 6, PH - MB - y);
-                            pdf.setFillColor(30, 41, 59);
-                            pdf.roundedRect(ML, y, CW, mdBlockH, 2, 2, 'F');
-                            y += 4;
-                            pdf.setFontSize(7); pdf.setFont('Roboto', 'normal'); pdf.setTextColor(255, 255, 255);
+                            const mdLineH = 4;
+                            const mdPad = 3.5;
+                            /* Split into page segments */
+                            const mdSegs = [];
+                            let mdSeg = [];
+                            let mdLeft = PH - MB - y;
                             for (const cl of mdCodeLines) {
-                                if (y + 4 > PH - MB) { newPage(); const remH = Math.min(mdCodeLines.length * 4, PH - MB - MT - 4); pdf.setFillColor(30, 41, 59); pdf.roundedRect(ML, MT, CW, remH, 2, 2, 'F'); y = MT + 4; pdf.setFontSize(7); pdf.setFont('Roboto', 'normal'); pdf.setTextColor(255, 255, 255); }
-                                pdf.text(cl.substring(0, 110), ML + 4, y); y += 4;
+                                if (mdSeg.length > 0 && (mdSeg.length * mdLineH + mdPad * 2 + mdLineH) > mdLeft) {
+                                    mdSegs.push(mdSeg); mdSeg = [cl]; mdLeft = PH - MB - MT;
+                                } else { mdSeg.push(cl); }
                             }
-                            y += 4; break;
+                            if (mdSeg.length) mdSegs.push(mdSeg);
+                            for (let msi = 0; msi < mdSegs.length; msi++) {
+                                if (msi > 0) newPage();
+                                const mLines = mdSegs[msi];
+                                const mBgH = mLines.length * mdLineH + mdPad * 2;
+                                checkSpace(mBgH);
+                                pdf.setFillColor(30, 41, 59);
+                                pdf.roundedRect(ML, y, CW, mBgH, 2, 2, 'F');
+                                y += mdPad;
+                                pdf.setFontSize(7); pdf.setFont('Roboto', 'normal'); pdf.setTextColor(255, 255, 255);
+                                for (const cl of mLines) { pdf.text(cl.substring(0, 110), ML + 4, y); y += mdLineH; }
+                                y += mdPad;
+                            }
+                            break;
                         }
                         case 'table': {
                             const headers = token.header.map(h => stripInline(h.text != null ? h.text : String(h)));
@@ -1541,67 +1555,67 @@ async function downloadNotebookPDF(filePath, docTitle) {
                 const codeLines = source.split('\n');
                 const maxLines = 60;
                 const visibleLines = codeLines.slice(0, maxLines);
-                checkSpace(10);
-
-                /* Draw background dynamically: collect lines, draw bg then text */
-                const codeChunks = [];
-                let chunk = [];
                 const lineH = 3.8;
-                let tempY = y;
+                const padTop = 3.5;
+                const padBot = 2.5;
+
+                /* Split lines into page-fitting segments */
+                const segments = [];
+                let seg = [];
+                let spaceLeft = PH - MB - y;
+
                 for (const cl of visibleLines) {
-                    if (tempY + lineH + 3 > PH - MB) {
-                        codeChunks.push({ startY: y, lines: chunk });
-                        chunk = [cl];
-                        tempY = MT + 3.5;
-                        y = MT;
-                        tempY += lineH;
+                    const needed = lineH + (seg.length === 0 ? padTop + padBot : 0);
+                    if (seg.length > 0 && (seg.length * lineH + padTop + padBot + lineH) > spaceLeft) {
+                        segments.push(seg);
+                        seg = [cl];
+                        spaceLeft = PH - MB - MT;
                     } else {
-                        chunk.push(cl);
-                        tempY += lineH;
+                        seg.push(cl);
                     }
                 }
-                if (chunk.length) codeChunks.push({ startY: (codeChunks.length > 0 ? MT : y), lines: chunk });
+                if (seg.length) segments.push(seg);
 
-                /* Re-render from saved y, drawing bg then text for each chunk */
-                const firstChunk = codeChunks.length > 0;
-                for (let ci = 0; ci < codeChunks.length; ci++) {
-                    if (ci > 0) newPage();
-                    const ch = codeChunks[ci];
-                    const bgH = ch.lines.length * lineH + 6;
-                    const startY = ci === 0 ? y : MT;
+                /* Render each segment with proper bg */
+                for (let si = 0; si < segments.length; si++) {
+                    if (si > 0) newPage();
+                    const lines = segments[si];
+                    const bgH = lines.length * lineH + padTop + padBot;
+                    checkSpace(bgH);
                     pdf.setFillColor(30, 41, 59);
-                    pdf.roundedRect(ML, startY, CW, bgH, 2, 2, 'F');
-                    let curY = startY + 3.5;
+                    pdf.roundedRect(ML, y, CW, bgH, 2, 2, 'F');
+                    y += padTop;
                     pdf.setFontSize(6.5); pdf.setFont('Roboto', 'normal'); pdf.setTextColor(255, 255, 255);
-                    for (const cl of ch.lines) {
-                        pdf.text(cl.substring(0, 120), ML + 3, curY);
-                        curY += lineH;
+                    for (const cl of lines) {
+                        pdf.text(cl.substring(0, 120), ML + 3, y);
+                        y += lineH;
                     }
-                    y = curY + 2.5;
+                    y += padBot;
                 }
                 if (codeLines.length > maxLines) {
                     pdf.setFontSize(6.5); pdf.setTextColor(148, 163, 184);
                     pdf.text('... (' + (codeLines.length - maxLines) + ' satır daha)', ML + 3, y);
-                    y += 3.8;
+                    y += 4;
                 }
-                y += 4;
+                y += 3;
 
                 /* ── Render outputs ── */
                 if (cell.outputs && cell.outputs.length) {
                     for (const output of cell.outputs) {
-                        /* Text output */
-                        if (output.text) {
-                            const outText = (Array.isArray(output.text) ? output.text.join('') : output.text).substring(0, 500);
-                            checkSpace(10);
+                        /* Text output (execute_result / display_data with text/plain) */
+                        const textData = output.text || (output.data && output.data['text/plain']);
+                        if (textData && !output.data?.['image/png']) {
+                            const raw = Array.isArray(textData) ? textData.join('') : textData;
+                            const outLines = raw.substring(0, 600).split('\n').slice(0, 15);
+                            const outH = outLines.length * 3.5 + 6;
+                            checkSpace(outH);
                             pdf.setFillColor(248, 250, 252); pdf.setDrawColor(226, 232, 240);
-                            const outLines = outText.split('\n').slice(0, 15);
-                            const outH = Math.min(outLines.length * 3.5 + 4, 60);
                             pdf.roundedRect(ML, y, CW, outH, 1.5, 1.5, 'FD');
                             y += 3;
                             pdf.setFontSize(6.5); pdf.setFont('Roboto', 'normal'); pdf.setTextColor(51, 65, 85);
                             for (const ol of outLines) {
-                                if (y + 3.5 > y + outH - 2) break;
-                                pdf.text(ol.substring(0, 120), ML + 3, y); y += 3.5;
+                                pdf.text(ol.substring(0, 120), ML + 3, y);
+                                y += 3.5;
                             }
                             y += 3;
                         }
@@ -1609,26 +1623,30 @@ async function downloadNotebookPDF(filePath, docTitle) {
                         if (output.data && output.data['image/png']) {
                             const imgData = 'data:image/png;base64,' + output.data['image/png'].replace(/\n/g, '');
                             const imgW = CW - 10;
-                            const imgH = imgW * 0.55;
-                            checkSpace(imgH + 6);
+                            const imgH = imgW * 0.5;
+                            checkSpace(imgH + 8);
                             try {
-                                pdf.addImage(imgData, 'PNG', ML + 5, y, imgW, imgH);
-                                y += imgH + 4;
+                                pdf.addImage(imgData, 'PNG', ML + 5, y + 2, imgW, imgH);
+                                y += imgH + 6;
                             } catch (imgErr) {
                                 pdf.setFontSize(7); pdf.setTextColor(220, 38, 38);
-                                pdf.text('[Görsel yüklenemedi]', ML + 5, y); y += 5;
+                                pdf.text('[Görsel yüklenemedi]', ML + 5, y + 4); y += 8;
                             }
                         }
-                        /* Stream output */
-                        if (output.output_type === 'stream' && output.text) {
-                            const streamText = (Array.isArray(output.text) ? output.text.join('') : output.text).substring(0, 400);
-                            const sLines = streamText.split('\n').slice(0, 10);
-                            checkSpace(sLines.length * 3.5 + 6);
+                        /* Stream output (stdout/stderr) */
+                        if (output.output_type === 'stream' && output.text && !textData) {
+                            const streamRaw = Array.isArray(output.text) ? output.text.join('') : output.text;
+                            const sLines = streamRaw.substring(0, 400).split('\n').slice(0, 10);
+                            const sH = sLines.length * 3.5 + 6;
+                            checkSpace(sH);
                             pdf.setFillColor(248, 250, 252); pdf.setDrawColor(203, 213, 225);
-                            pdf.roundedRect(ML, y, CW, sLines.length * 3.5 + 4, 1.5, 1.5, 'FD');
+                            pdf.roundedRect(ML, y, CW, sH, 1.5, 1.5, 'FD');
                             y += 3;
                             pdf.setFontSize(6); pdf.setFont('Roboto', 'normal'); pdf.setTextColor(71, 85, 105);
-                            for (const sl of sLines) { pdf.text(sl.substring(0, 130), ML + 3, y); y += 3.5; }
+                            for (const sl of sLines) {
+                                pdf.text(sl.substring(0, 130), ML + 3, y);
+                                y += 3.5;
+                            }
                             y += 3;
                         }
                     }
