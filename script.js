@@ -1499,14 +1499,14 @@ async function downloadNotebookPDF(filePath, docTitle) {
                         case 'code': {
                             const codeText = token.text || '';
                             checkSpace(10);
-                            const codeLines = codeText.split('\n');
-                            const blockH = Math.min(codeLines.length * 4 + 6, PH - MB - y);
+                            const mdCodeLines = codeText.split('\n');
+                            const mdBlockH = Math.min(mdCodeLines.length * 4 + 6, PH - MB - y);
                             pdf.setFillColor(30, 41, 59);
-                            pdf.roundedRect(ML, y, CW, blockH, 2, 2, 'F');
+                            pdf.roundedRect(ML, y, CW, mdBlockH, 2, 2, 'F');
                             y += 4;
-                            pdf.setFontSize(7); pdf.setFont('Roboto', 'normal'); pdf.setTextColor(226, 232, 240);
-                            for (const cl of codeLines) {
-                                if (y + 4 > PH - MB) { newPage(); pdf.setFillColor(30, 41, 59); pdf.roundedRect(ML, y, CW, 20, 2, 2, 'F'); y += 4; pdf.setFontSize(7); pdf.setFont('Roboto', 'normal'); pdf.setTextColor(226, 232, 240); }
+                            pdf.setFontSize(7); pdf.setFont('Roboto', 'normal'); pdf.setTextColor(255, 255, 255);
+                            for (const cl of mdCodeLines) {
+                                if (y + 4 > PH - MB) { newPage(); const remH = Math.min(mdCodeLines.length * 4, PH - MB - MT - 4); pdf.setFillColor(30, 41, 59); pdf.roundedRect(ML, MT, CW, remH, 2, 2, 'F'); y = MT + 4; pdf.setFontSize(7); pdf.setFont('Roboto', 'normal'); pdf.setTextColor(255, 255, 255); }
                                 pdf.text(cl.substring(0, 110), ML + 4, y); y += 4;
                             }
                             y += 4; break;
@@ -1542,25 +1542,45 @@ async function downloadNotebookPDF(filePath, docTitle) {
                 const maxLines = 60;
                 const visibleLines = codeLines.slice(0, maxLines);
                 checkSpace(10);
-                const blockH = Math.min(visibleLines.length * 3.8 + 6, PH - MB - y - 2);
-                pdf.setFillColor(30, 41, 59);
-                pdf.roundedRect(ML, y, CW, blockH, 2, 2, 'F');
-                y += 3.5;
-                pdf.setFontSize(6.5); pdf.setFont('Roboto', 'normal'); pdf.setTextColor(200, 220, 240);
+
+                /* Draw background dynamically: collect lines, draw bg then text */
+                const codeChunks = [];
+                let chunk = [];
+                const lineH = 3.8;
+                let tempY = y;
                 for (const cl of visibleLines) {
-                    if (y + 3.8 > PH - MB) {
-                        newPage();
-                        pdf.setFillColor(30, 41, 59);
-                        const remainH = Math.min(20, PH - MB - y);
-                        pdf.roundedRect(ML, y, CW, remainH, 2, 2, 'F');
-                        y += 3.5;
-                        pdf.setFontSize(6.5); pdf.setFont('Roboto', 'normal'); pdf.setTextColor(200, 220, 240);
+                    if (tempY + lineH + 3 > PH - MB) {
+                        codeChunks.push({ startY: y, lines: chunk });
+                        chunk = [cl];
+                        tempY = MT + 3.5;
+                        y = MT;
+                        tempY += lineH;
+                    } else {
+                        chunk.push(cl);
+                        tempY += lineH;
                     }
-                    pdf.text(cl.substring(0, 120), ML + 3, y);
-                    y += 3.8;
+                }
+                if (chunk.length) codeChunks.push({ startY: (codeChunks.length > 0 ? MT : y), lines: chunk });
+
+                /* Re-render from saved y, drawing bg then text for each chunk */
+                const firstChunk = codeChunks.length > 0;
+                for (let ci = 0; ci < codeChunks.length; ci++) {
+                    if (ci > 0) newPage();
+                    const ch = codeChunks[ci];
+                    const bgH = ch.lines.length * lineH + 6;
+                    const startY = ci === 0 ? y : MT;
+                    pdf.setFillColor(30, 41, 59);
+                    pdf.roundedRect(ML, startY, CW, bgH, 2, 2, 'F');
+                    let curY = startY + 3.5;
+                    pdf.setFontSize(6.5); pdf.setFont('Roboto', 'normal'); pdf.setTextColor(255, 255, 255);
+                    for (const cl of ch.lines) {
+                        pdf.text(cl.substring(0, 120), ML + 3, curY);
+                        curY += lineH;
+                    }
+                    y = curY + 2.5;
                 }
                 if (codeLines.length > maxLines) {
-                    pdf.setTextColor(148, 163, 184);
+                    pdf.setFontSize(6.5); pdf.setTextColor(148, 163, 184);
                     pdf.text('... (' + (codeLines.length - maxLines) + ' satır daha)', ML + 3, y);
                     y += 3.8;
                 }
