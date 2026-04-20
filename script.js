@@ -615,7 +615,7 @@ const projectDocs = [
     { id: '07', title: 'İş Paketi Detaylandırması', desc: '7 iş paketi, faaliyet kırılımı ve zaman çizelgesi', file: 'docs/07_IS_PAKETI_DETAYLANDIRMASI.md', color: '#ec4899', tags: ['İş Paketleri', 'Planlama', '18 Ay'] },
     { id: '08', title: 'Kalite Kontrol Planı', desc: 'ISO standartları, kalite metrikleri ve denetim planı', file: 'docs/08_KALITE_KONTROL_PLANI.md', color: '#14b8a6', tags: ['Kalite', 'ISO', 'Denetim'] },
     { id: '09', title: 'VGX BMS Firmware Datasheet', desc: 'STM32F030C8 BMS gömülü yazılım teknik referansı', file: 'docs/10_VGX_BMS_FIRMWARE_DATASHEET.md', color: '#64748b', tags: ['Firmware', 'BMS', 'Gömülü'] },
-    { id: '10', title: 'SoH Tahmin Notebook (Derin Öğrenme)', desc: 'LSTM, GRU, AST-LSTM ve Transfer Öğrenme ile SoH tahmin modelleri — Jupyter Notebook', file: 'KOBİNERJİ_SoH_Tahmin-2.ipynb', color: '#EE4C2C', tags: ['Deep Learning', 'PyTorch', 'AST-LSTM', 'Notebook'], isNotebook: true }
+    { id: '10', title: 'SoH Tahmin Notebook (Derin Öğrenme)', desc: 'LSTM, GRU, AST-LSTM ve Transfer Öğrenme ile SoH tahmin modelleri — Jupyter Notebook', file: 'KOBINERJI_SoH_Tahmin-2.ipynb', color: '#EE4C2C', tags: ['Deep Learning', 'PyTorch', 'AST-LSTM', 'Notebook'], isNotebook: true }
 ];
 
 function renderDocuments() {
