@@ -641,6 +641,10 @@ function renderDocuments() {
                         <a class="doc-download-btn" href="${doc.file}" download style="text-decoration:none;">
                             <span class="btn-text">📥 Notebook İndir</span>
                         </a>
+                        <button class="doc-download-btn" onclick="downloadNotebookPDF('${doc.file}', '${doc.id} — ${doc.title.replace(/'/g, "\\'")}')">
+                            <span class="btn-text">📥 PDF İndir</span>
+                            <span class="spinner"></span>
+                        </button>
                     </div>
                 </div>
             </div>`;
@@ -1293,6 +1297,367 @@ async function downloadDocPDF(filePath, docTitle) {
         showToast(`✅ ${docTitle} PDF başarıyla indirildi`, 'success');
     } catch (err) {
         console.error('PDF oluşturma hatası:', err);
+        showToast(`❌ PDF oluşturulamadı: ${err.message}`, 'error');
+    } finally {
+        btn.classList.remove('loading');
+        btn.disabled = false;
+    }
+}
+
+/* ═══════════ NOTEBOOK PDF EXPORT ═══════════ */
+async function downloadNotebookPDF(filePath, docTitle) {
+    const btn = event.currentTarget;
+    btn.classList.add('loading');
+    btn.disabled = true;
+
+    try {
+        /* 1. Fetch and parse notebook JSON */
+        const resp = await fetch(filePath);
+        if (!resp.ok) throw new Error('Notebook yüklenemedi: ' + resp.status);
+        const nb = await resp.json();
+        const cells = nb.cells || [];
+
+        const now = new Date();
+        const dateStr = now.toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' });
+        const dateISO = now.toISOString().split('T')[0];
+
+        /* 2. Setup jsPDF */
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+        const PW = 210, PH = 297;
+        const ML = 18, MR = 18, MT = 22, MB = 20;
+        const CW = PW - ML - MR;
+        let y = MT;
+        let pageNum = 0;
+
+        await loadPdfFonts(pdf);
+
+        function newPage() {
+            if (pageNum > 0) pdf.addPage();
+            pageNum++;
+            y = MT;
+        }
+        function checkSpace(needed) {
+            if (y + needed > PH - MB) { newPage(); return true; }
+            return false;
+        }
+        function stripInline(text) {
+            if (!text || typeof text !== 'string') return String(text || '');
+            return text
+                .replace(/\*\*(.+?)\*\*/g, '$1').replace(/\*(.+?)\*/g, '$1')
+                .replace(/__(.+?)__/g, '$1').replace(/_(.+?)_/g, '$1')
+                .replace(/`(.+?)`/g, '$1').replace(/\[(.+?)\]\(.+?\)/g, '$1')
+                .replace(/~~(.+?)~~/g, '$1');
+        }
+        function printText(text, fontSize, bold, color, indent) {
+            indent = indent || 0;
+            pdf.setFontSize(fontSize);
+            pdf.setFont('Roboto', bold ? 'bold' : 'normal');
+            pdf.setTextColor(color[0], color[1], color[2]);
+            const lines = pdf.splitTextToSize(text, CW - indent);
+            const lineH = fontSize * 0.45;
+            for (const line of lines) { checkSpace(lineH); pdf.text(line, ML + indent, y); y += lineH; }
+        }
+
+        /* ══════ COVER PAGE ══════ */
+        newPage();
+        pdf.setFillColor(15, 23, 42);
+        pdf.rect(0, 0, PW, 42, 'F');
+        pdf.setFillColor(30, 58, 95);
+        pdf.rect(0, 35, PW, 7, 'F');
+        pdf.setFontSize(11); pdf.setFont('Roboto', 'bold'); pdf.setTextColor(255, 255, 255);
+        pdf.text('KOBİNERJİ MÜHENDİSLİK VE ENERJİ VERİMLİLİĞİ DANIŞMANLIK A.Ş.', ML, 18);
+        pdf.setFontSize(8); pdf.setFont('Roboto', 'normal'); pdf.setTextColor(180, 200, 220);
+        pdf.text('Ceran Plaza, Kemalpaşa OSB, Gazi Blv. No:177/19, 35730 Kemalpaşa/İzmir', ML, 25);
+
+        pdf.setFillColor(99, 102, 241);
+        pdf.roundedRect(PW / 2 - 45, 58, 90, 12, 6, 6, 'F');
+        pdf.setFontSize(9); pdf.setFont('Roboto', 'bold'); pdf.setTextColor(255, 255, 255);
+        pdf.text('TÜBİTAK 1507 - KOBİ Ar-Ge Destek Programı', PW / 2, 66, { align: 'center' });
+
+        pdf.setFontSize(36); pdf.setFont('Roboto', 'bold'); pdf.setTextColor(15, 23, 42);
+        pdf.text('Proje No: 7260634', PW / 2, 95, { align: 'center' });
+
+        pdf.setFontSize(13); pdf.setFont('Roboto', 'normal'); pdf.setTextColor(51, 65, 85);
+        const projNameLines = pdf.splitTextToSize(
+            'Elektrikli Araç Bataryaları İçin Yapay Zekâ Destekli Yeşil Dönüşüm ve Analiz Sistemi', 140);
+        let pny = 110;
+        projNameLines.forEach(l => { pdf.text(l, PW / 2, pny, { align: 'center' }); pny += 7; });
+
+        pdf.setDrawColor(99, 102, 241); pdf.setLineWidth(1);
+        pdf.line(PW / 2 - 30, pny + 5, PW / 2 + 30, pny + 5);
+
+        pdf.setFontSize(18); pdf.setFont('Roboto', 'bold'); pdf.setTextColor(15, 76, 117);
+        const titleLines = pdf.splitTextToSize(docTitle, 150);
+        let ty = pny + 20;
+        titleLines.forEach(l => { pdf.text(l, PW / 2, ty, { align: 'center' }); ty += 9; });
+
+        // Notebook badge
+        pdf.setFillColor(238, 76, 44);
+        pdf.roundedRect(PW / 2 - 30, ty + 5, 60, 10, 3, 3, 'F');
+        pdf.setFontSize(8); pdf.setFont('Roboto', 'bold'); pdf.setTextColor(255, 255, 255);
+        pdf.text('Jupyter Notebook • PyTorch', PW / 2, ty + 12, { align: 'center' });
+
+        const metaItems = [
+            ['Doküman Tarihi', dateStr], ['Sürüm', '1.0.0'],
+            ['Proje Süresi', '01.03.2026 – 01.09.2027'], ['Gizlilik', 'Proje İçi – Gizli'],
+            ['Proje Yürütücüsü', 'Cem Bülbül'], ['Hazırlayan', 'KOBİNERJİ A.Ş. Proje Ekibi']
+        ];
+        let my = ty + 30;
+        const mColW = 80;
+        for (let i = 0; i < metaItems.length; i++) {
+            const col = i % 2;
+            const mx = ML + col * (mColW + 10);
+            if (i % 2 === 0 && i > 0) my += 16;
+            pdf.setFillColor(248, 250, 252); pdf.setDrawColor(226, 232, 240);
+            pdf.roundedRect(mx, my, mColW, 14, 2, 2, 'FD');
+            pdf.setFontSize(7); pdf.setFont('Roboto', 'bold'); pdf.setTextColor(100, 116, 139);
+            pdf.text(metaItems[i][0].toLocaleUpperCase('tr-TR'), mx + 4, my + 5);
+            pdf.setFontSize(9); pdf.setFont('Roboto', 'bold'); pdf.setTextColor(15, 23, 42);
+            pdf.text(metaItems[i][1], mx + 4, my + 11);
+        }
+
+        const bby = PH - 30;
+        pdf.setFillColor(248, 250, 252); pdf.rect(0, bby, PW, 30, 'F');
+        pdf.setDrawColor(226, 232, 240); pdf.line(0, bby, PW, bby);
+        pdf.setFontSize(9); pdf.setFont('Roboto', 'bold'); pdf.setTextColor(220, 38, 38);
+        pdf.text('GİZLİ – Bu doküman KOBİNERJİ A.Ş. tarafından TÜBİTAK\'a sunulmak üzere hazırlanmıştır.', PW / 2, bby + 12, { align: 'center' });
+        pdf.setFontSize(8); pdf.setFont('Roboto', 'normal'); pdf.setTextColor(148, 163, 184);
+        pdf.text('© 2026 KOBİNERJİ A.Ş. – Tüm hakları saklıdır.', PW / 2, bby + 20, { align: 'center' });
+
+        /* ══════ CONTENT PAGES ══════ */
+        newPage();
+        pdf.setFontSize(16); pdf.setFont('Roboto', 'bold'); pdf.setTextColor(15, 23, 42);
+        const mainTitleLines = pdf.splitTextToSize(docTitle, CW);
+        mainTitleLines.forEach(l => { pdf.text(l, ML, y); y += 7; });
+        y += 2;
+        pdf.setDrawColor(99, 102, 241); pdf.setLineWidth(0.8);
+        pdf.line(ML, y, PW - MR, y); y += 3;
+        pdf.setFontSize(8); pdf.setFont('Roboto', 'normal'); pdf.setTextColor(100, 116, 139);
+        pdf.text('Tarih: ' + dateStr + '  |  Jupyter Notebook  |  Toplam ' + cells.length + ' hücre', ML, y);
+        y += 8;
+
+        /* ── Cell counter ── */
+        let cellNum = 0;
+
+        /* ── Process each notebook cell ── */
+        for (const cell of cells) {
+            cellNum++;
+            const source = (cell.source || []).join('');
+            if (!source.trim() && !(cell.outputs && cell.outputs.length)) continue;
+
+            /* ── Cell header badge ── */
+            checkSpace(12);
+            const isCode = cell.cell_type === 'code';
+            const badge = isCode ? 'In [' + cellNum + ']' : 'Markdown';
+            const badgeColor = isCode ? [238, 76, 44] : [99, 102, 241];
+            pdf.setFillColor(badgeColor[0], badgeColor[1], badgeColor[2]);
+            pdf.roundedRect(ML, y, 22, 5, 1.5, 1.5, 'F');
+            pdf.setFontSize(6); pdf.setFont('Roboto', 'bold'); pdf.setTextColor(255, 255, 255);
+            pdf.text(badge, ML + 11, y + 3.5, { align: 'center' });
+            y += 7;
+
+            if (cell.cell_type === 'markdown') {
+                /* ── Render markdown with marked ── */
+                const tokens = marked.lexer(source);
+                for (const token of tokens) {
+                    switch (token.type) {
+                        case 'heading': {
+                            const text = stripInline(token.text);
+                            const sizes = { 1: 14, 2: 12, 3: 10.5, 4: 9.5, 5: 9, 6: 8.5 };
+                            const fs = sizes[token.depth] || 10;
+                            checkSpace(fs * 0.5 + 6);
+                            y += token.depth <= 2 ? 4 : 2;
+                            pdf.setFontSize(fs); pdf.setFont('Roboto', 'bold');
+                            pdf.setTextColor(15, 23, 42);
+                            const hLines = pdf.splitTextToSize(text, CW);
+                            hLines.forEach(l => { checkSpace(fs * 0.45); pdf.text(l, ML, y); y += fs * 0.45; });
+                            if (token.depth <= 2) {
+                                y += 1; pdf.setDrawColor(226, 232, 240); pdf.setLineWidth(0.3);
+                                pdf.line(ML, y, PW - MR, y);
+                            }
+                            y += 3; break;
+                        }
+                        case 'paragraph': {
+                            const text = stripInline(token.text);
+                            checkSpace(8); printText(text, 9, false, [30, 41, 59], 0); y += 2; break;
+                        }
+                        case 'list': {
+                            checkSpace(6);
+                            token.items.forEach((item, i) => {
+                                const text = stripInline(item.text);
+                                const bullet = token.ordered ? (i + 1) + '.' : '\u2022';
+                                checkSpace(5);
+                                pdf.setFontSize(9); pdf.setFont('Roboto', 'normal'); pdf.setTextColor(30, 41, 59);
+                                pdf.text(bullet, ML + 3, y);
+                                const ll = pdf.splitTextToSize(text, CW - 10);
+                                ll.forEach(l => { checkSpace(4.5); pdf.text(l, ML + 10, y); y += 4.5; });
+                                y += 1;
+                            });
+                            y += 2; break;
+                        }
+                        case 'code': {
+                            const codeText = token.text || '';
+                            checkSpace(10);
+                            const codeLines = codeText.split('\n');
+                            const blockH = Math.min(codeLines.length * 4 + 6, PH - MB - y);
+                            pdf.setFillColor(30, 41, 59);
+                            pdf.roundedRect(ML, y, CW, blockH, 2, 2, 'F');
+                            y += 4;
+                            pdf.setFontSize(7); pdf.setFont('Roboto', 'normal'); pdf.setTextColor(226, 232, 240);
+                            for (const cl of codeLines) {
+                                if (y + 4 > PH - MB) { newPage(); pdf.setFillColor(30, 41, 59); pdf.roundedRect(ML, y, CW, 20, 2, 2, 'F'); y += 4; pdf.setFontSize(7); pdf.setFont('Roboto', 'normal'); pdf.setTextColor(226, 232, 240); }
+                                pdf.text(cl.substring(0, 110), ML + 4, y); y += 4;
+                            }
+                            y += 4; break;
+                        }
+                        case 'table': {
+                            const headers = token.header.map(h => stripInline(h.text != null ? h.text : String(h)));
+                            const rows = token.rows.map(row => row.map(c => stripInline(c.text != null ? c.text : String(c))));
+                            const colW = CW / headers.length;
+                            checkSpace(20);
+                            pdf.setFillColor(241, 245, 249); pdf.rect(ML, y, CW, 6, 'F');
+                            pdf.setFontSize(7); pdf.setFont('Roboto', 'bold'); pdf.setTextColor(51, 65, 85);
+                            headers.forEach((h, ci) => pdf.text((pdf.splitTextToSize(h, colW - 4))[0] || '', ML + ci * colW + 2, y + 4));
+                            pdf.setDrawColor(203, 213, 225); pdf.rect(ML, y, CW, 6); y += 6;
+                            pdf.setFont('Roboto', 'normal'); pdf.setFontSize(7);
+                            rows.forEach((row, ri) => {
+                                checkSpace(6);
+                                if (ri % 2 === 0) { pdf.setFillColor(248, 250, 252); pdf.rect(ML, y, CW, 6, 'F'); }
+                                pdf.setTextColor(30, 41, 59);
+                                row.forEach((c, ci) => pdf.text((pdf.splitTextToSize(c, colW - 4))[0] || '', ML + ci * colW + 2, y + 4));
+                                pdf.setDrawColor(226, 232, 240); pdf.rect(ML, y, CW, 6); y += 6;
+                            });
+                            y += 3; break;
+                        }
+                        default: {
+                            if (token.text) { const t = stripInline(token.text); if (t.trim()) { checkSpace(6); printText(t, 9, false, [30, 41, 59], 0); y += 2; } }
+                            break;
+                        }
+                    }
+                }
+            } else if (isCode) {
+                /* ── Render code cell ── */
+                const codeLines = source.split('\n');
+                const maxLines = 60;
+                const visibleLines = codeLines.slice(0, maxLines);
+                checkSpace(10);
+                const blockH = Math.min(visibleLines.length * 3.8 + 6, PH - MB - y - 2);
+                pdf.setFillColor(30, 41, 59);
+                pdf.roundedRect(ML, y, CW, blockH, 2, 2, 'F');
+                y += 3.5;
+                pdf.setFontSize(6.5); pdf.setFont('Roboto', 'normal'); pdf.setTextColor(200, 220, 240);
+                for (const cl of visibleLines) {
+                    if (y + 3.8 > PH - MB) {
+                        newPage();
+                        pdf.setFillColor(30, 41, 59);
+                        const remainH = Math.min(20, PH - MB - y);
+                        pdf.roundedRect(ML, y, CW, remainH, 2, 2, 'F');
+                        y += 3.5;
+                        pdf.setFontSize(6.5); pdf.setFont('Roboto', 'normal'); pdf.setTextColor(200, 220, 240);
+                    }
+                    pdf.text(cl.substring(0, 120), ML + 3, y);
+                    y += 3.8;
+                }
+                if (codeLines.length > maxLines) {
+                    pdf.setTextColor(148, 163, 184);
+                    pdf.text('... (' + (codeLines.length - maxLines) + ' satır daha)', ML + 3, y);
+                    y += 3.8;
+                }
+                y += 4;
+
+                /* ── Render outputs ── */
+                if (cell.outputs && cell.outputs.length) {
+                    for (const output of cell.outputs) {
+                        /* Text output */
+                        if (output.text) {
+                            const outText = (Array.isArray(output.text) ? output.text.join('') : output.text).substring(0, 500);
+                            checkSpace(10);
+                            pdf.setFillColor(248, 250, 252); pdf.setDrawColor(226, 232, 240);
+                            const outLines = outText.split('\n').slice(0, 15);
+                            const outH = Math.min(outLines.length * 3.5 + 4, 60);
+                            pdf.roundedRect(ML, y, CW, outH, 1.5, 1.5, 'FD');
+                            y += 3;
+                            pdf.setFontSize(6.5); pdf.setFont('Roboto', 'normal'); pdf.setTextColor(51, 65, 85);
+                            for (const ol of outLines) {
+                                if (y + 3.5 > y + outH - 2) break;
+                                pdf.text(ol.substring(0, 120), ML + 3, y); y += 3.5;
+                            }
+                            y += 3;
+                        }
+                        /* Image output (base64 PNG) */
+                        if (output.data && output.data['image/png']) {
+                            const imgData = 'data:image/png;base64,' + output.data['image/png'].replace(/\n/g, '');
+                            const imgW = CW - 10;
+                            const imgH = imgW * 0.55;
+                            checkSpace(imgH + 6);
+                            try {
+                                pdf.addImage(imgData, 'PNG', ML + 5, y, imgW, imgH);
+                                y += imgH + 4;
+                            } catch (imgErr) {
+                                pdf.setFontSize(7); pdf.setTextColor(220, 38, 38);
+                                pdf.text('[Görsel yüklenemedi]', ML + 5, y); y += 5;
+                            }
+                        }
+                        /* Stream output */
+                        if (output.output_type === 'stream' && output.text) {
+                            const streamText = (Array.isArray(output.text) ? output.text.join('') : output.text).substring(0, 400);
+                            const sLines = streamText.split('\n').slice(0, 10);
+                            checkSpace(sLines.length * 3.5 + 6);
+                            pdf.setFillColor(248, 250, 252); pdf.setDrawColor(203, 213, 225);
+                            pdf.roundedRect(ML, y, CW, sLines.length * 3.5 + 4, 1.5, 1.5, 'FD');
+                            y += 3;
+                            pdf.setFontSize(6); pdf.setFont('Roboto', 'normal'); pdf.setTextColor(71, 85, 105);
+                            for (const sl of sLines) { pdf.text(sl.substring(0, 130), ML + 3, y); y += 3.5; }
+                            y += 3;
+                        }
+                    }
+                }
+            }
+
+            /* ── Thin separator between cells ── */
+            checkSpace(4);
+            pdf.setDrawColor(226, 232, 240); pdf.setLineWidth(0.15);
+            pdf.line(ML + 10, y, PW - MR - 10, y);
+            y += 4;
+        }
+
+        /* ── End mark ── */
+        checkSpace(20); y += 8;
+        pdf.setDrawColor(99, 102, 241); pdf.setLineWidth(0.3);
+        pdf.line(PW / 2 - 40, y, PW / 2 + 40, y); y += 5;
+        pdf.setFontSize(8); pdf.setFont('Roboto', 'bold'); pdf.setTextColor(100, 116, 139);
+        pdf.text('— Notebook Sonu —', PW / 2, y, { align: 'center' }); y += 5;
+        pdf.setFontSize(7); pdf.setFont('Roboto', 'normal'); pdf.setTextColor(148, 163, 184);
+        pdf.text(docTitle + '  |  KOBİNERJİ A.Ş.  |  © 2026', PW / 2, y, { align: 'center' });
+
+        /* ── Headers & footers ── */
+        const total = pdf.internal.getNumberOfPages();
+        for (let p = 2; p <= total; p++) {
+            pdf.setPage(p);
+            pdf.setDrawColor(99, 102, 241); pdf.setLineWidth(0.4);
+            pdf.line(ML, MT - 6, PW - MR, MT - 6);
+            pdf.setFontSize(7); pdf.setFont('Roboto', 'normal'); pdf.setTextColor(100, 116, 139);
+            pdf.text('KOBİNERJİ A.Ş. | TÜBİTAK 7260634', ML, MT - 9);
+            pdf.setFontSize(6.5); pdf.setTextColor(99, 102, 241);
+            pdf.text('Notebook – Derin Öğrenme SoH', PW - MR, MT - 9, { align: 'right' });
+            const fy = PH - MB + 6;
+            pdf.setDrawColor(203, 213, 225); pdf.setLineWidth(0.3);
+            pdf.line(ML, fy, PW - MR, fy);
+            pdf.setFontSize(6.5); pdf.setTextColor(148, 163, 184);
+            pdf.text('© 2026 KOBİNERJİ A.Ş.', ML, fy + 4);
+            pdf.setFontSize(6); pdf.setTextColor(220, 38, 38);
+            pdf.text('GİZLİ', PW / 2, fy + 4, { align: 'center' });
+            pdf.setFontSize(7); pdf.setTextColor(100, 116, 139);
+            pdf.text('Sayfa ' + (p - 1) + ' / ' + (total - 1), PW - MR, fy + 4, { align: 'right' });
+        }
+
+        /* ── Save ── */
+        const safeTitle = docTitle.replace(/[^a-zA-Z0-9_\-ğüşıöçĞÜŞİÖÇ ]/g, '').replace(/\s+/g, '_');
+        pdf.save(`${safeTitle}_${dateISO}.pdf`);
+        showToast(`✅ ${docTitle} PDF başarıyla indirildi`, 'success');
+    } catch (err) {
+        console.error('Notebook PDF hatası:', err);
         showToast(`❌ PDF oluşturulamadı: ${err.message}`, 'error');
     } finally {
         btn.classList.remove('loading');
