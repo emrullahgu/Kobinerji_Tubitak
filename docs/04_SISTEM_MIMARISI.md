@@ -522,16 +522,16 @@ decision = controller.make_decision(soh['soh'])
 | FastAPI | Async gereksinimi yok, takım deneyimi |
 | **Flask** | **Seçilen: Hafif, hızlı prototipleme, kolay entegrasyon** |
 
-### 8.3. Neden Random Forest Varsayılan?
+### 8.3. Neden AST-LSTM Varsayılan?
 
-| Özellik | Random Forest | Gradient Boosting | Linear |
-|---------|--------------|-------------------|--------|
-| Doğruluk | Yüksek | En yüksek | Düşük |
-| Hız | Orta | Yavaş | Hızlı |
-| Aşırı öğrenme riski | Düşük | Orta | — |
-| Yorumlanabilirlik | İyi | Orta | Çok iyi |
-| Hiperparametre hassasiyeti | Düşük | Yüksek | — |
-| **Genel uygunluk** | **En dengeli** | — | — |
+| Özellik | AST-LSTM | LSTM | GRU | SimpleRNN |
+|---------|----------|------|-----|-----------|
+| Doğruluk (RMSE) | **0.75%** | 0.98% | 0.99% | 1.09% |
+| Zaman Serisi Modellemesi | Mükemmel | İyi | İyi | Zayıf |
+| Attention Mekanizması | ✓ | — | — | — |
+| Transfer Öğrenme Uyumu | Yüksek | Yüksek | Orta | Düşük |
+| Parametre Sayısı | Yüksek | Orta | Düşük | En düşük |
+| **Genel uygunluk** | **En iyi** | İyi | İyi | Referans |
 
 ### 8.4. Neden Bellek İçi Depolama?
 

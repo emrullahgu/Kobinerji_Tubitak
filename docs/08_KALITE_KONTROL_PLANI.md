@@ -217,12 +217,12 @@ Veri Hazırlama → Model Eğitim → Model Doğrulama → Model Onay → Dağı
 
 ### 6.2. Model Performans Kriterleri
 
-| Algoritma | R² Hedef | RMSE Hedef | CV std Hedef | Kabul |
-|-----------|----------|-----------|-------------|-------|
-| Random Forest | ≥0.90 | ≤4.0 | ≤0.03 | ≥0.85 R² |
-| Gradient Boosting | ≥0.92 | ≤3.5 | ≤0.03 | ≥0.87 R² |
-| Neural Network | ≥0.93 | ≤3.0 | ≤0.05 | ≥0.88 R² |
-| Ridge Regression | ≥0.80 | ≤6.0 | ≤0.02 | referans |
+| Model | RMSE Hedef | RMSE Sonuç | CV std Hedef | Kabul |
+|-------|-----------|-----------|-------------|-------|
+| AST-LSTM | RMSE < %1 | ≤0.75% | ≤0.03 | **Birincil model** |
+| LSTM | RMSE < %1 | ≤1.0% | ≤0.03 | Transfer Öğrenme tabanı |
+| GRU | RMSE < %1 | ≤1.0% | ≤0.03 | Alternatif model |
+| SimpleRNN | Referans | ≤1.5% | ≤0.05 | Alt sınır kıyaslama |
 
 ### 6.3. Aşırı Öğrenme Kontrolü
 

@@ -43,7 +43,7 @@ Bu doküman aşağıdaki bileşenlerin teknik detaylarını içerir:
 |---------|-------|-------|
 | Veri İşleme | `data_processing/battery_data.py` | CSV/Excel yükleme, temizleme, normalizasyon |
 | Özellik Çıkarımı | `data_processing/feature_extraction.py` | 50-100 özellik, istatistiksel/frekans/zaman alanı |
-| SoH Modeli | `models/soh_model.py` | Random Forest, Gradient Boosting, Ridge, Lineer |
+| SoH Modeli | `models/soh_model.py` | LSTM, GRU, AST-LSTM (PyTorch), Ridge, Lineer |
 | BMS İzleme | `bms/battery_manager.py` | Hücre izleme, dengeleme, koruma |
 | BMS Kontrolü | `bms/bms_controller.py` | Merkezi koordinasyon, karar verme |
 | REST API | `api/battery_api.py` | 13 endpoint, Flask tabanlı |
@@ -402,10 +402,10 @@ StandardScaler kullanılır. `fit=True` ise eğitim verisine uydurup dönüştü
 
 | Algoritma | Sınıf | Varsayılan Parametreler |
 |-----------|-------|------------------------|
-| Random Forest | `RandomForestRegressor` | n_estimators=100, max_depth=20, min_samples_split=5, n_jobs=-1 |
-| Lineer | `LinearRegression` | — |
-| Ridge | `Ridge` | alpha=1.0 |
-| Gradient Boosting | `GradientBoostingRegressor` | n_estimators=100, max_depth=6, learning_rate=0.1 |
+| AST-LSTM | `ASTLSTMSoH` (PyTorch) | hidden_size=128, num_layers=2, dropout=0.2, attention gate |
+| LSTM | `LSTMSoH` (PyTorch) | hidden_size=128, num_layers=2, dropout=0.2 |
+| GRU | `GRUSoH` (PyTorch) | hidden_size=128, num_layers=2, dropout=0.2 |
+| Transfer Öğrenme | `TransferLearningWrapper` | NMC→LFP/NCA, katman dondurma + fine-tune |
 
 #### 5.1.2. Eğitim Boru Hattı
 
@@ -440,7 +440,7 @@ predict(X_test) → Test tahminleri
 **`predict(X, confidence_interval=False)`**
 
 - Çıktı [0, 100] aralığına kırpılır
-- Random Forest için güven aralığı hesaplanır (ağaç bazlı standart sapma)
+- AST-LSTM Attention mekanizması ile öznitelik önem skorları hesaplanır
 
 **`predict_single(features) → dict`**
 

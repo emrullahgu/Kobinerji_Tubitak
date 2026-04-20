@@ -136,10 +136,10 @@
 
 | No | Faaliyet | Süre | Sorumlu | Çıktı | Durum |
 |----|----------|------|---------|-------|-------|
-| 3.1 | Random Forest model geliştirme | 3 hafta | A. Helva | RF model | ⏳ |
-| 3.2 | Gradient Boosting model geliştirme | 3 hafta | A. Helva | XGB model | ⏳ |
-| 3.3 | Yapay sinir ağı modellemesi | 4 hafta | A. Helva | NN model | ⏳ |
-| 3.4 | Ridge/Linear regresyon (referans) | 1 hafta | E. Günay | Referans modeller | ⏳ |
+| 3.1 | AST-LSTM model geliştirme (Attention-based) | 4 hafta | A. Helva | AST-LSTM model | ⏳ |
+| 3.2 | LSTM / GRU model geliştirme | 3 hafta | A. Helva | LSTM, GRU modeller | ⏳ |
+| 3.3 | SimpleRNN kıyaslama modeli | 1 hafta | A. Helva | RNN referans model | ⏳ |
+| 3.4 | Transfer Öğrenme (NMC→LFP/NCA) | 2 hafta | E. Günay | TL-LSTM model | ⏳ |
 | 3.5 | 5-katlı çapraz doğrulama | 2 hafta | A. Helva | CV metrikleri | ⏳ |
 | 3.6 | Hiperparametre optimizasyonu | 3 hafta | A. Helva | Optimize parametreler | ⏳ |
 | 3.7 | Model karşılaştırma ve seçim | 1 hafta | A. Helva, C. Bülbül | Karşılaştırma raporu | ⏳ |

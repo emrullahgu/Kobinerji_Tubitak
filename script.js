@@ -614,13 +614,38 @@ const projectDocs = [
     { id: '06', title: 'Test Raporu', desc: '34 test sonucu — birim, entegrasyon ve performans testleri', file: 'docs/06_TEST_RAPORU.md', color: '#ef4444', tags: ['Test', '34 Sonuç', 'Kapsam'] },
     { id: '07', title: 'İş Paketi Detaylandırması', desc: '7 iş paketi, faaliyet kırılımı ve zaman çizelgesi', file: 'docs/07_IS_PAKETI_DETAYLANDIRMASI.md', color: '#ec4899', tags: ['İş Paketleri', 'Planlama', '18 Ay'] },
     { id: '08', title: 'Kalite Kontrol Planı', desc: 'ISO standartları, kalite metrikleri ve denetim planı', file: 'docs/08_KALITE_KONTROL_PLANI.md', color: '#14b8a6', tags: ['Kalite', 'ISO', 'Denetim'] },
-    { id: '09', title: 'VGX BMS Firmware Datasheet', desc: 'STM32F030C8 BMS gömülü yazılım teknik referansı', file: 'docs/10_VGX_BMS_FIRMWARE_DATASHEET.md', color: '#64748b', tags: ['Firmware', 'BMS', 'Gömülü'] }
+    { id: '09', title: 'VGX BMS Firmware Datasheet', desc: 'STM32F030C8 BMS gömülü yazılım teknik referansı', file: 'docs/10_VGX_BMS_FIRMWARE_DATASHEET.md', color: '#64748b', tags: ['Firmware', 'BMS', 'Gömülü'] },
+    { id: '10', title: 'SoH Tahmin Notebook (Derin Öğrenme)', desc: 'LSTM, GRU, AST-LSTM ve Transfer Öğrenme ile SoH tahmin modelleri — Jupyter Notebook', file: 'KOBİNERJİ_SoH_Tahmin-2.ipynb', color: '#EE4C2C', tags: ['Deep Learning', 'PyTorch', 'AST-LSTM', 'Notebook'], isNotebook: true }
 ];
 
 function renderDocuments() {
     const grid = document.getElementById('docsGrid');
     if (!grid) return;
-    grid.innerHTML = projectDocs.map(doc => `
+    grid.innerHTML = projectDocs.map(doc => {
+        if (doc.isNotebook) {
+            return `
+            <div class="doc-card">
+                <div class="doc-card-header">
+                    <div class="doc-card-number" style="background: ${doc.color};">${doc.id}</div>
+                    <div class="doc-card-info">
+                        <h4>${doc.title}</h4>
+                        <p>${doc.desc}</p>
+                    </div>
+                </div>
+                <div class="doc-card-tags">
+                    ${doc.tags.map(t => `<span class="doc-tag">${t}</span>`).join('')}
+                </div>
+                <div class="doc-card-footer">
+                    <span class="doc-card-meta">📓 Jupyter Notebook (.ipynb)</span>
+                    <div class="doc-card-actions">
+                        <a class="doc-download-btn" href="${doc.file}" download style="text-decoration:none;">
+                            <span class="btn-text">📥 Notebook İndir</span>
+                        </a>
+                    </div>
+                </div>
+            </div>`;
+        }
+        return `
         <div class="doc-card">
             <div class="doc-card-header">
                 <div class="doc-card-number" style="background: ${doc.color};">${doc.id}</div>
@@ -645,8 +670,8 @@ function renderDocuments() {
                     </button>
                 </div>
             </div>
-        </div>
-    `).join('');
+        </div>`;
+    }).join('');
 }
 
 /* ═══════════ DOCUMENT EDITOR ═══════════ */
@@ -1324,7 +1349,7 @@ const testModules = [
     {
         id: 3, name: 'Yapay Zeka SoH Modeli', file: 'soh_model.py',
         tests: [
-            { id: 'test_3_1', name: 'test_model_training', desc: 'Random Forest eğitiliyor (500×50)...', output: '✓ Random Forest: 100 ağaç, max_depth=20 ✓ R²=0.94 ✓ RMSE=2.31 ✓ MAE=1.87' },
+            { id: 'test_3_1', name: 'test_model_training', desc: 'AST-LSTM eğitiliyor (500×50)...', output: '✓ AST-LSTM: Attention-based LSTM, 50 epoch ✓ RMSE=0.75% ✓ MSE=0.000056 ✓ Hedef karşılandı' },
             { id: 'test_3_2', name: 'test_model_prediction', desc: '100 batarya için toplu tahmin...', output: '✓ 100 tahmin üretildi ✓ Aralık: 52.3%–98.7% ✓ Ortalama SoH: 78.4% ✓ Tahmin süresi: 12ms' },
             { id: 'test_3_3', name: 'test_single_prediction', desc: 'Tek batarya SoH + karar...', output: '✓ SoH: 87.5% → Durum: REUSE ✓ Güven: %92 ✓ Öneri: İkinci ömür uygulamalarına uygun' },
             { id: 'test_3_4', name: 'test_model_persistence', desc: 'Model kaydet/yükle (joblib)...', output: '✓ Model kaydedildi: 2.4 MB ✓ Yeniden yüklendi ✓ Tahminler eşleşiyor (decimal=3)' },
@@ -1561,8 +1586,8 @@ function showTestResults() {
         </div>
         <div class="test-result-item" style="border-left-color: #3b82f6;">
             <h5>Model Doğruluğu</h5>
-            <div class="result-value" style="color: #3b82f6;">R²=0.93</div>
-            <p>5-fold CV ortalaması</p>
+            <div class="result-value" style="color: #3b82f6;">RMSE=0.75%</div>
+            <p>AST-LSTM en iyi model</p>
         </div>
         <div class="test-result-item" style="border-left-color: #f59e0b;">
             <h5>BMS Koruma</h5>
@@ -1593,7 +1618,7 @@ async function runPipelineDemo() {
         { id: 1, detail: '✓ 1000 ölçüm üretildi', subSteps: ['Sensör verileri okunuyor...', 'Voltaj, akım, sıcaklık kaydediliyor...'] },
         { id: 2, detail: '✓ 972 temiz kayıt', subSteps: ['Outlier tespit ediliyor...', '23 anomali kaldırıldı'] },
         { id: 3, detail: '✓ 72 özellik çıkarıldı', subSteps: ['İstatistiksel özellikler...', 'Frekans ve zaman özellikleri...'] },
-        { id: 4, detail: '✓ R²=0.94, RMSE=2.31', subSteps: ['Random Forest eğitiliyor...', '5-fold çapraz doğrulama...'] },
+        { id: 4, detail: '✓ RMSE=0.75%, AST-LSTM', subSteps: ['AST-LSTM eğitiliyor...', '5-fold çapraz doğrulama...'] },
         { id: 5, detail: '✓ 8/8 hücre izlendi', subSteps: ['BMS sensör tarama...', 'Pack metrikleri hesaplandı'] },
         { id: 6, detail: '✓ SoH: 87.5% → REUSE', subSteps: ['Tahmin motoru çalışıyor...', 'Karar: İkinci ömür uygun'] }
     ];

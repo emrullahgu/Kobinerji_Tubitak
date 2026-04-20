@@ -113,7 +113,7 @@ SoHModel sınıfının eğitim, tahmin ve değerlendirme işlevlerini test eder.
 
 | Test ID | Test Adı | Açıklama | Durum |
 |---------|----------|----------|-------|
-| SM-01 | `test_model_training` | RandomForest model eğitimi | ✅ |
+| SM-01 | `test_model_training` | AST-LSTM derin öğrenme model eğitimi | ✅ |
 | SM-02 | `test_model_prediction` | Tek örnek tahmini; 0-100 aralığı | ✅ |
 | SM-03 | `test_model_evaluation` | Metrik hesaplama; R², RMSE, MAE | ✅ |
 | SM-04 | `test_feature_importance` | Özellik önemlilik sıralaması | ✅ |

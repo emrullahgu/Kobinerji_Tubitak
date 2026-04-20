@@ -119,7 +119,7 @@ Bu komut sırasıyla çalıştırır:
 ```
 STAGE 1: DATA PROCESSING      ← Sentetik veri oluşturma ve temizleme
 STAGE 2: FEATURE EXTRACTION    ← 113 özellik çıkarma
-STAGE 3: MODEL TRAINING        ← Random Forest eğitimi
+STAGE 3: MODEL TRAINING        ← AST-LSTM derin öğrenme eğitimi
 STAGE 4: SOH PREDICTION        ← Tahmin ve sınıflandırma
 STAGE 5: BMS CONTROL SYSTEM    ← İzleme, dengeleme, karar
 STAGE 6: WEB API INTEGRATION   ← Endpoint listesi
@@ -289,10 +289,10 @@ battery.save_cleaned_data(filepath='data/processed/clean_data.parquet', format='
 
 | Model | Hız | Doğruluk | Yorumlanabilirlik | Ne Zaman Kullanılır |
 |-------|-----|----------|--------------------|--------------------|
-| Random Forest | Orta | Yüksek | Yüksek | **Varsayılan — çoğu durumda önerilir** |
-| Gradient Boosting | Yavaş | En yüksek | Orta | Maksimum doğruluk gerektiğinde |
-| Ridge | Hızlı | Düşük | Çok yüksek | Temel referans modeli olarak |
-| Linear | En hızlı | En düşük | Çok yüksek | Hızlı prototipleme |
+| AST-LSTM | Orta | En yüksek (RMSE=0.75%) | Orta (Attention) | **Varsayılan — en yüksek doğruluk** |
+| LSTM | Orta | Yüksek (RMSE=0.98%) | Düşük | Transfer öğrenme tabanı |
+| GRU | Hızlı | Yüksek (RMSE=0.99%) | Düşük | Hızlı eğitim gerektiğinde |
+| SimpleRNN | En hızlı | Düşük (RMSE=1.09%) | Düşük | Alt sınır kıyaslaması |
 
 ### 6.2. Model Eğitimi
 
