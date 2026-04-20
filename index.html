@@ -163,7 +163,7 @@
                 </div>
                 <div class="hhs-divider"></div>
                 <div class="hhs-item">
-                    <div class="hhs-value" data-counter="10">0</div>
+                    <div class="hhs-value" data-counter="11">0</div>
                     <div class="hhs-label">Doküman</div>
                 </div>
                 <div class="hhs-divider"></div>
@@ -177,7 +177,7 @@
                 <span class="hhc-chip hhc-blue">🔋 STM32 BMS Firmware Hazır</span>
                 <span class="hhc-chip hhc-purple">🤖 AI SoH Model Prototipi Hazır</span>
                 <span class="hhc-chip hhc-orange">🌐 Dashboard Canlıda (Netlify)</span>
-                <span class="hhc-chip hhc-teal">📄 10 Profesyonel Doküman</span>
+                <span class="hhc-chip hhc-teal">📄 11 Profesyonel Doküman</span>
             </div>
         </div>
     </div>
@@ -536,13 +536,13 @@
             <div class="evidence-item evidence-docs">
                 <div class="evidence-icon-wrap"><span class="evidence-icon">📄</span></div>
                 <div class="evidence-body">
-                    <h4>10 Profesyonel Doküman</h4>
-                    <p>Teknik dokümantasyon, API referans, kullanıcı kılavuzu, sistem mimarisi, test raporu, kurulum rehberi, firmware datasheet, SoH Derin Öğrenme Notebook.</p>
+                    <h4>11 Profesyonel Doküman</h4>
+                    <p>Teknik dokümantasyon, API referans, kullanıcı kılavuzu, sistem mimarisi, test raporu, kurulum rehberi, firmware datasheet, SoH Derin Öğrenme Notebook, VGX BMS Datasheet PDF.</p>
                     <div class="evidence-tags">
                         <span>Markdown</span><span>PDF Export</span><span>Kapak Sayfası</span><span>Jupyter Notebook</span>
                     </div>
                     <div class="evidence-metric">
-                        <span class="em-num">10</span><span class="em-label">doküman hazır</span>
+                        <span class="em-num">11</span><span class="em-label">doküman hazır</span>
                     </div>
                 </div>
             </div>
@@ -825,11 +825,74 @@
         </div>
 
         <h4 style="color:var(--text-secondary); font-size:0.85em; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:12px;">📋 MCU Şematik — Devre Tasarımı</h4>
-        <div style="background:var(--bg-tertiary); border-radius:12px; padding:16px; border:1px solid var(--border);">
+        <div style="background:var(--bg-tertiary); border-radius:12px; padding:16px; border:1px solid var(--border); margin-bottom:20px;">
             <img src="hardwareMCU.jpeg" alt="VGX BMS MCU Şematik" style="width:100%; border-radius:8px; cursor:pointer;" onclick="this.requestFullscreen ? this.requestFullscreen() : null" title="Tam ekran için tıklayın">
             <p style="text-align:center; font-size:0.78em; color:var(--text-secondary); margin-top:8px;">
                 MCU.SchDoc — STM32F030C8 + MP2797 + MPF4279x — Power Supply, JTAG/SWD, UART, I2C, RS485
             </p>
+        </div>
+
+        <h4 style="color:var(--text-secondary); font-size:0.85em; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:12px;">📑 Desteklenen Donanım (Datasheet)</h4>
+        <div style="overflow-x:auto; margin-bottom:20px;">
+            <table style="width:100%; border-collapse:collapse; font-size:0.82em; background:var(--bg-secondary); border-radius:8px; overflow:hidden;">
+                <thead>
+                    <tr style="background:var(--bg-tertiary);">
+                        <th style="padding:10px 14px; text-align:left; font-weight:600; color:var(--text-primary); border-bottom:2px solid var(--border);">Bileşen</th>
+                        <th style="padding:10px 14px; text-align:left; font-weight:600; color:var(--text-primary); border-bottom:2px solid var(--border);">Model / Seri</th>
+                        <th style="padding:10px 14px; text-align:left; font-weight:600; color:var(--text-primary); border-bottom:2px solid var(--border);">Açıklama</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td style="padding:8px 14px; border-bottom:1px solid var(--border);"><strong>BMS IC</strong></td><td style="padding:8px 14px; border-bottom:1px solid var(--border); color:var(--accent); font-weight:600;">MP2797 / MP2791</td><td style="padding:8px 14px; border-bottom:1px solid var(--border); color:var(--text-secondary);">7-16 seri hücreli Li-ion pil paketleri için hücre, akım ve koruma yönetimi</td></tr>
+                    <tr style="background:var(--bg-tertiary);"><td style="padding:8px 14px; border-bottom:1px solid var(--border);"><strong>Fuel Gauge IC</strong></td><td style="padding:8px 14px; border-bottom:1px solid var(--border); color:var(--accent); font-weight:600;">MPF42791 / 42793 / 42790 / 42792 / 42795 / 42797</td><td style="padding:8px 14px; border-bottom:1px solid var(--border); color:var(--text-secondary);">SoC, SoH, kalan süre ve Coulomb sayacı fonksiyonları</td></tr>
+                    <tr><td style="padding:8px 14px; border-bottom:1px solid var(--border);"><strong>MCU</strong></td><td style="padding:8px 14px; border-bottom:1px solid var(--border); color:var(--accent); font-weight:600;">STM32F030C8Tx</td><td style="padding:8px 14px; border-bottom:1px solid var(--border); color:var(--text-secondary);">ARM Cortex-M0, 48 MHz, Keil uVision projesi ve J-Link debug desteği</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h4 style="color:var(--text-secondary); font-size:0.85em; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:12px;">⚡ Temel Özellikler</h4>
+        <div style="overflow-x:auto; margin-bottom:20px;">
+            <table style="width:100%; border-collapse:collapse; font-size:0.82em; background:var(--bg-secondary); border-radius:8px; overflow:hidden;">
+                <thead>
+                    <tr style="background:var(--bg-tertiary);">
+                        <th style="padding:10px 14px; text-align:left; font-weight:600; color:var(--text-primary); border-bottom:2px solid var(--border); width:25%;">Özellik</th>
+                        <th style="padding:10px 14px; text-align:left; font-weight:600; color:var(--text-primary); border-bottom:2px solid var(--border);">Açıklama</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td style="padding:8px 14px; border-bottom:1px solid var(--border);"><strong>Hücre İzleme</strong></td><td style="padding:8px 14px; border-bottom:1px solid var(--border); color:var(--text-secondary);">7-16 seri hücre voltaj/akım ölçümü; hücre bazlı OV, UV ve Dead koruması</td></tr>
+                    <tr style="background:var(--bg-tertiary);"><td style="padding:8px 14px; border-bottom:1px solid var(--border);"><strong>Akım Koruması</strong></td><td style="padding:8px 14px; border-bottom:1px solid var(--border); color:var(--text-secondary);">Aşırı deşarj (DOC), kısa devre (DSC/CSC) ve aşırı şarj akımı (COC) için yapılandırılabilir eşik ve gecikme</td></tr>
+                    <tr><td style="padding:8px 14px; border-bottom:1px solid var(--border);"><strong>Sıcaklık Yönetimi</strong></td><td style="padding:8px 14px; border-bottom:1px solid var(--border); color:var(--text-secondary);">NTC sensörleri ile batarya ve PCB sıcaklık izleme; ısıtıcı ve fan kontrolü; yüksek/düşük sıcaklık koruması</td></tr>
+                    <tr style="background:var(--bg-tertiary);"><td style="padding:8px 14px; border-bottom:1px solid var(--border);"><strong>Fuel Gauge</strong></td><td style="padding:8px 14px; border-bottom:1px solid var(--border); color:var(--text-secondary);">SoC, SoH, kalan süre tahmini, Coulomb sayacı ve öğrenme algoritmaları</td></tr>
+                    <tr><td style="padding:8px 14px; border-bottom:1px solid var(--border);"><strong>Hücre Dengeleme</strong></td><td style="padding:8px 14px; border-bottom:1px solid var(--border); color:var(--text-secondary);">Otomatik pasif dengeleme (Auto-Balance) ve minimum dengeleme voltaj eşiği</td></tr>
+                    <tr style="background:var(--bg-tertiary);"><td style="padding:8px 14px; border-bottom:1px solid var(--border);"><strong>FET Kontrolü</strong></td><td style="padding:8px 14px; border-bottom:1px solid var(--border); color:var(--text-secondary);">Şarj/deşarj MOSFET yönetimi ve pre-charge desteği</td></tr>
+                    <tr><td style="padding:8px 14px; border-bottom:1px solid var(--border);"><strong>Arıza Yönetimi</strong></td><td style="padding:8px 14px; border-bottom:1px solid var(--border); color:var(--text-secondary);">13 farklı arıza tipi, otomatik kurtarma ve yapılandırılabilir arıza maskeleri</td></tr>
+                    <tr style="background:var(--bg-tertiary);"><td style="padding:8px 14px; border-bottom:1px solid var(--border);"><strong>Stand-by Modu</strong></td><td style="padding:8px 14px; border-bottom:1px solid var(--border); color:var(--text-secondary);">Düşük akım algılama ile otomatik uyku ve düşük güç tüketimi</td></tr>
+                    <tr><td style="padding:8px 14px; border-bottom:1px solid var(--border);"><strong>Haberleşme</strong></td><td style="padding:8px 14px; border-bottom:1px solid var(--border); color:var(--text-secondary);">I2C, UART ve CRC doğrulama; MPS EVKT ile uyumlu register map tabanlı GUI protokolü</td></tr>
+                    <tr style="background:var(--bg-tertiary);"><td style="padding:8px 14px; border-bottom:1px solid var(--border);"><strong>Flash Konfigürasyon</strong></td><td style="padding:8px 14px; border-bottom:1px solid var(--border); color:var(--text-secondary);">Parametrelerin Flash belleğe kaydı ve çalışma anında GUI üzerinden güncellenebilmesi</td></tr>
+                    <tr><td style="padding:8px 14px;"><strong>Watchdog</strong></td><td style="padding:8px 14px; color:var(--text-secondary);">Donanımsal bağımsız watchdog (IWDG) desteği</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h4 style="color:var(--text-secondary); font-size:0.85em; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:12px;">🎛️ Yapılandırılabilir Parametreler</h4>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom:16px;">
+            <div style="padding:14px; background:var(--bg-tertiary); border-radius:8px; border-left:3px solid var(--success);">
+                <strong style="font-size:0.88em; color:var(--success);">🔋 Hücre Eşikleri</strong>
+                <p style="font-size:0.82em; color:var(--text-secondary); margin-top:6px; line-height:1.6;">OV: 3.65 V<br>UV: 2.0 V<br>Dead: 1.8 V</p>
+            </div>
+            <div style="padding:14px; background:var(--bg-tertiary); border-radius:8px; border-left:3px solid var(--accent);">
+                <strong style="font-size:0.88em; color:var(--accent);">⚡ Akım Limitleri</strong>
+                <p style="font-size:0.82em; color:var(--text-secondary); margin-top:6px; line-height:1.6;">Deşarj aşırı akım: 45 A / 52.5 A<br>Şarj aşırı akım: 15 A<br>Kısa devre: 36 A</p>
+            </div>
+            <div style="padding:14px; background:var(--bg-tertiary); border-radius:8px; border-left:3px solid var(--warning);">
+                <strong style="font-size:0.88em; color:var(--warning);">🌡️ Sıcaklık Limitleri</strong>
+                <p style="font-size:0.82em; color:var(--text-secondary); margin-top:6px; line-height:1.6;">Deşarj: -18°C – 55°C<br>Şarj: 2°C – 43°C</p>
+            </div>
+            <div style="padding:14px; background:var(--bg-tertiary); border-radius:8px; border-left:3px solid var(--purple);">
+                <strong style="font-size:0.88em; color:var(--purple);">⚙️ Yapılandırma Modeli</strong>
+                <p style="font-size:0.82em; color:var(--text-secondary); margin-top:6px; line-height:1.6;">Tüm parametreler compile-time veya runtime olarak güncellenebilir.</p>
+            </div>
         </div>
     </div>
 
@@ -885,7 +948,8 @@
 ├── MPF4279x.h          # Fuel Gauge register tanımları
 └── *.uvprojx           # Keil uVision 5 proje dosyası — J-Link debug hazır</pre>
 
-        <div style="display:flex; gap:8px; margin-top:16px; flex-wrap:wrap;">
+        <div style="display:flex; gap:8px; margin-top:16px; flex-wrap:wrap; align-items:center;">
+            <a href="KobinerjiVGX.pdf" download style="padding:6px 14px; background:linear-gradient(135deg,#ef4444,#dc2626); color:#fff; border-radius:6px; font-size:0.78em; text-decoration:none; font-weight:600;">📥 VGX Datasheet PDF İndir</a>
             <span style="padding:4px 10px; background:var(--bg-tertiary); border-radius:6px; font-size:0.78em; color:var(--text-secondary);">📄 Detaylı Datasheet → Dokümanlar #9</span>
             <span style="padding:4px 10px; background:linear-gradient(135deg,#059669,#047857); color:#fff; border-radius:6px; font-size:0.78em;">Watchdog (IWDG)</span>
             <span style="padding:4px 10px; background:linear-gradient(135deg,#0ea5e9,#0284c7); color:#fff; border-radius:6px; font-size:0.78em;">Stand-by Modu</span>
@@ -950,7 +1014,7 @@
 │   └── reporting/                      # Raporlama
 ├── tests/test_suite.py                 # 34 birim test
 ├── examples/demo_end_to_end.py         # Uçtan uca demo
-└── docs/                               # 10 doküman</pre>
+└── docs/                               # 11 doküman</pre>
     </div>
 </section>
 
@@ -1686,7 +1750,7 @@
 <section id="documents" class="section">
     <div class="section-title">
         <h2>Proje Dokümantasyonları</h2>
-        <p>10 adet teknik doküman — Profesyonel kapak sayfası ile PDF olarak indirilebilir</p>
+        <p>11 adet teknik doküman — Profesyonel kapak sayfası ile PDF olarak indirilebilir</p>
     </div>
     <div class="docs-grid" id="docsGrid"></div>
 </section>

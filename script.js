@@ -615,7 +615,8 @@ const projectDocs = [
     { id: '07', title: 'İş Paketi Detaylandırması', desc: '7 iş paketi, faaliyet kırılımı ve zaman çizelgesi', file: 'docs/07_IS_PAKETI_DETAYLANDIRMASI.md', color: '#ec4899', tags: ['İş Paketleri', 'Planlama', '18 Ay'] },
     { id: '08', title: 'Kalite Kontrol Planı', desc: 'ISO standartları, kalite metrikleri ve denetim planı', file: 'docs/08_KALITE_KONTROL_PLANI.md', color: '#14b8a6', tags: ['Kalite', 'ISO', 'Denetim'] },
     { id: '09', title: 'VGX BMS Firmware Datasheet', desc: 'STM32F030C8 BMS gömülü yazılım teknik referansı', file: 'docs/10_VGX_BMS_FIRMWARE_DATASHEET.md', color: '#64748b', tags: ['Firmware', 'BMS', 'Gömülü'] },
-    { id: '10', title: 'SoH Tahmin Notebook (Derin Öğrenme)', desc: 'LSTM, GRU, AST-LSTM ve Transfer Öğrenme ile SoH tahmin modelleri — Jupyter Notebook', file: 'KOBINERJI_SoH_Tahmin-2.ipynb', color: '#EE4C2C', tags: ['Deep Learning', 'PyTorch', 'AST-LSTM', 'Notebook'], isNotebook: true }
+    { id: '10', title: 'SoH Tahmin Notebook (Derin Öğrenme)', desc: 'LSTM, GRU, AST-LSTM ve Transfer Öğrenme ile SoH tahmin modelleri — Jupyter Notebook', file: 'KOBINERJI_SoH_Tahmin-2.ipynb', color: '#EE4C2C', tags: ['Deep Learning', 'PyTorch', 'AST-LSTM', 'Notebook'], isNotebook: true },
+    { id: '11', title: 'VGX BMS Firmware Datasheet (PDF)', desc: 'STM32F030C8 + MP2797 + MPF4279x — 3 sayfa profesyonel firmware teknik dokümanı', file: 'KobinerjiVGX.pdf', color: '#059669', tags: ['Hardware', 'BMS', 'Datasheet', 'PDF'], isPdf: true }
 ];
 
 function renderDocuments() {
@@ -645,6 +646,32 @@ function renderDocuments() {
                             <span class="btn-text">📥 PDF İndir</span>
                             <span class="spinner"></span>
                         </button>
+                    </div>
+                </div>
+            </div>`;
+        }
+        if (doc.isPdf) {
+            return `
+            <div class="doc-card">
+                <div class="doc-card-header">
+                    <div class="doc-card-number" style="background: ${doc.color};">${doc.id}</div>
+                    <div class="doc-card-info">
+                        <h4>${doc.title}</h4>
+                        <p>${doc.desc}</p>
+                    </div>
+                </div>
+                <div class="doc-card-tags">
+                    ${doc.tags.map(t => `<span class="doc-tag">${t}</span>`).join('')}
+                </div>
+                <div class="doc-card-footer">
+                    <span class="doc-card-meta">📄 PDF Doküman</span>
+                    <div class="doc-card-actions">
+                        <a class="doc-download-btn" href="${doc.file}" target="_blank" style="text-decoration:none;">
+                            <span class="btn-text">👁️ PDF Görüntüle</span>
+                        </a>
+                        <a class="doc-download-btn" href="${doc.file}" download style="text-decoration:none;">
+                            <span class="btn-text">📥 PDF İndir</span>
+                        </a>
                     </div>
                 </div>
             </div>`;
