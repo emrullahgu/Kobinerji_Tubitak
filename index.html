@@ -781,6 +781,118 @@
         </div>
     </div>
 
+    <!-- ─── Donanım: MCU & Devre Tasarımı ─── -->
+    <div class="card">
+        <h3>🔌 Donanım — MCU &amp; Devre Tasarımı</h3>
+        <p style="color: var(--text-secondary); margin-bottom: 16px;">STM32F030C8Tx tabanlı BMS kontrol kartı — 7-16S Li-ion pil paketi yönetimi için özel tasarım</p>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
+            <div class="standard-item" style="border-left: 3px solid #059669;">
+                <strong>🧠 Mikrodenetleyici</strong>
+                <p>STM32F030C8Tx — ARM Cortex-M0, 48 MHz, 64 KB Flash, 8 KB SRAM</p>
+            </div>
+            <div class="standard-item" style="border-left: 3px solid #0ea5e9;">
+                <strong>⚡ BMS Entegresi</strong>
+                <p>MPS MP2797 / MP2791 — 7-16 seri hücre voltaj/akım izleme, OV/UV/OC koruma</p>
+            </div>
+            <div class="standard-item" style="border-left: 3px solid #8b5cf6;">
+                <strong>⛽ Fuel Gauge</strong>
+                <p>MPF4279x serisi — SoC, SoH, kalan süre tahmini, Coulomb sayacı</p>
+            </div>
+            <div class="standard-item" style="border-left: 3px solid #f59e0b;">
+                <strong>📡 Haberleşme</strong>
+                <p>I2C (BMS &amp; FG), UART (RS485), SWD/JTAG debug — CRC doğrulama</p>
+            </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px;">
+            <div style="text-align:center; padding:12px; background:var(--bg-tertiary); border-radius:8px;">
+                <div style="font-size:1.4em; font-weight:700; color:var(--accent);">7-16S</div>
+                <div style="font-size:0.75em; color:var(--text-secondary);">Seri Hücre</div>
+            </div>
+            <div style="text-align:center; padding:12px; background:var(--bg-tertiary); border-radius:8px;">
+                <div style="font-size:1.4em; font-weight:700; color:var(--success);">45A</div>
+                <div style="font-size:0.75em; color:var(--text-secondary);">Max Deşarj</div>
+            </div>
+            <div style="text-align:center; padding:12px; background:var(--bg-tertiary); border-radius:8px;">
+                <div style="font-size:1.4em; font-weight:700; color:var(--warning);">13</div>
+                <div style="font-size:0.75em; color:var(--text-secondary);">Arıza Tipi</div>
+            </div>
+            <div style="text-align:center; padding:12px; background:var(--bg-tertiary); border-radius:8px;">
+                <div style="font-size:1.4em; font-weight:700; color:var(--purple);">NTC</div>
+                <div style="font-size:0.75em; color:var(--text-secondary);">Sıcaklık Sensörü</div>
+            </div>
+        </div>
+
+        <h4 style="color:var(--text-secondary); font-size:0.85em; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:12px;">📋 MCU Şematik — Devre Tasarımı</h4>
+        <div style="background:var(--bg-tertiary); border-radius:12px; padding:16px; border:1px solid var(--border);">
+            <img src="hardwareMCU.jpeg" alt="VGX BMS MCU Şematik" style="width:100%; border-radius:8px; cursor:pointer;" onclick="this.requestFullscreen ? this.requestFullscreen() : null" title="Tam ekran için tıklayın">
+            <p style="text-align:center; font-size:0.78em; color:var(--text-secondary); margin-top:8px;">
+                MCU.SchDoc — STM32F030C8 + MP2797 + MPF4279x — Power Supply, JTAG/SWD, UART, I2C, RS485
+            </p>
+        </div>
+    </div>
+
+    <!-- ─── Donanım: BMS Firmware Teknik Özet ─── -->
+    <div class="card">
+        <h3>🖥️ Donanım Yazılımı — VGX BMS Firmware</h3>
+        <p style="color: var(--text-secondary); margin-bottom: 16px;">Gömülü sistem firmware'i — Hücre izleme, koruma, fuel gauge, dengeleme ve haberleşme tek platformda</p>
+
+        <div class="tech-grid" style="margin-bottom: 20px;">
+            <div class="tech-item"><div class="tech-badge tech-stm32">STM32F030C8</div><span>ARM Cortex-M0 @ 48 MHz</span></div>
+            <div class="tech-item"><div class="tech-badge tech-c">C (Bare-metal)</div><span>Interrupt-driven mimari</span></div>
+            <div class="tech-item"><div class="tech-badge tech-keil">Keil uVision 5</div><span>IDE &amp; ARM Compiler</span></div>
+            <div class="tech-item"><div class="tech-badge tech-jlink">J-Link SWD</div><span>Debug &amp; flash programlama</span></div>
+        </div>
+
+        <h4 style="color:var(--text-secondary); font-size:0.85em; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:12px;">⚙️ Firmware Fonksiyonları</h4>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px;">
+            <div style="padding:14px; background:var(--bg-tertiary); border-radius:8px; border-left:3px solid #059669;">
+                <strong style="font-size:0.88em;">🔋 Hücre İzleme &amp; Koruma</strong>
+                <p style="font-size:0.78em; color:var(--text-secondary); margin-top:4px;">7-16S voltaj/akım ölçümü, OV (3.65V), UV (2.0V), Dead (1.8V), DOC/DSC/CSC/COC koruması</p>
+            </div>
+            <div style="padding:14px; background:var(--bg-tertiary); border-radius:8px; border-left:3px solid #0ea5e9;">
+                <strong style="font-size:0.88em;">⛽ Fuel Gauge &amp; SoH</strong>
+                <p style="font-size:0.78em; color:var(--text-secondary); margin-top:4px;">SoC, SoH, kalan süre tahmini, Coulomb sayacı, öğrenme algoritmaları (MPF4279x)</p>
+            </div>
+            <div style="padding:14px; background:var(--bg-tertiary); border-radius:8px; border-left:3px solid #f59e0b;">
+                <strong style="font-size:0.88em;">🌡️ Sıcaklık Yönetimi</strong>
+                <p style="font-size:0.78em; color:var(--text-secondary); margin-top:4px;">NTC sensörleri, ısıtıcı/fan PWM kontrolü, deşarj -18°C–55°C, şarj 2°C–43°C limitleri</p>
+            </div>
+            <div style="padding:14px; background:var(--bg-tertiary); border-radius:8px; border-left:3px solid #8b5cf6;">
+                <strong style="font-size:0.88em;">⚖️ Hücre Dengeleme</strong>
+                <p style="font-size:0.78em; color:var(--text-secondary); margin-top:4px;">Otomatik pasif dengeleme (Auto-Balance), minimum dengeleme voltaj eşiği yapılandırması</p>
+            </div>
+            <div style="padding:14px; background:var(--bg-tertiary); border-radius:8px; border-left:3px solid #ef4444;">
+                <strong style="font-size:0.88em;">🔌 FET &amp; Arıza Yönetimi</strong>
+                <p style="font-size:0.78em; color:var(--text-secondary); margin-top:4px;">Şarj/deşarj MOSFET sürüşü, pre-charge, 13 arıza tipi, otomatik kurtarma, arıza maskeleri</p>
+            </div>
+            <div style="padding:14px; background:var(--bg-tertiary); border-radius:8px; border-left:3px solid #64748b;">
+                <strong style="font-size:0.88em;">💾 Flash &amp; Haberleşme</strong>
+                <p style="font-size:0.78em; color:var(--text-secondary); margin-top:4px;">Parametrelerin Flash'a kaydı, runtime GUI güncelleme, I2C/UART, MPS EVKT register map protokolü</p>
+            </div>
+        </div>
+
+        <h4 style="color:var(--text-secondary); font-size:0.85em; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:12px;">📁 Firmware Dosya Yapısı</h4>
+        <pre class="code-block" style="font-size:0.82em;">VGX/
+├── main.c              # Ana uygulama — RTC, Timer, EXTI kesme yönetimi
+├── Init.c / Init.h     # Sistem başlatma — GPIO, I2C, UART, Clock konfigürasyonu
+├── MP279x_I2C.c / .h   # BMS IC sürücüsü — Hücre okuma, koruma, FET kontrolü
+├── MPF4279x_I2C.c / .h # Fuel Gauge sürücüsü — SoC, SoH, Coulomb sayacı
+├── BMS_MP279x.h        # BMS yapılandırma parametreleri (OV, UV, akım limitleri)
+├── Flash_Config.h      # Flash parametre yönetimi — Runtime güncelleme desteği
+├── MP279x.h            # Register tanımları — MP2797/MP2791 register map
+├── MPF4279x.h          # Fuel Gauge register tanımları
+└── *.uvprojx           # Keil uVision 5 proje dosyası — J-Link debug hazır</pre>
+
+        <div style="display:flex; gap:8px; margin-top:16px; flex-wrap:wrap;">
+            <span style="padding:4px 10px; background:var(--bg-tertiary); border-radius:6px; font-size:0.78em; color:var(--text-secondary);">📄 Detaylı Datasheet → Dokümanlar #9</span>
+            <span style="padding:4px 10px; background:linear-gradient(135deg,#059669,#047857); color:#fff; border-radius:6px; font-size:0.78em;">Watchdog (IWDG)</span>
+            <span style="padding:4px 10px; background:linear-gradient(135deg,#0ea5e9,#0284c7); color:#fff; border-radius:6px; font-size:0.78em;">Stand-by Modu</span>
+            <span style="padding:4px 10px; background:linear-gradient(135deg,#8b5cf6,#7c3aed); color:#fff; border-radius:6px; font-size:0.78em;">CRC Doğrulama</span>
+        </div>
+    </div>
+
     <div class="card">
         <h3>📐 Uygulanacak Standartlar</h3>
         <div class="standards-grid">
